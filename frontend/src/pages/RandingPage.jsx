@@ -3,29 +3,28 @@ import React from 'react';
 
 const Root = styled.div`
 margin: auto;
-width: 1440px;
-height: 1024px;
+width: 1920px;
 background: #FFF;
 display: flex;
 border: 1px solid #EEE;
 `
 
 const RandButtonBox = styled.div`
-width: 412px;
+width: 480px;
 height: 1024px;
 flex-shrink: 0;
 background: #FFF;
 `
 
 const RandBox = styled.div`
-width: 1028px;
+width: 1440px;
 height: 1024px;
 background: linear-gradient(90deg, #FFF8F3 88.55%, #E7E6E6 100%);
 `
 
 const RandBtnBox = styled.div`
 margin : 56px 26px 32px 26px;
-width: 360px;
+width: 428px;
 height: 70px;
 display: flex;
 justify-content: space-between;
@@ -33,7 +32,7 @@ justify-content: space-between;
 
 const RandBtn = styled.div`
 margin: 32px 26px;
-width: 360px;
+width: 428px;
 height: 70px;
 flex-shrink: 0;
 border-radius: 15px;
@@ -53,7 +52,7 @@ align-items : center;
 `
 
 const RandBtnSmall = styled.div`
-width: 170px;
+width: 204px;
 height: 70px;
 flex-shrink: 0;
 border-radius: 15px;
@@ -74,7 +73,7 @@ align-items : center;
 
 const RandBtnBig = styled.div`
 margin: 32px 26px;
-width: 360px;
+width: 428px;
 height: 100px;
 flex-shrink: 0;
 border-radius: 15px;
