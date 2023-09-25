@@ -1,42 +1,45 @@
 import styled from "styled-components";
 import React from 'react';
 import logoImg from '../img/임시로고.png'
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Root = styled.div`
-margin: auto;
-width: 1920px;
-background: #FFF;
+width: 100%;
+background-color: #FFF;
 display: flex;
-border: 1px solid #EEE;
+justify-content: flex-end;
 `
 
 const RandButtonBox = styled.div`
-width: 480px;
-height: 1024px;
+display: flex;
+flex-direction: column;
+align-items: center;
+width: 25%;
 flex-shrink: 0;
-background: #FFF;
 `
 
 const RandBox = styled.div`
+width: 75%;
 display:flex;
 flex-direction: column;
 align-items: center;
-width: 1440px;
 height: 1024px;
 background: linear-gradient(90deg, #FFF8F3 88.55%, #E7E6E6 100%);
 `
 
 const RandBtnBox = styled.div`
-margin : 56px 26px 32px 26px;
-width: 428px;
+margin : 32px auto 16px auto;
+width: 86%;
 height: 70px;
 display: flex;
 justify-content: space-between;
+align-items: center;
 `
 
 const RandBtn = styled.div`
-margin: 32px 26px;
-width: 428px;
+margin: 16px auto;
+width: 86%;
 height: 70px;
 flex-shrink: 0;
 border-radius: 15px;
@@ -56,12 +59,12 @@ align-items : center;
 `
 
 const RandBtnSmall = styled.div`
-width: 204px;
+width: 47.7%;
 height: 70px;
 flex-shrink: 0;
 border-radius: 15px;
 border: 1px solid #E7E6E6;
-background: #FFF8F3;
+background: ${props=>(props.toggle ? '#E7E6E6': '#FFF8F3')};
 box-shadow: 2px 2px 2px 0px rgba(0, 0, 0, 0.25);
 
 color: #000;
@@ -76,8 +79,8 @@ align-items : center;
 `
 
 const RandBtnBig = styled.div`
-margin: 32px 26px;
-width: 428px;
+margin: 16px auto;
+width: 86%;
 height: 100px;
 flex-shrink: 0;
 border-radius: 15px;
@@ -93,6 +96,16 @@ line-height: 48px; /* 200% */
 display : flex;
 justify-content : center;
 align-items : center;
+`
+
+const RandLogin=styled.div`
+margin: 16px auto;
+width: 86%;
+flex-shrink: 0;
+
+border-radius: 15px;
+background: #E7E6E6;
+box-shadow: 2px 2px 2px 0px rgba(0, 0, 0, 0.25);
 `
 
 const RandLogoImg = styled.img`
@@ -145,7 +158,52 @@ font-weight: 400;
 line-height: 48px; /* 200% */
 `
 
+const RandLoginText = styled.p`
+color: #000;
+font-family: Noto Serif KR;
+font-size: 24px;
+font-style: normal;
+font-weight: 400;
+line-height: 48px; /* 200% */
+`
+
+const RandLoginTextF = styled.p`
+color: #8F8F8F;
+text-align: center;
+font-family: Inter;
+font-size: 18px;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+`
+
+const RandLoginInput = styled.input`
+width: 63.33%;
+height: 54px;
+flex-shrink: 0;
+
+fill: #FFF;
+stroke-width: 1px;
+stroke: #BB6C25;
+`
+
 export const RandingPage = () => {
+
+    const navigate = useNavigate();
+
+    const [login, setLogin] = useState(0);
+    const ClickLogin = () =>{
+        if (login===1){
+            setLogin(0);
+        }else{
+            setLogin(1);
+        }
+    };
+
+    const JoinOnclickHandler =() =>{
+        navigate("/Join");
+    };
+
     return(
         <Root>
             <RandBox>
@@ -168,9 +226,27 @@ export const RandingPage = () => {
             </RandBox>
             <RandButtonBox>
                 <RandBtnBox>
-                    <RandBtnSmall>로그인</RandBtnSmall>
-                    <RandBtnSmall>회원가입</RandBtnSmall>
+                    <RandBtnSmall toggle={login} onClick={ClickLogin}>로그인</RandBtnSmall>
+                    <RandBtnSmall onClick={JoinOnclickHandler}>회원가입</RandBtnSmall>
                 </RandBtnBox>
+                {login===1&&(
+                <RandLogin>
+                    <RandBtnBox style={{height:'53px', margin:'16px auto'}}>
+                        <RandBtnSmall style={{height:'53px'}}>이용자</RandBtnSmall>
+                        <RandBtnSmall style={{height:'53px'}}>도우미</RandBtnSmall>
+                    </RandBtnBox>
+                    <RandBtnBox style={{margin:'16px auto'}}>
+                        <RandLoginText>아이디</RandLoginText>
+                        <RandLoginInput></RandLoginInput>
+                    </RandBtnBox>
+                    <RandBtnBox style={{margin:'16px auto'}}>
+                        <RandLoginText>비밀번호</RandLoginText>
+                        <RandLoginInput type='password'></RandLoginInput>
+                    </RandBtnBox>
+                    <RandLoginTextF>로그인 정보를 잊으셨나요?</RandLoginTextF>
+                    <RandBtn style={{color:'#FFF',background:'#BB6C25',height:'53px'}}>로그인</RandBtn>
+                </RandLogin>
+                )}
                 <RandBtnBig>로그인이 필요합니다.</RandBtnBig>
                 <RandBtn>메인 화면</RandBtn>
                 <RandBtn>이용 가이드</RandBtn>
