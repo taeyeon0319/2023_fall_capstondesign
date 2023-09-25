@@ -121,6 +121,7 @@ width: 1180px;
 height: 2px;
 background: #E7E6E6;
 `
+
 const RandHeader = styled.div`
 width: 1440px;
 `
