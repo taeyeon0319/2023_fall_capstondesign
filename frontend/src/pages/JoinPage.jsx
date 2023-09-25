@@ -3,6 +3,7 @@ import styled from "styled-components";
 import React from 'react';
 import Join1 from '../img/Join1.png'
 import Join2 from '../img/Join2.png'
+import { useNavigate } from "react-router-dom";
 
 const Root = styled.div`
 width: 100vw;
@@ -71,6 +72,16 @@ width:70%;
 `
 
 export const JoinPage = () => {
+    const navigate = useNavigate();
+
+    const onclickHandler1= () =>{
+        navigate("/JoinUser");
+    };
+
+    const onclickHandler2= () =>{
+        navigate("/JoinHelper");
+    };
+
     return(
         <Root>
             <Header></Header>
@@ -79,7 +90,7 @@ export const JoinPage = () => {
                     <JoinImg src={Join1}></JoinImg>
                     <JoinTextBox>
                         <JoinText>도우미가 필요해요</JoinText>
-                        <JoinText style={{color:'#35993F',fontWeight:'600'}}>이용자 가입 &gt;</JoinText>
+                        <JoinText style={{color:'#35993F',fontWeight:'600'}} onClick={onclickHandler1}>이용자 가입 &gt;</JoinText>
                     </JoinTextBox>
                 </JoinBtnBox>
                 <JoinLine></JoinLine>
@@ -87,7 +98,7 @@ export const JoinPage = () => {
                     <JoinImg src={Join2}></JoinImg>
                     <JoinTextBox>
                         <JoinText>든든한 도우미로 활동하고 싶어요</JoinText>
-                        <JoinText style={{color:'#E61515',fontWeight:'600'}}>도우미 가입 &gt;</JoinText>
+                        <JoinText style={{color:'#E61515',fontWeight:'600'}} onClick={onclickHandler2}>도우미 가입 &gt;</JoinText>
                     </JoinTextBox>
                 </JoinBtnBox>
                 <JoinLine></JoinLine>
