@@ -2,6 +2,7 @@ import styled from "styled-components";
 import React from 'react';
 import logoImg from '../img/임시로고.png'
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Root = styled.div`
 width: 100%;
@@ -187,6 +188,9 @@ stroke: #BB6C25;
 `
 
 export const RandingPage = () => {
+
+    const navigate = useNavigate();
+
     const [login, setLogin] = useState(0);
     const ClickLogin = () =>{
         if (login===1){
@@ -194,7 +198,12 @@ export const RandingPage = () => {
         }else{
             setLogin(1);
         }
-    }
+    };
+
+    const JoinOnclickHandler =() =>{
+        navigate("/Join");
+    };
+
     return(
         <Root>
             <RandBox>
@@ -218,7 +227,7 @@ export const RandingPage = () => {
             <RandButtonBox>
                 <RandBtnBox>
                     <RandBtnSmall toggle={login} onClick={ClickLogin}>로그인</RandBtnSmall>
-                    <RandBtnSmall>회원가입</RandBtnSmall>
+                    <RandBtnSmall onClick={JoinOnclickHandler}>회원가입</RandBtnSmall>
                 </RandBtnBox>
                 {login===1&&(
                 <RandLogin>
