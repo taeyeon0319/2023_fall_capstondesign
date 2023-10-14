@@ -5,6 +5,10 @@ import RandingPage from './pages/RandingPage';
 import JoinPage from './pages/JoinPage';
 import JoinPageHelper from './pages/JoinPageHelper';
 import JoinPageUser from './pages/JoinPageUser';
+import HelperList from './pages/helper/helperList/HelperList';
+import HelperDetail from './pages/helper/helperDetail/HelperDetail';
+import HelperRequest from './pages/helper/helperRequest/HelperRequest';
+import UserMyPage from './pages/user/userMyPage/UserMyPage';
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 const router = createBrowserRouter([
@@ -23,7 +27,23 @@ const router = createBrowserRouter([
   {
     path: "/JoinHelper",
     element: <JoinPageHelper />,
-  }
+  },
+  {
+    path: "/helper",
+    element : <HelperList/>,
+  },
+  {
+    path: "/helperdetail",
+    element : <HelperDetail/>,
+  },
+  {
+    path: "/helperrequest",
+    element : <HelperRequest/>,
+  },
+  {
+    path: "/usermypage",
+    element : <UserMyPage/>,
+  },
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
