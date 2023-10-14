@@ -4,27 +4,64 @@ import axios from "axios";
 
 const HelperList = ()=>{
     const [city, setCity] = useState(""); //시/도 : 서울
-    const [district, setㅇistrict] = useState(""); //시/군/구 : 종로구
+    const [district, setDistrict] = useState(""); //시/군/구 : 종로구
     const [serviceType, setServiceType] = useState(""); //분야 : 베이비시터
     const [serviceStartTime, setServiceStartTime] = useState("");//시작시간 : 0830
     const [serviceEndTime, setServiceEndTime] = useState("");//끝시간 : 1130
     const [gender, setGender] = useState("");//성별 : 여
     const [orderby, setOrderby ] = useState(""); //등록순
 
+    const [cities, setCities] = useState([]);
+    const [districts, setDistricts] = useState([]);
+
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await axios.get('http://localhost:8085/city');
-                response.then((res)=>console.log(res))
-                
+                setCities(response.data.cities)
             } catch (error) {
                 console.log('Error fetching data:', error);
             }
         }
-        
         fetchData();
         
-        }, [])
+    }, [])
+    
+    const getCities = ()=>{
+        // for (let i=0 ;i<cities.length;i++){
+        //     return <option value={cities[i]} >{cities[i]}</option>
+        //     // return cities[i]
+        //     // console.log(cities[i])
+        // }
+        const result = cities.map((city,idx)=>{
+
+            return <option key={idx} value={city} >{city}</option>
+        })
+
+        // console.log(result) // [<option>서울</option>, <option>광주</option>, <option>용산</option>..]
+
+        return result;
+    }
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get('http://localhost:8085/district');
+                setDistricts(response.data.districts)
+            } catch (error) {
+                console.log('Error fetching data:', error);
+            }
+        }
+        fetchData();
+        
+    }, [])
+
+    const getDistricts = ()=>{
+        const result = districts.map((district, idx)=>{
+            return <option key={idx} value={district}>{district}</option>
+        })
+        return result;
+    }
 
     return (
         <div className="app">
@@ -47,12 +84,18 @@ const HelperList = ()=>{
                         <li className='filter-list-item'>
                             <div><b>지역</b></div>
                             <div className="select-container-2">
-                                <select className="select-container-item" name="" id="">
-                                    <option value="" >시/도</option>
+                                <select onChange={(e)=>{setCity(e.target.value)}} className="select-container-item" name="" id="">
+                                    <option value=""  >시/도</option>
+                                    {getCities()}
+
+                                    {/* <option value="서울" >서울</option>
+                                    <option value="광주" >광주</option>
+                                    <option value="대전" >대전</option> */}
                                 </select>
 
                                 <select className="select-container-item" name="" id="">
                                     <option value="" >시/군/구</option>
+                                    {getDistricts()}
                                 </select>
                             </div>
                         </li>
