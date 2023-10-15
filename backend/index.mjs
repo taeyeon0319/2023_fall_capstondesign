@@ -1,5 +1,4 @@
 import express from 'express'; // module
-// import pg from 'pg';
 import bodyParser from "body-parser";
 import cors from "cors";
 import userRouter from './server/user.mjs'; // user 모듈 불러오기
@@ -13,14 +12,6 @@ const app = express()
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
-
-//routing
-// const pool = new pg.Pool({
-//   host: process.env.DB_HOST, 
-//   user: process.env.DB_USER,
-//   password: process.env.DB_PASSWORD,
-//   database: process.env.DB_NAME,
-// });
 
 app.get("/", (req, res) => {
   res.json("success");
