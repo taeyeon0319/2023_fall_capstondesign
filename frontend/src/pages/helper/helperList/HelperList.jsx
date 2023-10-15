@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import './helper.css';
 import axios from "axios";
+import { Button, Modal } from 'antd';
 
 
 const HelperList = ()=>{
@@ -17,6 +18,18 @@ const HelperList = ()=>{
     const [services, setServices] = useState([]);//분야 selectbox
     const [helperlist, setHelperlist] = useState([]);
     
+    const [open, setOpen] = useState(false);//모달 창
+    const showModal = () => {
+        setOpen(true);
+    };
+    const handleOk = (e) => {
+        console.log(e);
+        setOpen(false);
+    };
+    const handleCancel = (e) => {
+    console.log(e);
+    setOpen(false);
+    };
 
     // const a = {
     //     'b' : 1,
@@ -148,7 +161,7 @@ const HelperList = ()=>{
 
     const getHelperList = ()=>{
         const result = helperlist.map((helper, idx)=>{
-            return  <li key={idx} className='helper-list-searched-item'>
+            return  <li onClick={showModal} key={idx} className='helper-list-searched-item'>
                         <img className='profile' src={require('./images/profile-2.png')} />
                         <div className='description'>
                             <span className='description-item'>{helper.city} / {helper.country}</span>
@@ -163,6 +176,7 @@ const HelperList = ()=>{
 
     return (
         <div className="app">
+
             <header className='header'>
                 <select className='select-type' placeholder='종류 선택'>
                     <option value="" >종류선택</option>
@@ -258,7 +272,54 @@ const HelperList = ()=>{
                     </ul>
                 </div>
             </div>
+            <Modal
 
+                title="Basic Modal"
+                open={open}
+                onOk={handleOk}
+                onCancel={handleCancel}
+                styles={{width : '600px', height: '550px'}}
+                okButtonProps={{
+                disabled: true,
+                }}
+                cancelButtonProps={{
+                disabled: true,
+                }}
+            >
+                <div className="modal-container">
+                
+                <div className="modal-header">
+                    <img className="profile" src={require('./images/profile-1.png')} alt="" />
+                    <div className="desc">
+                        <div className="desc-item name"><h3>김무너 님</h3></div>
+                        <div className="desc-item local">서울 / 서현동</div>
+                        <div className="desc-item service">요양보호사</div>
+                        <div className="desc-item gender">여자 도우미</div>
+                    </div>
+                </div>
+                <div style={{marginBottom: '20px'}}></div>
+                <h3>소개</h3>
+                <textarea className='intro-text' readOnly value={"안녕하세요"}></textarea>
+                <div style={{marginBottom: '20px'}}></div>
+                <h3>후기</h3>
+                <div style={{marginBottom: '10px'}}></div>
+                <ul className='review-list'>
+                    <li className='review-item'>
+                        <div className='review-content'>정말 좋은 도우미! 우리 아이가 정말 좋아합니다.</div>
+                        <div className='review-user'>윤바덕 님</div>
+                    </li>
+                    <li className='review-item'>
+                        <div className='review-content'>1시간 잠깐이지만 우리 아이랑 놀아주셔서 감사합니다. 너무 친절했습니다.</div>
+                        <div className='review-user'>윤바덕 님</div>
+                    </li>
+                    <li className='review-item'>
+                        <div className='review-content'>또 요청하겠습니다!</div>
+                        <div className='review-user'>윤바덕 님</div>
+                    </li>
+                </ul>
+                <button className='next-container-item'>다음</button>
+            </div>
+            </Modal>
         </div>
     )
 }

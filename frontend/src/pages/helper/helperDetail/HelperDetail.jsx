@@ -3,6 +3,7 @@ import "./HelperDetail.css";
 import styled from "styled-components";
 import React from 'react';
 import Header from "../../../components/Header";
+import { Button, Modal } from 'antd';
 const Root = styled.div`
 width: 100vw;
 height:100vh;
@@ -15,63 +16,43 @@ align-items: center;
 export const HelperDetail = () => {
     return(
         <Root>
-            <Header>
+            <Header></Header>
             <div className="desktop">
-            <div className="div">
-                <img className="image" alt="Image" src="image-1.png" />
-                <div className="overlap-group">
-                <p className="p">
-                    <span className="text-wrapper">김동국 </span>
-                    <span className="span">님</span>
-                </p>
-                <img className="ellipse" alt="Ellipse" src="ellipse-5.svg" />
-                <div className="overlap">
-                    <div className="rectangle" />
-                    <div className="text-wrapper-2">마이페이지</div>
-                </div>
-                <div className="overlap-2">
-                    <div className="rectangle" />
-                    <div className="text-wrapper-3">로그아웃</div>
-                </div>
-                </div>
-                <div className="overlap-3">
-                <div className="overlap-4">
-                    <div className="rectangle-2" />
-                    <div className="text-wrapper-4">다음</div>
-                </div>
-                <div className="image-wrapper">
-                    <img className="img" alt="Image" src="image-8.png" />
-                </div>
-                <p className="a">
-                    <span className="text-wrapper-5">A </span>
-                    <span className="text-wrapper-6">
-                    씨<br />
-                    </span>
-                    <span className="text-wrapper-7">
-                    서울시 중구
-                    <br />
-                    남자 도우미
-                    </span>
-                </p>
-                <div className="div-wrapper">
-                    <div className="text-wrapper-8">
-                    안녕하세요.
-                    <br />
-                    ......
-                    </div>
-                </div>
-                <div className="text-wrapper-9">소개글</div>
-                <div className="text-wrapper-10">후기</div>
-                <p className="OOO">
-                    정말 좋은 도우미! 우리 아이가 정말
-                    좋아합니다&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OOO
-                    님
-                </p>
-                <div className="text-wrapper-11">X</div>
+            <div className="modal-container">
+            <div className="modal-header">
+                <img className="profile" src={require('./profile-1.png')} alt="" />
+                <div className="desc">
+                    <div className="desc-item name"><h3>김무너 님</h3></div>
+                    <div className="desc-item local">서울 / 서현동</div>
+                    <div className="desc-item service">요양보호사</div>
+                    <div className="desc-item gender">여자 도우미</div>
                 </div>
             </div>
+            <div style={{marginBottom: '20px'}}></div>
+            <h3>소개</h3>
+            <textarea className='intro-text' readOnly value={"안녕하세요"}></textarea>
+            <div style={{marginBottom: '20px'}}></div>
+            <h3>후기</h3>
+            <div style={{marginBottom: '10px'}}></div>
+            <ul className='review-list'>
+                <li className='review-item'>
+                    <div className='review-content'>정말 좋은 도우미! 우리 아이가 정말 좋아합니다.</div>
+                    <div className='review-user'>윤바덕 님</div>
+                </li>
+                <li className='review-item'>
+                    <div className='review-content'>1시간 잠깐이지만 우리 아이랑 놀아주셔서 감사합니다. 너무 친절했습니다.</div>
+                    <div className='review-user'>윤바덕 님</div>
+                </li>
+                <li className='review-item'>
+                    <div className='review-content'>또 요청하겠습니다!</div>
+                    <div className='review-user'>윤바덕 님</div>
+                </li>
+            </ul>
+            <button className='next-container-item'>다음</button>
+        </div>
+
     </div>
-            </Header>
+            
 
         </Root>
     );
