@@ -9,9 +9,9 @@ const helperRouter = express.Router();
 
 
 
-// app.use(cors(corsOptions));
-// app.use(bodyParser.urlencoded({ extended: true }));
-// app.use(bodyParser.json());
+// helperRouter.use(cors(corsOptions));
+// helperRouter.use(bodyParser.urlencoded({ extended: true }));
+// helperRouter.use(bodyParser.json());
 
 // dotenv.config();
 
