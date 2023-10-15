@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import './helper.css';
 import axios from "axios";
 
+
 const HelperList = ()=>{
     const [city, setCity] = useState(""); //시/도 : 서울
     const [district, setDistrict] = useState(""); //시/군/구 : 종로구
@@ -15,10 +16,25 @@ const HelperList = ()=>{
     const [districts, setDistricts] = useState([]);//시/군/구 selectbox
     const [services, setServices] = useState([]);//분야 selectbox
 
+    
+
+    // const a = {
+    //     'b' : 1,
+    //     c: 2,
+    //     '1ef': 3,
+    // }
+
+    // console.log(a.b)
+    // console.log(a['b'])
+    // console.log(a.c)
+    // console.log(a['c'])
+    // console.log(a['1ef'])
+
     useEffect(() => {
         const fetchData = async () => {
+            // console.log(process.env.REACT_APP_SERVER_URL)
             try {
-                const response = await axios.get('http://localhost:8085/city');
+                const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/city`);
                 setCities(response.data.cities)
             } catch (error) {
                 console.log('Error fetching data:', error);
@@ -40,14 +56,13 @@ const HelperList = ()=>{
         })
 
         // console.log(result) // [<option>서울</option>, <option>광주</option>, <option>용산</option>..]
-
         return result;
     }
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('http://localhost:8085/district');
+                const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/district`);
                 setDistricts(response.data.districts)
             } catch (error) {
                 console.log('Error fetching data:', error);
@@ -67,9 +82,8 @@ const HelperList = ()=>{
     useEffect(()=>{
         const fetchData = async ()=>{
             try {
-                const response = await axios.get('http://localhost:8085/service');
+                const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/service`);
                 setServices(response.data.services)
-
             }catch(error){
                 console.log('Error fetching data :', error);
             }
@@ -82,6 +96,41 @@ const HelperList = ()=>{
             return <option key={idx} value={service}>{service}</option>
         })
         return result;
+    }
+
+
+    // localhost:8085/helper/search?city=”서울”?district=”강서구”?serviceType=”베이비시터”…  요청 URL http
+    //처음 한 번이 아니라 리팩토링 될 때마다 가져와야하니까 useState
+    // useEffect(()=>{
+    //     const fetchData = async ()=>{
+    //                 try {
+    //                     const response = await axios.get('http://localhost:8085/search', { params: requestParams });
+    //                     console.log(response.data);
+    //                 }catch(error){
+    //                     console.log('Error fetching data :', error);
+    //                 }
+    //         }
+    //         fetchData();
+    //     }
+    // )
+
+    const getHelperSearch = async()=>{
+        const requestParams  = {
+            city : city,
+            district : district,
+            serviceType : serviceType,
+            serviceStartTime : serviceStartTime,
+            serviceEndTime : serviceEndTime,
+            gender : gender,
+            orderby : orderby,
+        };
+        try {
+            const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/helper/search`, { params: requestParams });
+            console.log(response.data);
+        }catch(error){
+            console.log('Error fetching data :', error);
+        }
+
     }
     return (
         <div className="app">
@@ -113,7 +162,7 @@ const HelperList = ()=>{
                                     <option value="대전" >대전</option> */}
                                 </select>
 
-                                <select className="select-container-item" name="" id="">
+                                <select onChange={(e)=>{setDistrict(e.target.value)}} className="select-container-item" name="" id="">
                                     <option value="" >시/군/구</option>
                                     {getDistricts()}
                                 </select>
@@ -122,7 +171,7 @@ const HelperList = ()=>{
                         <li className='filter-list-item'>
                             <div><b>분야</b></div>
                             <div className="select-container-1">
-                                <select className="select-container-item" name="" id="">
+                                <select onChange={(e)=>{setServiceType(e.target.value)}} className="select-container-item" name="" id="">
                                     {getServices()}
                                     {/* <option value="" >분야선택</option>
                                     <option value="" >베이비시터</option>
@@ -137,24 +186,25 @@ const HelperList = ()=>{
                         <li className='filter-list-item'>
                             <div><b>시간</b></div>
                             <div className="select-container-4">
-                                <input placeholder='00:00' className='select-container-item ft-center' type="text" />
+                                <input placeholder='00:00' onChange={(e)=>{setServiceStartTime(e.target.value)}} className='select-container-item ft-center' type="text" />
                                 <span className='ft-center'>~</span>
-                                <input placeholder='00:00' className='select-container-item ft-center' type="text" />
+                                <input placeholder='00:00' onChange={(e)=>{setServiceEndTime(e.target.value)}} className='select-container-item ft-center' type="text" />
                                 <span> </span>
                             </div>
                         </li>
-
+                        {/* setGender */}
+                        {/* 버튼 둘 중 하나만 선택되도록 하기 */}
                         <li className='filter-list-item'>
                             <div><b>성별</b></div>
                             <div className="select-container-3">
-                                <button placeholder='' className='select-container-item ft-center' type="text">남자</button>
-                                <button placeholder='00:00' className='select-container-item ft-center' type="text">여자</button>
+                                <button placeholder='' onChange={(e)=>{setGender(e.target.value)}} className='select-container-item ft-center' type="text">남자</button>
+                                <button placeholder='00:00' onChange={(e)=>{setGender(e.target.value)}} className='select-container-item ft-center' type="text">여자</button>
                                 <span> </span>
                             </div>
                         </li>
                     </ul>
 
-                    <button className='search-helper-button'>도우미 찾기</button>
+                    <button onClick={()=>{getHelperSearch()}} className='search-helper-button'>도우미 찾기</button>
                 </div>
 
                 <div className="helper-list-searched-container">

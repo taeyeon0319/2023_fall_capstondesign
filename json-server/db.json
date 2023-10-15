@@ -49,6 +49,36 @@
             "병원동행인",
             "기타"
         ]	
+    },
+    "search" :{
+        "helperList" : [
+			{
+				"name" : "김문어",
+				"id" : 20,
+				"city" : "서울",
+				"country" : "종로구",
+				"gender" : "여",
+				"imageID" : null ,
+				"reviewCount" : 12
+			},
+			{
+				"name" : "윤바덕",
+				"id" : 21,
+				"city" : "서울",
+				"country" : "종로구",
+				"gender" : "여",
+				"imageID" : null ,
+				"reviewCount" : 10
+			},
+			{
+				"name" : "전우미",
+				"id" : 22,
+				"city" : "서울",
+				"country" : "종로구",
+				"gender" : "여",
+				"imageID" : null ,
+				"reviewCount" : 23
+			}
+        ]
     }
-
 }
