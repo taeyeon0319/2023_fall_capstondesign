@@ -11,8 +11,9 @@ const HelperList = ()=>{
     const [gender, setGender] = useState("");//성별 : 여
     const [orderby, setOrderby ] = useState(""); //등록순
 
-    const [cities, setCities] = useState([]);
-    const [districts, setDistricts] = useState([]);
+    const [cities, setCities] = useState([]);//시/도 selectbox
+    const [districts, setDistricts] = useState([]);//시/군/구 selectbox
+    const [services, setServices] = useState([]);//분야 selectbox
 
     useEffect(() => {
         const fetchData = async () => {
@@ -63,6 +64,25 @@ const HelperList = ()=>{
         return result;
     }
 
+    useEffect(()=>{
+        const fetchData = async ()=>{
+            try {
+                const response = await axios.get('http://localhost:8085/service');
+                setServices(response.data.services)
+
+            }catch(error){
+                console.log('Error fetching data :', error);
+            }
+        }
+        fetchData();
+    },[])
+
+    const getServices = ()=>{
+        const result = services.map((service, idx)=>{
+            return <option key={idx} value={service}>{service}</option>
+        })
+        return result;
+    }
     return (
         <div className="app">
             <header className='header'>
@@ -103,12 +123,13 @@ const HelperList = ()=>{
                             <div><b>분야</b></div>
                             <div className="select-container-1">
                                 <select className="select-container-item" name="" id="">
-                                    <option value="" >분야선택</option>
+                                    {getServices()}
+                                    {/* <option value="" >분야선택</option>
                                     <option value="" >베이비시터</option>
                                     <option value="" >등하원도우미  </option>
                                     <option value="" >요양보호사</option>
                                     <option value="" >간병인</option>
-                                    <option value="" >기타</option>
+                                    <option value="" >기타</option> */}
                                 </select>
                             </div>
                         </li>
