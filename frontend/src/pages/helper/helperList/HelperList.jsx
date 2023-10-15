@@ -15,7 +15,7 @@ const HelperList = ()=>{
     const [cities, setCities] = useState([]);//시/도 selectbox
     const [districts, setDistricts] = useState([]);//시/군/구 selectbox
     const [services, setServices] = useState([]);//분야 selectbox
-
+    const [helperlist, setHelperlist] = useState([]);
     
 
     // const a = {
@@ -127,11 +127,40 @@ const HelperList = ()=>{
         try {
             const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/helper/search`, { params: requestParams });
             console.log(response.data);
+            setHelperlist(response.data.helperList)
         }catch(error){
             console.log('Error fetching data :', error);
         }
-
     }
+
+    useEffect(()=>{
+    //     const fetchData = async ()=>{
+    //         try {
+    //             const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/search`);
+    //             setHelperlist(response.data.helperList)
+    //         }catch(error){
+    //             console.log('Error fetching data :', error);
+    //         }
+    //     }
+    //     fetchData();
+        getHelperSearch();
+    },[])
+
+    const getHelperList = ()=>{
+        const result = helperlist.map((helper, idx)=>{
+            return  <li key={idx} className='helper-list-searched-item'>
+                        <img className='profile' src={require('./images/profile-2.png')} />
+                        <div className='description'>
+                            <span className='description-item'>{helper.city} / {helper.country}</span>
+                            <span className='description-item'>베이비시터</span>
+                            <span className='description-item'>{helper.name}</span>
+                            <span className='description-item'>오후</span>
+                        </div>
+                    </li>
+        })
+        return result;
+    }
+
     return (
         <div className="app">
             <header className='header'>
@@ -214,35 +243,9 @@ const HelperList = ()=>{
                         </select>
                     </div>
                     <ul className='helper-list-searched'>
-                        <li className='helper-list-searched-item'>
-                            <img className='profile' src={require('./images/profile-2.png')} />
-                            <div className='description'>
-                                <span className='description-item'>서울 / 강서구</span>
-                                <span className='description-item'>베이비시터</span>
-                                <span className='description-item'>윤바덕</span>
-                                <span className='description-item'>오후</span>
-                            </div>
-                        </li>
-                        <li className='helper-list-searched-item'>
-                            <img className='profile' src={require('./images/profile-2.png')} />
-                            <div className='description'>
-                                <span className='description-item'>서울 / 강서구</span>
-                                <span className='description-item'>베이비시터</span>
-                                <span className='description-item'>윤바덕</span>
-                                <span className='description-item'>오후</span>
-                            </div>
-                        </li>
-                        <li className='helper-list-searched-item'>
-                            <img className='profile' src={require('./images/profile-2.png')} />
-                            <div className='description'>
-                                <span className='description-item'>서울 / 강서구</span>
-                                <span className='description-item'>베이비시터</span>
-                                <span className='description-item'>윤바덕</span>
-                                <span className='description-item'>오후</span>
-                            </div>
-                        </li>
 
-                        <li className='helper-list-searched-item'>
+                        {getHelperList()}
+                        {/* <li className='helper-list-searched-item'>
                             <img className='profile' src={require('./images/profile-2.png')} />
                             <div className='description'>
                                 <span className='description-item'>서울 / 강서구</span>
@@ -250,27 +253,8 @@ const HelperList = ()=>{
                                 <span className='description-item'>윤바덕</span>
                                 <span className='description-item'>오후</span>
                             </div>
-                        </li>
+                        </li> */}
 
-                        <li className='helper-list-searched-item'>
-                            <img className='profile' src={require('./images/profile-2.png')} />
-                            <div className='description'>
-                                <span className='description-item'>서울 / 강서구</span>
-                                <span className='description-item'>베이비시터</span>
-                                <span className='description-item'>윤바덕</span>
-                                <span className='description-item'>오후</span>
-                            </div>
-                        </li>
-
-                        <li className='helper-list-searched-item'>
-                            <img className='profile' src={require('./images/profile-2.png')} />
-                            <div className='description'>
-                                <span className='description-item'>서울 / 강서구</span>
-                                <span className='description-item'>베이비시터</span>
-                                <span className='description-item'>윤바덕</span>
-                                <span className='description-item'>오후</span>
-                            </div>
-                        </li>
                     </ul>
                 </div>
             </div>
