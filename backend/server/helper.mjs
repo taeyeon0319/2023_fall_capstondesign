@@ -7,18 +7,6 @@ import dotenv from "dotenv";
 
 const helperRouter = express.Router();
 
-<<<<<<< HEAD
-// app.use(cors(corsOptions));
-// app.use(bodyParser.urlencoded({ extended: true }));
-// app.use(bodyParser.json());
-=======
-
-
-// helperRouter.use(cors(corsOptions));
-// helperRouter.use(bodyParser.urlencoded({ extended: true }));
-// helperRouter.use(bodyParser.json());
->>>>>>> 7eba76dec82019f428fff0b136b68fdd9f7e69e6
-
 // dotenv.config();
 
 const pool = new pg.Pool({
@@ -32,12 +20,6 @@ helperRouter.get("/", (req, res) => {
   res.json("success도우미");
 });
 
-// 이용자 목록 (임시 데이터)
-// const users_data = [
-//   { id: 1, name: "이용자1", location: "종로구", phone: "010-1234-5678" },
-//   { id: 2, name: "이용자2", location: "중구", phone: "010-1234-5678" },
-//   { id: 3, name: "이용자3", location: "강북구", phone: "010-1234-5678" },
-// ];
 
 // 이용자 목록을 반환하는 엔드포인트
 helperRouter.get("/users", async (req, res) => {
@@ -71,43 +53,6 @@ helperRouter.get("/users/:user_id", async (req, res) => {
       .json({ error: "An error occurred while fetching the user data." });
   }
 });
-
-// 이용자의 요구사항 목록 (임시 데이터)
-// const requests_data = [
-//   {
-//     id: 1,
-//     user_id: 1,
-//     helper_id: 1,
-//     field: "베이비시터",
-//     status: "요청",
-//     timestart: "2021-05-01 12:00:00",
-//     timeend: "2021-05-01 14:00:00",
-//     timepay: 20000,
-//     totalpay: 40000,
-//   },
-//   {
-//     id: 2,
-//     user_id: 2,
-//     helper_id: 2,
-//     field: "하원도우미",
-//     status: "요청",
-//     timestart: "2021-05-01 12:00:00",
-//     timeend: "2021-05-01 14:00:00",
-//     timepay: 20000,
-//     totalpay: 40000,
-//   },
-//   {
-//     id: 3,
-//     user_id: 3,
-//     helper_id: 3,
-//     field: "하원도우미",
-//     status: "요청",
-//     timestart: "2021-05-01 12:00:00",
-//     timeend: "2021-05-01 14:00:00",
-//     timepay: 20000,
-//     totalpay: 40000,
-//   },
-// ];
 
 // 도우미가 수락/거절했을경우 이용자의 요구사항목록 데이터에서 status를 수락/거절으로 변경하는 엔드포인트
 helperRouter.put("/response-request/:request_id", async (req, res) => {
