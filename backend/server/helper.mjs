@@ -7,9 +7,17 @@ import dotenv from "dotenv";
 
 const helperRouter = express.Router();
 
+<<<<<<< HEAD
 // app.use(cors(corsOptions));
 // app.use(bodyParser.urlencoded({ extended: true }));
 // app.use(bodyParser.json());
+=======
+
+
+// helperRouter.use(cors(corsOptions));
+// helperRouter.use(bodyParser.urlencoded({ extended: true }));
+// helperRouter.use(bodyParser.json());
+>>>>>>> 7eba76dec82019f428fff0b136b68fdd9f7e69e6
 
 // dotenv.config();
 
