@@ -103,7 +103,7 @@ export const JoinPage = () => {
                 </JoinBtnBox>
                 <JoinLine></JoinLine>
                 <JoinText2 style={{color:'#8F8F8F',fontWeight:'400', margin:'30px auto 0px auto'}}>이미 회원이신가요?</JoinText2>
-                <JoinText2 style={{color:'#000',fontWeight:'700', margin:'00px auto 30px auto'}}>로그인하기</JoinText2>
+                <JoinText2 style={{color:'#000',fontWeight:'700', margin:'00px auto 30px auto'}} >로그인하기</JoinText2>
             </div>
         </Root>
     );
