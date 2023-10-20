@@ -197,7 +197,7 @@ justify-content:center;
 align-items:center;
 `
 
-export const JoinPage = () => {
+export const HelperPage = () => {
     const [displayData, setdisplayData] = useState(def);
 
     const UserListClickHandler = (index) =>{
@@ -267,4 +267,4 @@ export const JoinPage = () => {
         </Root>
     );
 };
-export default JoinPage;
+export default HelperPage;
