@@ -9,7 +9,7 @@ import HelperList from './pages/helper/helperList/HelperList';
 import HelperDetail from './pages/helper/helperDetail/HelperDetail';
 import HelperRequest from './pages/helper/helperRequest/HelperRequest';
 import UserMyPage from './pages/user/userMyPage/UserMyPage';
-import HelperPage from './pages/UserPage';
+import HelperPage from './pages/HelperPage';
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 const router = createBrowserRouter([
