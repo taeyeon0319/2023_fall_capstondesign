@@ -9,6 +9,7 @@ import HelperList from './pages/helper/helperList/HelperList';
 import HelperDetail from './pages/helper/helperDetail/HelperDetail';
 import HelperRequest from './pages/helper/helperRequest/HelperRequest';
 import UserMyPage from './pages/user/userMyPage/UserMyPage';
+import HelperPage from './pages/UserPage';
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 const router = createBrowserRouter([
@@ -29,7 +30,7 @@ const router = createBrowserRouter([
     element: <JoinPageHelper />,
   },
   {
-    path: "/helper",
+    path: "/user",
     element : <HelperList/>,
   },
   {
@@ -44,6 +45,10 @@ const router = createBrowserRouter([
     path: "/usermypage",
     element : <UserMyPage/>,
   },
+  {
+    path: "/helper",
+    element : <HelperPage/>,
+  }
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

@@ -118,9 +118,9 @@ const RandHeader = styled.div`
 width: 1440px;
 `
 const RandTextBox = styled.div`
-width: 1440px;
+width: 1180px;
 padding-top:24px;
-padding-left:324px;
+padding-left:20px;
 `
 const RandTextBig = styled.div`
 width: 1440px;
@@ -260,6 +260,10 @@ export const RandingPage = () => {
         }
     };
 
+    const clickMain = () =>{
+        navigate("/");
+    };
+
     return(
         <Root>
             <RandBox>
@@ -282,7 +286,7 @@ export const RandingPage = () => {
             </RandBox>
             <RandButtonBox>
                 <RandBtnBox>
-                    <RandBtnSmall toggle={loginBtn} onClick={clickLoginBtn}>로그인</RandBtnSmall>
+                    <RandBtnSmall id={'cypresslogin'} toggle={loginBtn} onClick={clickLoginBtn}>로그인</RandBtnSmall>
                     <RandBtnSmall onClick={JoinOnclickHandler}>회원가입</RandBtnSmall>
                 </RandBtnBox>
                 {loginBtn===1&&login===0&&(
@@ -294,14 +298,14 @@ export const RandingPage = () => {
                     </RandBtnBox>
                     <RandBtnBox style={{margin:'16px auto'}}>
                         <RandLoginText>아이디</RandLoginText>
-                        <RandLoginInput className="input" onChange={(e) => setId(e.target.value)}></RandLoginInput>
+                        <RandLoginInput id="cypressid" className="input" onChange={(e) => setId(e.target.value)}></RandLoginInput>
                     </RandBtnBox>
                     <RandBtnBox style={{margin:'16px auto'}}>
                         <RandLoginText>비밀번호</RandLoginText>
-                        <RandLoginInput className="input" type='password' onChange={(e) => setPw(e.target.value)}></RandLoginInput>
+                        <RandLoginInput id="cypresspw" className="input" type='password' onChange={(e) => setPw(e.target.value)}></RandLoginInput>
                     </RandBtnBox>
                     <RandLoginTextF>로그인 정보를 잊으셨나요?</RandLoginTextF>
-                    <RandBtn style={{color:'#FFF',background:'#BB6C25',height:'53px'}} onClick={clickLoginbtn}>로그인</RandBtn>
+                    <RandBtn id="cypressok"style={{color:'#FFF',background:'#BB6C25',height:'53px'}} onClick={clickLoginbtn}>로그인</RandBtn>
                 </RandLogin>
                 <RandBtnBig>로그인이 필요합니다.</RandBtnBig>
                 </>
@@ -311,7 +315,7 @@ export const RandingPage = () => {
                     <RandAfterLoginBox>
                         <RandAfterLoginImg src={userImg}></RandAfterLoginImg>
                         <div style={{display:"flex", flexDirection:"column"}}>
-                            <RandAfterLoginText>{user.name}</RandAfterLoginText>
+                            <RandAfterLoginText id="cypressname">{user.name}</RandAfterLoginText>
                             <RandAfterLoginText style={{fontSize:"16px", fontWeight:"400", color:"#8F8F8F"}}>{user.address}</RandAfterLoginText>
                             <div style={{display:"flex"}}>
                                 <RandAfterLoginBtn>마이페이지</RandAfterLoginBtn>
@@ -326,7 +330,7 @@ export const RandingPage = () => {
                     <RandAfterLoginBox>
                         <RandAfterLoginImg src={helperImg}></RandAfterLoginImg>
                         <div style={{display:"flex", flexDirection:"column"}}>
-                            <RandAfterLoginText>{helper.name}</RandAfterLoginText>
+                            <RandAfterLoginText id="cypressname">{helper.name}</RandAfterLoginText>
                             <RandAfterLoginText style={{fontSize:"16px", fontWeight:"400", color:"#8F8F8F"}}>{helper.address}</RandAfterLoginText>
                             <div style={{display:"flex"}}>
                                 <RandAfterLoginBtn>마이페이지</RandAfterLoginBtn>
@@ -336,7 +340,7 @@ export const RandingPage = () => {
                     </RandAfterLoginBox>
                 </RandLogin>
                 )}
-                <RandBtn>메인 화면</RandBtn>
+                <RandBtn onClick={clickMain}>메인 화면</RandBtn>
                 <RandBtn>이용 가이드</RandBtn>
                 <RandBtn>서비스</RandBtn>
                 <RandBtn>소개</RandBtn>
