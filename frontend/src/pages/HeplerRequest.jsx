@@ -131,29 +131,29 @@ export const HelperRequestPage = () => {
                     <div style={{width:"50%"}}>
                         <UserInfoBox>
                             <UserInfoText>지역</UserInfoText>
-                            <UserInfoIpt></UserInfoIpt>
+                            <UserInfoIpt>서울 중구</UserInfoIpt>
                         </UserInfoBox>
                         <UserInfoBox>
                             <UserInfoText>분야</UserInfoText>
-                            <UserInfoIpt></UserInfoIpt>
+                            <UserInfoIpt>베이비 시터</UserInfoIpt>
                         </UserInfoBox>
                         <UserInfoBox>
                             <UserInfoText>시간</UserInfoText>
-                            <UserInfoIpt style={{width:"24%",marginRight:"0px"}}></UserInfoIpt>
+                            <UserInfoIpt style={{width:"24%",marginRight:"0px"}}>18:00</UserInfoIpt>
                             <UserInfoText style={{width:"7.23%",display:"flex",justifyContent:"center",alignItems:"center"}}>-</UserInfoText>
-                            <UserInfoIpt style={{width:"24%",marginLeft:"0px"}}></UserInfoIpt>
+                            <UserInfoIpt style={{width:"24%",marginLeft:"0px"}}>19:00</UserInfoIpt>
                         </UserInfoBox>
                         <UserInfoBox>
                             <UserInfoText>성별</UserInfoText>
-                            <UserInfoIpt></UserInfoIpt>
+                            <UserInfoIpt>남</UserInfoIpt>
                         </UserInfoBox>
                         <UserInfoBox>
                             <UserInfoText>요청<br></br>사항</UserInfoText>
-                            <UserInfoIpt style={{height:"180px"}}></UserInfoIpt>
+                            <UserInfoIpt style={{height:"180px"}}>등원 도우미 구합니다.</UserInfoIpt>
                         </UserInfoBox>
                     </div>
                     <div style={{width:"50%",display:"flex",justifyContent:"center",alignItems:"center"}}>
-                        <UserPText>010-0000-0000<br></br>이용자님과 연락 후<br></br>매칭에 성공하세요</UserPText>
+                        <UserPText>010-1234-5678<br></br>이용자님과 연락 후<br></br>매칭에 성공하세요</UserPText>
                     </div>
                 </UserPBox>
                 <UserBtn>이전</UserBtn>

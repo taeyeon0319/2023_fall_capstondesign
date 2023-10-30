@@ -11,6 +11,7 @@ import HelperRequest from './pages/helper/helperRequest/HelperRequest';
 import UserMyPage from './pages/user/userMyPage/UserMyPage';
 import HelperPage from './pages/HelperPage';
 import HelperRequestPage from './pages/HeplerRequest';
+import HelperMyPage from './pages/HelperMyPage';
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 const router = createBrowserRouter([
@@ -53,6 +54,10 @@ const router = createBrowserRouter([
   {
     path: "/helperReq",
     element : <HelperRequestPage/>,
+  },
+  {
+    path: "/helperMy",
+    element : <HelperMyPage/>,
   }
 ]);
 
