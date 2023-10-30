@@ -12,6 +12,7 @@ const dbConfig = {
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
+    ssl: { rejectUnauthorized: false }
 };
 const db = pgp(dbConfig);
 
@@ -20,9 +21,9 @@ userRouter.get('/', (req, res) => {
 });
 
 // /all : 모든 도우미 정보 get
-userRouter.get('/all', async (req, res) => {
+userRouter.get('/helper/all', async (req, res) => {
     try {
-        const data = await db.any("SELECT * FROM temp_helper");
+        const data = await db.any("SELECT * FROM temp_helper ORDER BY id");
         res.json(data);
     } catch (error) {
         console.error('Error: ', error);
@@ -32,8 +33,11 @@ userRouter.get('/all', async (req, res) => {
 
 
 // /helper : 도우미 검색 get(가상 테이블 중 특정 도우미들만 출력)
-// 검색url 예시 : /helper/search?region=강동구&field=베이비시터&starttime=15:00:00&endtime=17:00:00&gender=M
+// 검색url 예시 : /helper/search?region=강동구&field=베이비시터&starttime=15:00:00&endtime=17:00:00&gender=M&age=20
+// 강동구에 사는 오후3시부터 5시까지 베이비시터로 일할 수 있는 20대 남자 출력
 userRouter.get('/helper/search', async (req, res) => {
+    const searchAge = req.query.age;
+    const searchActive = true;
     const searchRegion = req.query.region;
     const searchField = req.query.field;
     const searchStartTime = req.query.starttime;
@@ -42,8 +46,8 @@ userRouter.get('/helper/search', async (req, res) => {
 
     try {
         const searchResults = await db.any(
-            "SELECT * FROM temp_helper WHERE region_country = $1 AND field = $2 AND start_time <= $3 AND end_time >= $4 AND gender = $5", 
-            [searchRegion, searchField, searchStartTime, searchEndTime, searchGender]
+            "SELECT * FROM temp_helper WHERE region_country = $1 AND field = $2 AND start_time <= $3 AND end_time >= $4 AND gender = $5 AND age >= $6 AND age <= $7 AND active = $8", 
+            [searchRegion, searchField, searchStartTime, searchEndTime, searchGender, searchAge, parseInt(searchAge)+9, searchActive]
         );
 
         if (searchResults.length === 0) {
@@ -57,6 +61,8 @@ userRouter.get('/helper/search', async (req, res) => {
     }
 });
 
+
+//~~순(평점순) ==> /helper/order
 
 
 // /helper:id : 도우미 상세정보 출력 api(가상 테이블 데이터 출력)
