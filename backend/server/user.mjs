@@ -56,9 +56,9 @@ userRouter.get('/helper/all', async (req, res) => {
 
 
 // /helper : 도우미 검색 get(가상 테이블 중 특정 도우미들만 출력)
-// /user/helper/search?region=중구&field=베이비시터&date=2023-10-31&gender=남&age=20&career=1&certification=true&needtime_s=15:00:00&needtime_e=17:00:00
-// 회원 A씨 : 중구에 사는 남자 20대 베이비시터가 필요하다. career는 1년 이상 인증인 된 사람이면 좋겠다. 2023년 10월 31일 15시부터 17시까지 쓰고 싶다.
-// 도우미 B씨 : 중구에 사는 남자 20대 베이비시터이다. career는 1년이상, 인증이 되어 있다. 화요일에는 10시부터 17시까지 일을 할 수 있다.
+// /helper/search?region=중구&field=베이비시터&date=2023-11-01&gender=여&age=20&career=1&certification=true&needtime_s=15:00:00&needtime_e=17:00:00
+// 회원 A씨 : 중구에 사는 여자 20대 베이비시터가 필요하다. career는 1년 이상 인증인 된 사람이면 좋겠다. 2023년 11월 01일 15시부터 17시까지 쓰고 싶다.
+// 도우미 B씨 : 중구에 사는 여자 20대 베이비시터이다. career는 1년이상, 인증이 되어 있다. 수요일에는 10시부터 17시까지 일을 할 수 있다.
 userRouter.get('/helper/search', async (req, res) => {
     try {
         const { region, field, gender, age, career, certification, date, needtime_s, needtime_e } = req.query;
@@ -69,7 +69,7 @@ userRouter.get('/helper/search', async (req, res) => {
         if (gender) conditions.push(`gender = '${gender}'`);
         if (age) {
             const minAge = age;
-            const maxAge = age + 9; // 10년 단위로 범위 설정
+            const maxAge = parseInt(age) + 9; // 10년 단위로 범위 설정
             conditions.push(`age >= ${minAge} AND age <= ${maxAge}`);
         }
         if (career) conditions.push(`career = '${career}'`);
@@ -147,5 +147,6 @@ userRouter.get('/helper/:id', async (req, res) => {
 
 
 // /request : 도우미 요청 api(post)
+// post하면 해당 user테이블의 ()속성들이랑 helper테입르의 ()속성들이 저장됨.
 
 export default userRouter;
