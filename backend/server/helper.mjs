@@ -14,13 +14,12 @@ const pool = new pg.Pool({
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  ssl: { rejectUnauthorized: false }
+  ssl: { rejectUnauthorized: false },
 });
 
 helperRouter.get("/", (req, res) => {
   res.json("success도우미");
 });
-
 
 // 이용자 목록을 반환하는 엔드포인트
 helperRouter.get("/users", async (req, res) => {
@@ -102,7 +101,7 @@ helperRouter.get("/requests-helper/:helper_id", async (req, res) => {
   }
   try {
     const requests = await client.query(
-      `SELECT * FROM requests_data WHERE helper_id = $1`,
+      `SELECT * FROM requests WHERE helper_id = $1`,
       [helperId]
     );
     res.json(requests.rows);
@@ -121,7 +120,7 @@ helperRouter.get("/requests-helper/:helper_id/accepted", async (req, res) => {
   const helperId = parseInt(req.params.helper_id);
   try {
     const requests = await client.query(
-      `SELECT * FROM requests_data WHERE helper_id = $1 AND status = '수락'`,
+      `SELECT * FROM requests WHERE helper_id = $1 AND status = '수락'`,
       [helperId]
     );
     res.json(requests.rows);
@@ -140,7 +139,7 @@ helperRouter.get("/requests-helper/:helper_id/totalpay", async (req, res) => {
   const helperId = parseInt(req.params.helper_id);
   try {
     const requests = await client.query(
-      `SELECT SUM(totalpay) FROM requests_data WHERE helper_id = $1 AND status = '수락'`,
+      `SELECT SUM(totalpay) FROM requests WHERE helper_id = $1 AND status = '수락'`,
       [helperId]
     );
     res.json(requests.rows);
