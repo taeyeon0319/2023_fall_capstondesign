@@ -6,8 +6,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 
 const helperRouter = express.Router();
-
-// dotenv.config();
+dotenv.config();
 
 const pool = new pg.Pool({
   host: process.env.DB_HOST,
@@ -149,6 +148,29 @@ helperRouter.get("/requests-helper/:helper_id/totalpay", async (req, res) => {
     res
       .status(500)
       .json({ error: "An error occurred while fetching the request data." });
+  }
+});
+
+// 도우미가 일하는시간 설정하고 확정 누르면 success table에 request_id, 일하는 시작시간 끝나는 시간 추가하고 request table의 matching을 true로 바꾸는 엔드포인트
+helperRouter.post("/requests-helper/confirmed", async (req, res) => {
+  const client = await pool.connect();
+  const request_id = req.body.request_id;
+  const start_time = req.body.start_time;
+  const end_time = req.body.end_time;
+  try {
+    await client.query(
+      "INSERT INTO confirmed_table(request_id, start_time, end_time) VALUES( $1, $2, $3)",
+      [request_id, start_time, end_time]
+    );
+    await client.query("UPDATE requests SET matching = true WHERE id = $1", [
+      request_id,
+    ]);
+    client.release();
+  } catch (err) {
+    console.error("Error updating request status:", err);
+    res.status(500).json({
+      error: "An error occurred while updating the request status.",
+    });
   }
 });
 
