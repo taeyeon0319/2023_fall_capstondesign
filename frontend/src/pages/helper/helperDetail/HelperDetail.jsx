@@ -1,60 +1,176 @@
-// 도우미 상세 페이지
-import "./HelperDetail.css";
-import styled from "styled-components";
-import React from 'react';
-import Header from "../../../components/Header";
-import { Button, Modal } from 'antd';
-const Root = styled.div`
-width: 100vw;
-height:100vh;
-background: #FFF8F3;
-display: flex;
-flex-direction: column;
-justify-content: flex-start;
-align-items: center;
-`
-export const HelperDetail = () => {
-    return(
-        <Root>
-            <Header></Header>
-            <div className="desktop">
-            <div className="modal-container">
-            <div className="modal-header">
-                <img className="profile" src={require('./profile-1.png')} alt="" />
-                <div className="desc">
-                    <div className="desc-item name"><h3>김무너 님</h3></div>
-                    <div className="desc-item local">서울 / 서현동</div>
-                    <div className="desc-item service">요양보호사</div>
-                    <div className="desc-item gender">여자 도우미</div>
+import { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import './HelperDetail.css';
+import axios from "axios";
+import { Button, Modal, DatePicker, Space, TimePicker  } from 'antd';
+
+
+const HelperDetail = ()=>{
+    const navigate = useNavigate();
+    const params = useParams();
+
+    const helper_id = params.id;
+
+    const [helperInfo, setHelperInfo] = useState({});
+
+    const [secondStep, setSecondStep] = useState(false);
+
+    const [city, setCity] = useState(""); //시/도 : 서울
+    const [district, setDistrict] = useState(""); //시/군/구 : 종로구
+    const [serviceType, setServiceType] = useState(""); //분야 : 베이비시터
+    const [serviceStartTime, setServiceStartTime] = useState("");//시작시간 : 0830
+    const [serviceEndTime, setServiceEndTime] = useState("");//끝시간 : 1130
+    const [gender, setGender] = useState("");//성별 : 여
+    const [orderby, setOrderby ] = useState(""); //등록순
+    const [date, setDate] = useState("");
+    const [age, setAge] = useState("");
+    const [career, setCareer] = useState("");
+    const [certification, setCertification] = useState("");
+
+
+    const [cities, setCities] = useState([]);//시/도 selectbox
+    const [districts, setDistricts] = useState([]);//시/군/구 selectbox
+    const [services, setServices] = useState([]);//분야 selectbox
+    const [helperlist, setHelperlist] = useState([]);
+
+    useEffect(() => {
+        const response = axios.get(`${process.env.REACT_APP_SERVER_URL}/user/helper/${helper_id}`);
+
+        response.then(res => {
+            setHelperInfo(res.data)
+        })
+    }, [])
+
+    return (
+        <div className="app">
+
+            <header className='header'>
+                <div className="logo">
+                    <img src={require('./images/home_logo.png')}></img>
+                </div>                
+            </header>
+
+            <div className="helper-list-container">
+                <div className="helper-search-form">
+                    <div className='helper-list-searched-item'>
+                        <img className='profile' src={helperInfo.image} />
+                        <div className='description'>
+                            <h4 className='name'>{helperInfo.name} <span style={{fontSize: '13px'}}>도우미</span></h4>
+                            <p className='region'>{helperInfo.region_state} / {helperInfo.region_county}</p>
+                            <p className='time-range'>
+                            <span className="materail-time material-symbols-outlined">schedule</span>
+                            <span>{helperInfo.start_time}</span>
+                            &nbsp;~&nbsp;
+                            <span>{helperInfo.end_time}</span>
+                            </p>
+                            <p className='career-list'>
+
+                                <span className='career'>베이비시터</span>
+                            </p>
+                        </div>
+                        <div></div>
+                    </div>
+
+                    <h3 className='description-1'>소개글</h3>
+                    <div className='description-2'>
+                        <textarea className='intro' readOnly value={helperInfo.introduction}></textarea>
+                    </div>
                 </div>
-            </div>
-            <div style={{marginBottom: '20px'}}></div>
-            <h3>소개</h3>
-            <textarea className='intro-text' readOnly value={"안녕하세요"}></textarea>
-            <div style={{marginBottom: '20px'}}></div>
-            <h3>후기</h3>
-            <div style={{marginBottom: '10px'}}></div>
-            <ul className='review-list'>
-                <li className='review-item'>
-                    <div className='review-content'>정말 좋은 도우미! 우리 아이가 정말 좋아합니다.</div>
-                    <div className='review-user'>윤바덕 님</div>
-                </li>
-                <li className='review-item'>
-                    <div className='review-content'>1시간 잠깐이지만 우리 아이랑 놀아주셔서 감사합니다. 너무 친절했습니다.</div>
-                    <div className='review-user'>윤바덕 님</div>
-                </li>
-                <li className='review-item'>
-                    <div className='review-content'>또 요청하겠습니다!</div>
-                    <div className='review-user'>윤바덕 님</div>
-                </li>
-            </ul>
-            <button className='next-container-item'>다음</button>
-        </div>
+                {
+                    !secondStep && 
+                    <div className="helper-list-searched-container">
+                        <div className='title'><span className='fl'>후기</span> <span className='count ft-size15 fr'>평균 4.5점 | 총 0건의 후기</span></div>
+                        
+                        <div></div>
+                    </div>
+                }
+                {
+                    secondStep && 
+                    <div className="helper-list-searched-container">
+                        <div className='title'>도우미 신청 양식</div>
+                        
+                        <div className="helper-search-form important-height">
+                    <ul className='filter-list'>
+                        <div><b>지역</b></div>
+                        <li className='filter-list-item'> 
+                            <div className="select-container-2">
+                                <select onChange={(e)=>{setCity(e.target.value)}} className="select-container-item" name="" id="">
+                                    <option value=""  >시/도</option>
+                                    {/* {getCities()} */}
 
-    </div>
+                                    {/* <option value="서울" >서울</option>
+                                    <option value="광주" >광주</option>
+                                    <option value="대전" >대전</option> */}
+                                </select>
+
+                                <select onChange={(e)=>{setDistrict(e.target.value)}} className="select-container-item" name="" id="">
+                                    <option value="" >시</option>
+                                    {/* {getDistricts()} */}
+                                </select>
+
+                                <select onChange={(e)=>{setDistrict(e.target.value)}} className="select-container-item" name="" id="">
+                                    <option value="" >군/구</option>
+                                    {/* {getDistricts()} */}
+                                </select>
+                            </div>
+                        </li>
+                        <li className='filter-list-item'>
+                            <div><b>도우미 분야</b></div>
+                            <div className="select-container-1">
+                                <select onChange={(e)=>{setServiceType(e.target.value)}} className="select-container-item" name="" id="">
+                                    {/* {getServices()} */}
+                                    <option value="" >분야선택</option>
+                                    <option value="" >베이비시터</option>
+                                    <option value="" >등하원도우미  </option>
+                                    <option value="" >요양보호사</option>
+                                    <option value="" >간병인</option>
+                                    <option value="" >기타</option>
+                                </select>
+                            </div>
+                        </li>
             
+                        <li className='filter-list-item'>
+                            <div><b>날짜</b></div>
+                            <div className="select-container-1">
+                                <DatePicker 
+                                    placeholder="날짜를 입력해주세요."
+                                    inputReadOnly={true}
+                                    style={{width: '100%'}}
+                                    size='large' onChange={()=>{}} />
+                            </div>
+                        </li>
 
-        </Root>
-    );
-};
+                        <li className='filter-list-item'>
+                            <div><b>시간</b></div>
+                            <div className="select-container-4">
+                                <TimePicker placeholder='00:00' onChange={(time, timeString)=>setServiceStartTime(timeString)} format={'HH:mm'} />
+                                <span className='ft-center'>~</span>
+                                <TimePicker placeholder='00:00' onChange={(time, timeString)=>setServiceStartTime(timeString)} format={'HH:mm'} />
+                                <span> </span>
+                                <button className='select-container-item'>상관 없음</button>
+
+                            </div>
+                        </li>
+                        <li className='filter-list-item'>
+                            <div><b>요청 사항</b></div>
+                            <div className="select-container-1">
+                                <textarea className='textarea-000'></textarea>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                    </div>
+                }
+                
+            </div>
+
+            <div className='btn-container'>
+                {!secondStep && <button className='btn-1' onClick={()=>{navigate(-1)}}>취소</button>}
+                {secondStep && <button className='btn-1' onClick={()=>{setSecondStep(false)}}>이전</button>}
+                <button disabled={secondStep} className='btn-2' onClick={()=>{setSecondStep(true); console.log('hi')}}>도우미 요청</button>
+            </div>
+        </div>
+    )
+}
+
 export default HelperDetail;
