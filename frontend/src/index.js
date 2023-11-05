@@ -37,6 +37,10 @@ const router = createBrowserRouter([
     element : <HelperList/>,
   },
   {
+    path: "/user/helper/:id",
+    element : <HelperDetail/>,
+  },
+  {
     path: "/helperdetail",
     element : <HelperDetail/>,
   },
