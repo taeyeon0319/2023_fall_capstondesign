@@ -149,4 +149,31 @@ userRouter.get('/helper/:id', async (req, res) => {
 // /request : 도우미 요청 api(post)
 // post하면 해당 user테이블의 ()속성들이랑 helper테입르의 ()속성들이 저장됨.
 
+
+
+// /city : 위치 테이블 출력
+userRouter.get('/city', async (req, res) => {
+    try {
+        // 데이터베이스에서 해당 ID의 도우미 정보를 검색합니다.
+        const searchResult = await db.any("SELECT * FROM city");
+        res.json(searchResult);
+        
+    } catch (error) {
+        console.error('Error: ', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+// /fields : 위치 테이블 출력
+userRouter.get('/fields', async (req, res) => {
+    try {
+        // 데이터베이스에서 해당 ID의 도우미 정보를 검색합니다.
+        const searchResult = await db.any("SELECT * FROM fields");
+        res.json(searchResult);
+        
+    } catch (error) {
+        console.error('Error: ', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
 export default userRouter;
