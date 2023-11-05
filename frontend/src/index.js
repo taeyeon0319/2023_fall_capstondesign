@@ -12,6 +12,7 @@ import UserMyPage from './pages/user/userMyPage/UserMyPage';
 import HelperPage from './pages/HelperPage';
 import HelperRequestPage from './pages/HeplerRequest';
 import HelperMyPage from './pages/HelperMyPage';
+import Header2 from './components/Header2';
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 const router = createBrowserRouter([
@@ -58,7 +59,11 @@ const router = createBrowserRouter([
   {
     path: "/helperMy",
     element : <HelperMyPage/>,
-  }
+  },
+  {
+    path: "/header2",
+    element : <Header2/>,
+  },
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
