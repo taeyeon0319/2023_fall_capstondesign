@@ -1,5 +1,5 @@
 // helper.mjs
-import express from "express";
+import express, { request } from "express";
 import pg from "pg";
 import bodyParser from "body-parser";
 import cors from "cors";
@@ -77,7 +77,7 @@ helperRouter.get("/requests-user/:user_id", async (req, res) => {
   const userId = parseInt(req.params.user_id);
   try {
     const requests = await client.query(
-      `SELECT * FROM requests_data WHERE user_id = $1`,
+      `SELECT * FROM requests WHERE user_id = $1`,
       [userId]
     );
     res.json(requests.rows);
@@ -103,7 +103,17 @@ helperRouter.get("/requests-helper/:helper_id", async (req, res) => {
       `SELECT * FROM requests WHERE helper_id = $1`,
       [helperId]
     );
-    res.json(requests.rows);
+    //한 도우미에 대한 요청데이터와 이용자 정보 합치기
+    const requestsWithUserData = await Promise.all(
+      requests.rows.map(async (request) => {
+        const userData = await client.query(
+          `SELECT * FROM user_data WHERE id = $1`,
+          [request.user_id]
+        );
+        return { ...request, user: userData.rows[0] };
+      })
+    );
+    res.json(requestsWithUserData);
     client.release();
   } catch (err) {
     console.error("Error fetching request data:", err);
