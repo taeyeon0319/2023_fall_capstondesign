@@ -1,4 +1,4 @@
-import Header from "../components/Header";
+import Header2 from "../components/Header2";
 import styled from "styled-components";
 import React from 'react';
 import { useNavigate } from "react-router-dom";
@@ -120,45 +120,47 @@ export const HelperRequestPage = () => {
 
     return(
         <Root>
-            <Header></Header>
-            <UserRect>
-                <UserPBox style={{display:"flex",justifyContent:"center"}}>
-                    <UserPImg src={userImg}></UserPImg>
-                    <UserPText>김동국</UserPText>
-                    <UserPText2>씨</UserPText2>
-                </UserPBox>
-                <UserPBox>
-                    <div style={{width:"50%"}}>
-                        <UserInfoBox>
-                            <UserInfoText>지역</UserInfoText>
-                            <UserInfoIpt>서울 중구</UserInfoIpt>
-                        </UserInfoBox>
-                        <UserInfoBox>
-                            <UserInfoText>분야</UserInfoText>
-                            <UserInfoIpt>베이비 시터</UserInfoIpt>
-                        </UserInfoBox>
-                        <UserInfoBox>
-                            <UserInfoText>시간</UserInfoText>
-                            <UserInfoIpt style={{width:"24%",marginRight:"0px"}}>18:00</UserInfoIpt>
-                            <UserInfoText style={{width:"7.23%",display:"flex",justifyContent:"center",alignItems:"center"}}>-</UserInfoText>
-                            <UserInfoIpt style={{width:"24%",marginLeft:"0px"}}>19:00</UserInfoIpt>
-                        </UserInfoBox>
-                        <UserInfoBox>
-                            <UserInfoText>성별</UserInfoText>
-                            <UserInfoIpt>남</UserInfoIpt>
-                        </UserInfoBox>
-                        <UserInfoBox>
-                            <UserInfoText>요청<br></br>사항</UserInfoText>
-                            <UserInfoIpt style={{height:"180px"}}>등원 도우미 구합니다.</UserInfoIpt>
-                        </UserInfoBox>
-                    </div>
-                    <div style={{width:"50%",display:"flex",justifyContent:"center",alignItems:"center"}}>
-                        <UserPText>010-1234-5678<br></br>이용자님과 연락 후<br></br>매칭에 성공하세요</UserPText>
-                    </div>
-                </UserPBox>
-                <UserBtn>이전</UserBtn>
-            </UserRect>
+            <Header2></Header2>
         </Root>
     );
 };
 export default HelperRequestPage;
+/*
+<UserRect>
+<UserPBox style={{display:"flex",justifyContent:"center"}}>
+    <UserPImg src={userImg}></UserPImg>
+    <UserPText>김동국</UserPText>
+    <UserPText2>씨</UserPText2>
+</UserPBox>
+<UserPBox>
+    <div style={{width:"50%"}}>
+        <UserInfoBox>
+            <UserInfoText>지역</UserInfoText>
+            <UserInfoIpt>서울 중구</UserInfoIpt>
+        </UserInfoBox>
+        <UserInfoBox>
+            <UserInfoText>분야</UserInfoText>
+            <UserInfoIpt>베이비 시터</UserInfoIpt>
+        </UserInfoBox>
+        <UserInfoBox>
+            <UserInfoText>시간</UserInfoText>
+            <UserInfoIpt style={{width:"24%",marginRight:"0px"}}>18:00</UserInfoIpt>
+            <UserInfoText style={{width:"7.23%",display:"flex",justifyContent:"center",alignItems:"center"}}>-</UserInfoText>
+            <UserInfoIpt style={{width:"24%",marginLeft:"0px"}}>19:00</UserInfoIpt>
+        </UserInfoBox>
+        <UserInfoBox>
+            <UserInfoText>성별</UserInfoText>
+            <UserInfoIpt>남</UserInfoIpt>
+        </UserInfoBox>
+        <UserInfoBox>
+            <UserInfoText>요청<br></br>사항</UserInfoText>
+            <UserInfoIpt style={{height:"180px"}}>등원 도우미 구합니다.</UserInfoIpt>
+        </UserInfoBox>
+    </div>
+    <div style={{width:"50%",display:"flex",justifyContent:"center",alignItems:"center"}}>
+        <UserPText>010-1234-5678<br></br>이용자님과 연락 후<br></br>매칭에 성공하세요</UserPText>
+    </div>
+</UserPBox>
+<UserBtn>이전</UserBtn>
+</UserRect>
+*/

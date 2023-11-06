@@ -16,10 +16,16 @@ display:flex;
 align-items:center;
 justify-content:space-between;
 `
+const HeadButtonSet2 = styled.div`
+width:20%;
+display:flex;
+align-items:center;
+justify-content:space-between;
+`
 const HeadButtonText = styled.div`
 color: var(--Point-6, #54493F);
 font-family: Noto Sans KR;
-font-size: 20px;
+font-size: 1vw;
 font-style: normal;
 font-weight: 700;
 line-height: normal;
@@ -39,7 +45,9 @@ export const Header = () => {
     return(
         <>
             <HeaderRoot>
+                <div style={{width:"2%"}}></div>
                 <HeadImg src={logoImg}></HeadImg>
+                <div style={{width:"2%"}}></div>
                 <HeadButtonSet>
                     <HeadButtonText>메뉴A</HeadButtonText>
                     <HeadButtonLine></HeadButtonLine>
@@ -47,13 +55,14 @@ export const Header = () => {
                     <HeadButtonLine></HeadButtonLine>
                     <HeadButtonText>메뉴C</HeadButtonText>
                 </HeadButtonSet>
-                <HeadButtonSet>
+                <div style={{width:"55%"}}></div>
+                <HeadButtonSet2>
                     <HeadButtonText>김헬퍼 도우미님</HeadButtonText>
                     <HeadButtonLine></HeadButtonLine>
                     <HeadButtonText>마이페이지</HeadButtonText>
                     <HeadButtonLine></HeadButtonLine>
                     <HeadButtonText>로그아웃</HeadButtonText>
-                </HeadButtonSet>
+                </HeadButtonSet2>
             </HeaderRoot>
         </>
     );
