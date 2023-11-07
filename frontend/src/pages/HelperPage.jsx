@@ -284,7 +284,8 @@ export const HelperPage = () => {
     };
 
     const OkayBtnHandler = () =>{
-        navigate("/helperReq",{reqId:displayData.id});
+        console.log(displayData.id);
+        navigate("/helperReq",{state:displayData.id});
     };
 
     const UserListClickHandler = (index) =>{
@@ -329,7 +330,7 @@ export const HelperPage = () => {
                             <UserInfoText>도우미 시간대</UserInfoText>
                             <UserInfoIpt>{displayData.start_time}~{displayData.end_time}</UserInfoIpt>
                             <UserInfoText>도우미 성별</UserInfoText>
-                            <UserInfoIpt>{displayData.care_gender}</UserInfoIpt>
+                            <UserInfoIpt>{displayData.care_gender==='M'?'남':'여'}</UserInfoIpt>
                             <UserInfoText>요청 사항</UserInfoText>
                             <UserInfoIpt style={{height:"12.5185vh",overflow:"auto"}}>{displayData.comment}</UserInfoIpt>
                         </div>

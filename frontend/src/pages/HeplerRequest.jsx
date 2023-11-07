@@ -1,16 +1,12 @@
 import Header2 from "../components/Header2";
 import styled from "styled-components";
-import React from 'react';
+import React, { useEffect } from 'react';
+import axios from 'axios';
 import { useLocation } from "react-router";
 import { useNavigate } from "react-router-dom";
 import userImg from '../img/profile.png';
 import userImg2 from '../img/profile3.png';
 import { useState } from "react";
-
-const SetReqId = () => {
-    const { reqId } = useLocation();
-    console.log(reqId);
-};
 
 const dummyData = {
     data:[
@@ -46,7 +42,6 @@ flex-direction: column;
 justify-content: flex-start;
 align-items: center;
 `
-
 const UserRect = styled.div`
 width: 62%;
 margin: 40px;
@@ -210,7 +205,24 @@ font-weight: 500;
 line-height: 170%;
 `
 export const HelperRequestPage = () => {
-    SetReqId();
+    const { state } = useLocation();
+
+    const [Data, setData] = useState([]);
+
+    useEffect(() => {
+        fetchData();
+    },[]);
+
+    const fetchData = async () => {
+        try {
+            const response = await axios.get('http://localhost:5000/helper/requests-helper/1');
+            setData(response.data.filter(item => item.id === state));
+            console.log(Data);
+        } catch (error) {
+            console.error('API 호출 중 오류 발생:', error);
+        }
+    };
+
     return(
         <Root>
             <Header2></Header2>
@@ -218,35 +230,37 @@ export const HelperRequestPage = () => {
                 <div style={{height:"81.855vh",margin:"auto"}}>
                     <HelperRectTitle>도우미 신청</HelperRectTitle>
                     <HelperRect>
+                        {Data.length!==0&&(
                         <div style={{dispaly:"flex",flexDirection:"column",alignItems:"flex-start"}}>
                             <UserInfoText>지역</UserInfoText>
-                            <UserInfoIpt>{dummyData.data[0].area}</UserInfoIpt>
+                            <UserInfoIpt>{Data[0].user.region_county}</UserInfoIpt>
                             <UserInfoText>도우미 분야</UserInfoText>
-                            <UserInfoIpt>{dummyData.data[0].part}</UserInfoIpt>
+                            <UserInfoIpt>{Data[0].field}</UserInfoIpt>
                             <UserInfoText>날짜</UserInfoText>
-                            <UserInfoIpt>{dummyData.data[0].day}</UserInfoIpt>
+                            <UserInfoIpt>{Data[0].date.substr(0,10)}</UserInfoIpt>
                             <UserInfoText>도우미 시간대</UserInfoText>
-                            <UserInfoIpt>{dummyData.data[0].time[0]}~{dummyData.data[0].time[1]}</UserInfoIpt>
+                            <UserInfoIpt>{Data[0].start_time}~{Data[0].end_time}</UserInfoIpt>
                             <UserInfoText>도우미 성별</UserInfoText>
-                            <UserInfoIpt>{dummyData.data[0].sex}</UserInfoIpt>
+                            <UserInfoIpt>{Data[0].care_gender==='M'?'남':'여'}</UserInfoIpt>
                             <UserInfoText>요청 사항</UserInfoText>
-                            <UserInfoIpt style={{height:"22.5185vh",overflow:"auto"}}>{dummyData.data[0].request}</UserInfoIpt>
-                        </div>
+                            <UserInfoIpt style={{height:"22.5185vh",overflow:"auto"}}>{Data[0].comment}</UserInfoIpt>
+                        </div>)}
                     </HelperRect>
                 </div>
                 <div style={{display:"flex",flexDirection:"column",justifyContent:"space-between",height:"81.855vh",margin:"auto"}}>
                     <div>
                         <HelperRectTitle>도우미 신청자 정보</HelperRectTitle>
                         <HelperRect style={{alignItems:"center",height:"32.7vh"}}>
+                            {Data.length!==0&&(
                             <div style={{dispaly:"flex",flexDirection:"column",alignItems:"flex-start"}}>
                                 <UserInfoText>이름</UserInfoText>
-                                <UserInfoIpt>김동국</UserInfoIpt>
+                                <UserInfoIpt>{Data[0].user.name}</UserInfoIpt>
                                 <UserInfoText>주소</UserInfoText>
-                                <UserInfoIpt>서울 중구 충무로</UserInfoIpt>
+                                <UserInfoIpt>{Data[0].user.region_county}</UserInfoIpt>
                                 <HelperReqText>더욱 자세한 주소는 직접 전달받아야 합니다.</HelperReqText>
                                 <UserInfoText>연락처</UserInfoText>
-                                <UserInfoIpt>010-6154-1441</UserInfoIpt>
-                            </div>
+                                <UserInfoIpt>{Data[0].user.phone}</UserInfoIpt>
+                            </div>)}
                         </HelperRect>
                     </div>
                     <div>
