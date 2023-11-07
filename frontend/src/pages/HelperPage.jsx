@@ -266,7 +266,7 @@ height: 13.33333vh;
 flex-shrink: 0;
 
 border-radius: 5px;
-border: 1px solid var(--Point-5, #725F51);
+border: 1px solid var(--Gray-30, #EBEAEA);
 background: var(--white, #FFF);
 
 display:flex;

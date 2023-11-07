@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import React from 'react';
 import logoImg from '../img/임시로고.png'
+import { useNavigate } from "react-router-dom";
 
 const HeaderRoot = styled.div`
 width:100vw;
@@ -42,6 +43,11 @@ height:80%;
 `
 
 export const Header = () => {
+    const navigate = useNavigate();
+
+    const OnClickHandler = () => {
+        navigate("/HelperMy");
+    };
     return(
         <>
             <HeaderRoot>
@@ -59,7 +65,7 @@ export const Header = () => {
                 <HeadButtonSet2>
                     <HeadButtonText>김헬퍼 도우미님</HeadButtonText>
                     <HeadButtonLine></HeadButtonLine>
-                    <HeadButtonText>마이페이지</HeadButtonText>
+                    <HeadButtonText onClick={OnClickHandler}>마이페이지</HeadButtonText>
                     <HeadButtonLine></HeadButtonLine>
                     <HeadButtonText>로그아웃</HeadButtonText>
                 </HeadButtonSet2>
