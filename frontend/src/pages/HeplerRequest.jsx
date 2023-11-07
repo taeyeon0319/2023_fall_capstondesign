@@ -1,10 +1,16 @@
 import Header2 from "../components/Header2";
 import styled from "styled-components";
 import React from 'react';
+import { useLocation } from "react-router";
 import { useNavigate } from "react-router-dom";
 import userImg from '../img/profile.png';
 import userImg2 from '../img/profile3.png';
 import { useState } from "react";
+
+const SetReqId = () => {
+    const { reqId } = useLocation();
+    console.log(reqId);
+};
 
 const dummyData = {
     data:[
@@ -204,7 +210,7 @@ font-weight: 500;
 line-height: 170%;
 `
 export const HelperRequestPage = () => {
-
+    SetReqId();
     return(
         <Root>
             <Header2></Header2>

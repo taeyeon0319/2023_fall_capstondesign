@@ -1,48 +1,11 @@
 import Header2 from "../components/Header2";
 import styled from "styled-components";
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import userImg from '../img/profile.png';
-import userImg2 from '../img/profile3.png';
 import { useState } from "react";
-
-import HelperList from "./helper/helperList/HelperList";
+import axios from 'axios';
 //추가 기능: select 표현 될 수 있도록, 처음에 클릭해주세요X 제일 상단 값 표시되도록. 만약 데이터가 없으면 요청이 없다고 표시되도록.
-
-const dummyData = {
-    data:[
-        {
-            profileImg: userImg,
-            name: "김동국",
-            area: "서울중구",
-            part: "베이비시터",
-            day:"2023-11-05",
-            time: ["16:00","18:00"],
-            sex: "남",
-            request: "잠깐 장보는 동안 아이 봐주실 도우미 분 구합니다. 시간당 20000으로 생각하고 있고 협의가능합니다. 연락주세요!"
-        },
-        {
-            profileImg: userImg2,
-            name: "전현정",
-            area: "서울중구",
-            part: "베이비시터",
-            day:"2023-11-05",
-            time: ["08:00","09:00"],
-            sex: "여",
-            request: "매주 평일 등원 도우미 구합니다."
-        }
-    ]
-};
-
-const def={
-    profileImg: userImg,
-    name: "",
-    area: "",
-    part: "",
-    time: 0,
-    sex: "",
-    request: ""
-};
 
 const Root = styled.div`
 width: 100vw;
@@ -291,7 +254,6 @@ font-style: normal;
 font-weight: 500;
 line-height: normal;
 `
-
 const HelperReqText3 = styled.div`
 margin: 0.7vh 0 0 1.5vh;
 color: var(--Point-5, #725F51);
@@ -302,131 +264,83 @@ font-style: normal;
 font-weight: 400;
 line-height: normal;
 `
-
 export const HelperPage = () => {
     const navigate = useNavigate();
+    
+    const [responseData,setresponseData] = useState([]);
+    const [displayData, setdisplayData] = useState([]);
+    
+    useEffect(() => {
+        fetchData();
+    },[]);
 
-    const OkayBtnHandler = () =>{
-        navigate("/helperReq");
-    };
-
-    const [displayData, setdisplayData] = useState(def);
-    const UserListClickHandler = (index) =>{
-        if(index===def){
-            setdisplayData(def);
-        }else{
-            setdisplayData(dummyData.data[index]);
+    const fetchData = async () => {
+        try {
+            const response = await axios.get('http://localhost:5000/helper/requests-helper/1');
+            setresponseData(response.data);
+        } catch (error) {
+            console.error('API 호출 중 오류 발생:', error);
         }
     };
+
+    const OkayBtnHandler = () =>{
+        navigate("/helperReq",{reqId:displayData.id});
+    };
+
+    const UserListClickHandler = (index) =>{
+        setdisplayData(responseData[index]);
+    };
+
     return(
         <Root>
             <Header2></Header2>
             <HelperRectBox>
                 <div style={{height:"81.855vh",margin:"auto"}}>
-                    <HelperRectTitle>요청이 {dummyData.data.length}건 들어왔습니다.</HelperRectTitle>
+                    <HelperRectTitle>요청이 {responseData.length}건 들어왔습니다.</HelperRectTitle>
                     <HelperRect>
-                        {dummyData.data.map((item,index)=>(
+                        {responseData.map((item,index)=>(
                             <HelperReqList onClick={() => UserListClickHandler(index)}>
-                                <UserHelperListImg src={item.profileImg}></UserHelperListImg>
+                                <UserHelperListImg src={userImg}></UserHelperListImg>
                                 <div style={{display:"flex",flexDirection:"column",alignItems:"flex-start",justifyContent:"center"}}>
                                     <div style={{display:"flex",alignItems:"flex-end"}}>
-                                        <HelperReqText>{item.name}</HelperReqText>
+                                        <HelperReqText>{item.user.name}</HelperReqText>
                                         <HelperReqText2>님</HelperReqText2>
                                     </div>
-                                    <HelperReqText3>{item.area}</HelperReqText3>
-                                    <HelperReqText3>{item.time[0]}~{item.time[1]}</HelperReqText3>
-
+                                    <HelperReqText3>{item.user.region_county}</HelperReqText3>
+                                    <HelperReqText3>{item.start_time}~{item.end_time}</HelperReqText3>
                                 </div>
                             </HelperReqList>
-                            /*
-                            <UserHelperList onClick={() => UserListClickHandler(index)}>
-                                <UserHelperListImg src={item.profileImg}></UserHelperListImg>
-                                <UserHelperListText>{item.name}</UserHelperListText>
-                            </UserHelperList>
-                            */
                         ))}
                     </HelperRect>
                 </div>
                 <div style={{height:"81.855vh",margin:"auto"}}>
                     <HelperRectTitle>요청 수락</HelperRectTitle>
                     <HelperRect style={{alignItems:"center"}}>
+                        {displayData.length===0&&(<>
+                        </>)}
+                        {displayData.length!==0&&(<>
                         <div style={{dispaly:"flex",flexDirection:"column",alignItems:"flex-start"}}>
                             <UserInfoText>지역</UserInfoText>
-                            <UserInfoIpt>{displayData.area}</UserInfoIpt>
+                            <UserInfoIpt>{displayData.user.region_county}</UserInfoIpt>
                             <UserInfoText>도우미 분야</UserInfoText>
-                            <UserInfoIpt>{displayData.part}</UserInfoIpt>
+                            <UserInfoIpt>{displayData.field}</UserInfoIpt>
                             <UserInfoText>날짜</UserInfoText>
-                            <UserInfoIpt>{displayData.day}</UserInfoIpt>
+                            <UserInfoIpt>{displayData.date.substr(0,10)}</UserInfoIpt>
                             <UserInfoText>도우미 시간대</UserInfoText>
-                            <UserInfoIpt>{displayData.time[0]}~{displayData.time[1]}</UserInfoIpt>
+                            <UserInfoIpt>{displayData.start_time}~{displayData.end_time}</UserInfoIpt>
                             <UserInfoText>도우미 성별</UserInfoText>
-                            <UserInfoIpt>{displayData.sex}</UserInfoIpt>
+                            <UserInfoIpt>{displayData.care_gender}</UserInfoIpt>
                             <UserInfoText>요청 사항</UserInfoText>
-                            <UserInfoIpt style={{height:"12.5185vh",overflow:"auto"}}>{displayData.request}</UserInfoIpt>
+                            <UserInfoIpt style={{height:"12.5185vh",overflow:"auto"}}>{displayData.comment}</UserInfoIpt>
                         </div>
                         <UserBtnBox>
                             <UserBtn onClick={OkayBtnHandler}>수락</UserBtn>
                             <UserBtn2>거절</UserBtn2>
                         </UserBtnBox>
+                        </>)}
                     </HelperRect>
                 </div>
             </HelperRectBox>
-            
-            {/*
-            <div style={{width:"80%"}}>
-                <UserPTopText>요청이 {dummyData.data.length}건 들어왔습니다.</UserPTopText>
-            </div>
-            <UserRectBox>
-                <UserRect>
-                    {dummyData.data.map((item,index)=>(
-                        <UserHelperList onClick={() => UserListClickHandler(index)}>
-                            <UserHelperListImg src={item.profileImg}></UserHelperListImg>
-                            <UserHelperListText>{item.name}</UserHelperListText>
-                        </UserHelperList>
-                    ))}
-                </UserRect>
-                <UserRect>
-                    {displayData===def&&(
-                        <UserPText style={{width:"100%",height:"100%",display:"flex",alignItems:"center",justifyContent:"center"}}>확인하고자 하는 요청을 클릭하세요</UserPText>
-                    )}
-                    {displayData!==def&&(
-                    <>
-                        <UserPBox>
-                            <UserPImg src={displayData.profileImg}></UserPImg>
-                            <UserPText>{displayData.name}</UserPText>
-                            <UserPText2>씨</UserPText2>
-                        </UserPBox>
-                        <UserInfoBox>
-                            <UserInfoText>지역</UserInfoText>
-                            <UserInfoIpt>{displayData.area}</UserInfoIpt>
-                        </UserInfoBox>
-                        <UserInfoBox>
-                            <UserInfoText>분야</UserInfoText>
-                            <UserInfoIpt>{displayData.part}</UserInfoIpt>
-                        </UserInfoBox>
-                        <UserInfoBox>
-                            <UserInfoText>시간</UserInfoText>
-                            <UserInfoIpt style={{width:"24%",marginRight:"0px"}}>{displayData.time[0]}</UserInfoIpt>
-                            <UserInfoText style={{width:"7.23%",display:"flex",justifyContent:"center",alignItems:"center"}}>-</UserInfoText>
-                            <UserInfoIpt style={{width:"24%",marginLeft:"0px"}}>{displayData.time[1]}</UserInfoIpt>
-                        </UserInfoBox>
-                        <UserInfoBox>
-                            <UserInfoText>성별</UserInfoText>
-                            <UserInfoIpt>{displayData.sex}</UserInfoIpt>
-                        </UserInfoBox>
-                        <UserInfoBox>
-                            <UserInfoText>요청<br></br>사항</UserInfoText>
-                            <UserInfoIpt style={{height:"180px"}}>{displayData.request}</UserInfoIpt>
-                        </UserInfoBox>
-                        <UserBtnBox>
-                            <UserBtn>수락</UserBtn>
-                            <UserBtn>거절</UserBtn>
-                        </UserBtnBox>
-                    </>
-                    )}
-                </UserRect>
-            </UserRectBox>
-                    */}
         </Root>
     );
 };
