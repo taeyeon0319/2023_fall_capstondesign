@@ -16,64 +16,9 @@ flex-direction: column;
 justify-content: flex-start;
 align-items: center;
 `
-const UserPTopText = styled.div`
-margin: 30px 10px;
-color: #000;
-font-family: Inter;
-font-size: 30px;
-font-style: normal;
-font-weight: 600;
-line-height: normal;
-`
-const UserRectBox = styled.div`
-width:80%;
-height: 800px;
-
-display:flex;
-justify-content: space-between;
-`
-const UserRect = styled.div`
-width: 48%;
-padding: 30px 0px;
-height: 780px;
-flex-shrink: 0;
-
-border-radius: 20px;
-background: #E7E6E6;
-
-display:flex;
-flex-direction: column;
-align-items: center;
-`
-const UserHelperList = styled.div`
-width:96%;
-height: 120px;
-flex-shrink: 0;
-border-radius: 20px;
-border: 1px solid #D9D9D9;
-background: #FFF;
-
-color: #000;
-font-family: Inter;
-font-size: 30px;
-font-style: normal;
-font-weight: 600;
-line-height: normal;
-
-display:flex;
-align-items:center;
-`
 const UserHelperListImg = styled.img`
 margin: auto 1.48148vh;
 height:55%
-`
-const UserHelperListText = styled.text`
-color: #000;
-font-family: Inter;
-font-size: 30px;
-font-style: normal;
-font-weight: 600;
-line-height: normal;
 `
 const UserBtnBox = styled.div`
 margin: 3% 0% 6% 0%;
@@ -124,32 +69,6 @@ display : flex;
 justify-content : center;
 align-items : center;
 `
-const UserPBox = styled.div`
-width:90%;
-display:flex;
-align-items:center;
-justify-content:flex-start;
-`
-const UserPImg = styled.img`
-margin:3.84% 7.17% 6.84% 11.17%;
-width:12%;
-`
-const UserPText = styled.div`
-color: #000;
-font-family: Inter;
-font-size: 48px;
-font-style: normal;
-font-weight: 600;
-line-height: normal;
-`
-const UserPText2 = styled.div`
-color: #000;
-font-family: Inter;
-font-size: 32px;
-font-style: normal;
-font-weight: 500;
-line-height: normal;
-`
 const UserInfoText =  styled.div`
 margin: 1.48148vh 0 0.740740vh 0;
 color: var(--Gray-80, #555);
@@ -179,12 +98,6 @@ line-height: normal;
 display:flex;
 align-items:center;
 padding:1.5vh;
-`
-const UserInfoBox = styled.div`
-width:100%;
-display:flex;
-justify-content:center;
-align-items:center;
 `
 const HelperRectTitle = styled.div`
 width:30.6vw;
