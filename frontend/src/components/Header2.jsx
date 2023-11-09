@@ -48,11 +48,16 @@ export const Header = () => {
     const OnClickHandler = () => {
         navigate("/HelperMy");
     };
+
+    const OnClickHandler2 = () => {
+        navigate("/");
+    };
+
     return(
         <>
             <HeaderRoot>
                 <div style={{width:"2%"}}></div>
-                <HeadImg src={logoImg}></HeadImg>
+                <HeadImg src={logoImg} onClick={OnClickHandler2}></HeadImg>
                 <div style={{width:"2%"}}></div>
                 <HeadButtonSet>
                     <HeadButtonText>메뉴A</HeadButtonText>
