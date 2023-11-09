@@ -52,20 +52,19 @@ const HelperList = ()=>{
         
     }, [])
     
-    const getCities = ()=>{
-        // for (let i=0 ;i<cities.length;i++){
-        //     return <option value={cities[i]} >{cities[i]}</option>
-        //     // return cities[i]
-        //     // console.log(cities[i])
-        // }
-        const result = cities.map((city,idx)=>{
-
-            return <option key={idx} value={city} >{city}</option>
-        })
-
-        // console.log(result) // [<option>서울</option>, <option>광주</option>, <option>용산</option>..]
-        return result;
-    }
+    const getCities = () => {
+        if (cities && cities.length > 0) {
+          return cities.map((city, idx) => (
+            <option key={idx} value={city}>
+              {city}
+            </option>
+          ));
+        }
+        return null;
+      };
+      
+    
+      
 
     useEffect(() => {
         const fetchData = async () => {
@@ -80,12 +79,18 @@ const HelperList = ()=>{
         
     }, [])
 
-    const getDistricts = ()=>{
-        const result = districts.map((district, idx)=>{
-            return <option key={idx} value={district}>{district}</option>
-        })
-        return result;
-    }
+    const getDistricts = () => {
+        if (districts && districts.length > 0) {
+          return districts.map((district, idx) => (
+            <option key={idx} value={district}>
+              {district}
+            </option>
+          ));
+        }
+        return null;
+      };
+      
+    
 
     useEffect(()=>{
         const fetchData = async ()=>{
@@ -99,12 +104,16 @@ const HelperList = ()=>{
         fetchData();
     },[])
 
-    const getServices = ()=>{
-        const result = services.map((service, idx)=>{
-            return <option key={idx} value={service}>{service}</option>
-        })
-        return result;
-    }
+    const getServices = () => {
+        if (services && services.length > 0) {
+          return services.map((service, idx) => (
+            <option key={idx} value={service}>
+              {service}
+            </option>
+          ));
+        }
+        return null;
+      };
 
 
     // localhost:8085/helper/search?city=”서울”?district=”강서구”?serviceType=”베이비시터”…  요청 URL http
