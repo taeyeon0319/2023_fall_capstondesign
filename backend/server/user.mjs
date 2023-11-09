@@ -1,20 +1,7 @@
 import express from 'express';
-import pgPromise from 'pg-promise';
-import dotenv from 'dotenv';
+import db from '../db.mjs';
 
 const userRouter = express.Router();
-dotenv.config();
-
-// PostgreSQL 연결 설정
-const pgp = pgPromise();
-const dbConfig = {
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    ssl: { rejectUnauthorized: false }
-};
-const db = pgp(dbConfig);
 
 userRouter.get('/', (req, res) => {
     res.json("success회원 - 개발자 김태연");
