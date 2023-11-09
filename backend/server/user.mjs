@@ -99,7 +99,7 @@ userRouter.get('/helper/search', async (req, res) => {
 
 
 
-// /helper/orderbystars : 평점순
+// /helper/search/orderbystars? : 평점순
 userRouter.get('/helper/search/orderbystars', async (req, res) => {
     try {
         const { region, field, gender, age, career, certification, date, needtime_s, needtime_e } = req.query;
@@ -129,7 +129,7 @@ userRouter.get('/helper/search/orderbystars', async (req, res) => {
             conditions.push(`helper_time.end_time >= '${needtime_e}'`);
         }
 
-        let whereClause = '';
+        let whereClause = ''; 
         if (conditions.length > 0) {
             whereClause = 'WHERE ' + conditions.join(' AND ');
         }
