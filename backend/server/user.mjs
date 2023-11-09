@@ -61,7 +61,7 @@ userRouter.get('/helper/search', async (req, res) => {
         }
         if (career) conditions.push(`career = '${career}'`);
         if (certification) conditions.push(`certification = '${certification}'`);
-        
+
         let targetDay = '';
         if (date) {
             const targetDate = new Date(date);
@@ -69,7 +69,7 @@ userRouter.get('/helper/search', async (req, res) => {
             targetDay = daysOfWeek[targetDate.getDay()];
             conditions.push(`helper_time.day = '${targetDay}'`);
         }
-        
+
         if (needtime_s && needtime_e) {
             conditions.push(`helper_time.start_time <= '${needtime_s}'`);
             conditions.push(`helper_time.end_time >= '${needtime_e}'`);
@@ -100,9 +100,49 @@ userRouter.get('/helper/search', async (req, res) => {
 
 
 // /helper/orderbystars : 평점순
-userRouter.get('/helper/orderbystars', async (req, res) => {
+userRouter.get('/helper/search/orderbystars', async (req, res) => {
     try {
-        const data = await db.any("SELECT * FROM helper ORDER BY stars DESC");
+        const { region, field, gender, age, career, certification, date, needtime_s, needtime_e } = req.query;
+        const conditions = [];
+
+        if (region) conditions.push(`region_county = '${region}'`);
+        if (field) conditions.push(`field = '${field}'`);
+        if (gender) conditions.push(`gender = '${gender}'`);
+        if (age) {
+            const minAge = age;
+            const maxAge = parseInt(age) + 9; // 10년 단위로 범위 설정
+            conditions.push(`age >= ${minAge} AND age <= ${maxAge}`);
+        }
+        if (career) conditions.push(`career = '${career}'`);
+        if (certification) conditions.push(`certification = '${certification}'`);
+
+        let targetDay = '';
+        if (date) {
+            const targetDate = new Date(date);
+            const daysOfWeek = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+            targetDay = daysOfWeek[targetDate.getDay()];
+            conditions.push(`helper_time.day = '${targetDay}'`);
+        }
+
+        if (needtime_s && needtime_e) {
+            conditions.push(`helper_time.start_time <= '${needtime_s}'`);
+            conditions.push(`helper_time.end_time >= '${needtime_e}'`);
+        }
+
+        let whereClause = '';
+        if (conditions.length > 0) {
+            whereClause = 'WHERE ' + conditions.join(' AND ');
+        }
+
+        const query = `
+            SELECT helper.*, helper_time.day, helper_time.start_time, helper_time.end_time
+            FROM helper
+            LEFT JOIN helper_time ON helper.id = helper_time.helper_id
+            ${whereClause}
+            ORDER BY helper.stars DESC, helper.id
+        `;
+
+        const data = await db.any(query);
         res.json(data);
     } catch (error) {
         console.error('Error: ', error);
