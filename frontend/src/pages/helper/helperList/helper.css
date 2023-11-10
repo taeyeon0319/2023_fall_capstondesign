@@ -180,7 +180,7 @@ body {
 }
 
 .helper-list-searched-container .helper-list-searched {
-    height: 720px;
+    height: 600px !important;
     overflow-y: scroll;
     margin: 10px;
 

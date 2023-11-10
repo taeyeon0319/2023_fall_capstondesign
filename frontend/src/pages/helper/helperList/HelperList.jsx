@@ -12,15 +12,17 @@ const HelperList = ()=>{
     const [serviceStartTime, setServiceStartTime] = useState("");//시작시간 : 0830
     const [serviceEndTime, setServiceEndTime] = useState("");//끝시간 : 1130
     const [gender, setGender] = useState("");//성별 : 여
-    const [orderby, setOrderby ] = useState(""); //등록순
+    const [orderby, setOrderby ] = useState("등록순"); //등록순
     const [date, setDate] = useState("");
     const [age, setAge] = useState("");
     const [career, setCareer] = useState("");
     const [certification, setCertification] = useState("");
 
 
+    const [cityData, setCityData] = useState([])
     const [cities, setCities] = useState([]);//시/도 selectbox
-    const [districts, setDistricts] = useState([]);//시/군/구 selectbox
+    const [districts, setDistricts] = useState({});//시/군/구 selectbox
+
     const [services, setServices] = useState([]);//분야 selectbox
     const [helperlist, setHelperlist] = useState([]);
     
@@ -37,99 +39,85 @@ const HelperList = ()=>{
     // console.log(a['1ef'])
 
     const navigate = useNavigate();
+    
 
     useEffect(() => {
         const fetchData = async () => {
-            // console.log(process.env.REACT_APP_SERVER_URL)
             try {
                 const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/city`);
-                setCities(response.data.cities)
+                const data = response.data;
+                setCityData(data);
+                const districtInfo = {}
+
+                for(let district of data){
+                    districtInfo[`${district.region_state}`] = []
+                }
+                
+                for(let district of data){
+                    districtInfo[`${district.region_state}`].push(district.region_country)
+                }
+                setDistricts(districtInfo)
             } catch (error) {
                 console.log('Error fetching data:', error);
             }
         }
         fetchData();
-        
-    }, [])
-    
-    const getCities = () => {
-        if (cities && cities.length > 0) {
-          return cities.map((city, idx) => (
-            <option key={idx} value={city}>
-              {city}
-            </option>
-          ));
-        }
-        return null;
-      };
-      
-    
-      
 
-    useEffect(() => {
-        const fetchData = async () => {
+        const fetchData2 = async ()=>{
             try {
-                const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/district`);
-                setDistricts(response.data.districts)
-            } catch (error) {
-                console.log('Error fetching data:', error);
-            }
-        }
-        fetchData();
-        
-    }, [])
-
-    const getDistricts = () => {
-        if (districts && districts.length > 0) {
-          return districts.map((district, idx) => (
-            <option key={idx} value={district}>
-              {district}
-            </option>
-          ));
-        }
-        return null;
-      };
-      
-    
-
-    useEffect(()=>{
-        const fetchData = async ()=>{
-            try {
-                const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/service`);
-                setServices(response.data.services)
+                const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/fields`);
+                setServices(response.data)
             }catch(error){
                 console.log('Error fetching data :', error);
             }
         }
-        fetchData();
-    },[])
+        fetchData2();
+        
+    }, [])
+
+    useEffect(()=>{
+        getHelperSearch();
+    }, [orderby])
+
+    const getCities = () => {
+        if (!!districts) {
+        
+            const districtList = Object.keys(districts)
+          return districtList.map((el, idx) => (
+            <option key={idx} value={el}>
+              {el}
+            </option>
+          ));
+        }
+      };
+
+    const getDistrict = ()=>{
+        if(city !== "" ){
+            console.log(districts)
+            return districts[`${city}`].map((d, idx)=>{
+                return <option key={idx} value={d}>{d}</option>
+            })
+
+        } else {
+            return []
+        }
+    }
+      
+
 
     const getServices = () => {
-        if (services && services.length > 0) {
-          return services.map((service, idx) => (
-            <option key={idx} value={service}>
-              {service}
+        if (!!services && services.length > 0) {
+          return services.map((service) => (
+            <option 
+            
+            key={service.id} value={service.field_name}>
+              {service.field_name}
             </option>
           ));
         }
         return null;
       };
 
-
-    // localhost:8085/helper/search?city=”서울”?district=”강서구”?serviceType=”베이비시터”…  요청 URL http
-    //처음 한 번이 아니라 리팩토링 될 때마다 가져와야하니까 useState
-    // useEffect(()=>{
-    //     const fetchData = async ()=>{
-    //                 try {
-    //                     const response = await axios.get('http://localhost:8085/search', { params: requestParams });
-    //                     console.log(response.data);
-    //                 }catch(error){
-    //                     console.log('Error fetching data :', error);
-    //                 }
-    //         }
-    //         fetchData();
-    //     }
-    // )
 
     const getHelperSearch = async()=>{
         const requestParams  = {
@@ -139,7 +127,7 @@ const HelperList = ()=>{
             date :date,
             age: age,
             career:career,
-            certification:certification,
+            certification: true,
             needtime_s : serviceStartTime,
             needtime_e : serviceEndTime,
             gender : gender,
@@ -147,7 +135,7 @@ const HelperList = ()=>{
         };
 
         try {
-            const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/user/helper/search`, { params: requestParams });
+            const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/user/helper/search${orderby === '평점순' ? '/orderbystars': ''}`, { params: requestParams });
             setHelperlist(response.data)
         }catch(error){
             console.log('Error fetching data :', error);
@@ -213,46 +201,18 @@ const HelperList = ()=>{
                         <div><b>지역</b></div>
                         <li className='filter-list-item'> 
                             <div className="select-container-2">
-                                <select onChange={(e)=>{setCity(e.target.value)}} className="select-container-item" name="" id="">
-                                    <option value=""  >시/도</option>
+                                <select defaultValue={""} onChange={(e)=>{setCity(e.target.value)}} className="select-container-item" name="" id="">
+                                    <option value="" >지역</option>
                                     {getCities()}
 
                                     {/* <option value="서울" >서울</option>
                                     <option value="광주" >광주</option>
-                                    <option value="대전" >대전</option> */}
+                                <option value="대전" >대전</option> */}
                                 </select>
 
-                                <select onChange={(e)=>{setDistrict(e.target.value)}} className="select-container-item" name="" id="">
-                                    <option value="" >시</option>
-                                    {getDistricts()}
-                                </select>
-
-                                <select onChange={(e)=>{setDistrict(e.target.value)}} className="select-container-item" name="" id="">
-                                    <option value="" >군/구</option>
-                                    {getDistricts()}
-                                </select>
-                            </div>
-                        </li>
-                        <div><b>지역  추가하기</b></div>
-                        <li className='filter-list-item'> 
-                            <div className="select-container-2">
-                                <select onChange={(e)=>{setCity(e.target.value)}} className="select-container-item" name="" id="">
-                                    <option value=""  >시/도</option>
-                                    {getCities()}
-
-                                    {/* <option value="서울" >서울</option>
-                                    <option value="광주" >광주</option>
-                                    <option value="대전" >대전</option> */}
-                                </select>
-
-                                <select onChange={(e)=>{setDistrict(e.target.value)}} className="select-container-item" name="" id="">
-                                    <option value="" >시</option>
-                                    {getDistricts()}
-                                </select>
-
-                                <select onChange={(e)=>{setDistrict(e.target.value)}} className="select-container-item" name="" id="">
-                                    <option value="" >군/구</option>
-                                    {getDistricts()}
+                                <select defaultValue={""} onChange={(e)=>{setDistrict(e.target.value)}} className="select-container-item" name="" id="">
+                                    <option value="" >시/군/구</option>
+                                    {getDistrict()}
                                 </select>
                             </div>
                         </li>
@@ -277,7 +237,8 @@ const HelperList = ()=>{
                                     placeholder="날짜를 입력해주세요."
                                     inputReadOnly={true}
                                     style={{width: '100%'}}
-                                    size='large' onChange={()=>{}} />
+                                    size='large' onChange={(dayjs, dayString)=>{console.log(dayString)}}
+                                    />
                             </div>
                         </li>
 
@@ -286,9 +247,9 @@ const HelperList = ()=>{
                             <div className="select-container-4">
                                 <TimePicker placeholder='00:00' onChange={(time, timeString)=>setServiceStartTime(timeString)} format={'HH:mm'} />
                                 <span className='ft-center'>~</span>
-                                <TimePicker placeholder='00:00' onChange={(time, timeString)=>setServiceStartTime(timeString)} format={'HH:mm'} />
+                                <TimePicker placeholder='00:00' onChange={(time, timeString)=>setServiceEndTime(timeString)} format={'HH:mm'} />
                                 <span> </span>
-                                <button className='select-container-item'>상관 없음</button>
+                                <button className='select-container-item' onClick={()=>setServiceEndTime('')}>상관 없음</button>
 
                             </div>
                         </li>
@@ -297,9 +258,9 @@ const HelperList = ()=>{
                         <li className='filter-list-item'>
                             <div><b>성별</b></div>
                             <div className="select-container-3">
-                                <button placeholder='' onChange={(e)=>{setGender(e.target.value)}} className='select-container-item ft-center' type="text">남자</button>
-                                <button placeholder='00:00' onChange={(e)=>{setGender(e.target.value)}} className='select-container-item ft-center' type="text">여자</button>
-                                <button className='select-container-item'>상관 없음</button>
+                                <button placeholder='' onClick={()=>{setGender('남')}} className='select-container-item ft-center' type="text">남자</button>
+                                <button placeholder='00:00' onClick={()=>{setGender('여')}} className='select-container-item ft-center' type="text">여자</button>
+                                <button className='select-container-item' onClick={()=>setGender('')}>상관 없음</button>
                             </div>
                         </li>
                     </ul>
@@ -311,8 +272,12 @@ const HelperList = ()=>{
                     
                     <div className='title'><span className='fl'>도우미 목록</span> <span className='count ft-size15 fr'>총 {helperlist.length}건 검색</span></div>
                         <div className='options-container'>
-                        <select className='sorted-option ft-color' name="" id="">
-                            <option value="" >등록순</option>
+                        <select onChange={(e)=>{
+                            const value = e.target.value;
+                            setOrderby(value)
+                        }} className='sorted-option ft-color' name="" id="">
+                            <option value="등록순" >등록순</option>
+                            <option value="평점순" >평점순</option>
                         </select>
                     </div>
                     <ul className='helper-list-searched'>
