@@ -100,7 +100,7 @@ helperRouter.get("/requests-helper/:helper_id", async (req, res) => {
   }
   try {
     const requests = await client.query(
-      `SELECT * FROM requests WHERE helper_id = $1`,
+      `SELECT * FROM requests WHERE helper_id = $1  AND status = '요청'`,
       [helperId]
     );
     //한 도우미에 대한 요청데이터와 이용자 정보 합치기
@@ -184,4 +184,42 @@ helperRouter.post("/requests-helper/confirmed", async (req, res) => {
   }
 });
 
+// 도우미 정보 insert하는 엔드포인트
+helperRouter.post("/helper", async (req, res) => {
+  const client = await pool.connect();
+  try {
+    await client.query(
+      "INSERT INTO helper(name,region_state,region_country,field,gender,introduction,image,career,stars,certification,activity) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)",
+      [
+        req.body.name,
+        req.body.region_state,
+        req.body.region_country,
+        req.body.field,
+        req.body.gender,
+        req.body.introduction,
+        req.body.image,
+        req.body.career,
+        req.body.stars,
+        req.body.certification,
+        req.body.activity,
+      ]
+    );
+    res.json("success");
+    client.release();
+  } catch (err) {
+    console.error("Error updating request status:", err);
+    res.status(500).json({
+      error: "An error occurred while updating the request status.",
+    });
+  }
+});
+
+// 이용자 정보 insert하는 엔드포인트
+// helperRouter.post("/user", async (req, res) => {
+//   const client = await pool.connect();
+//   try{
+//     await client.query(
+//       "INSERT"
+
+//   }
 export default helperRouter;
