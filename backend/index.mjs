@@ -4,6 +4,7 @@ import cors from "cors";
 import db from './db.mjs';
 import userRouter from './server/user.mjs'; // user 모듈 불러오기
 import helperRouter from './server/helper.mjs'; // helper 모듈 불러오기
+import signupRouter from './server/signup.mjs';
 
 //variable
 const PORT = 5000;
@@ -26,6 +27,7 @@ app.use('/user', userRouter);
 //도우미용
 app.use('/helper', helperRouter);
 
+app.use('/', signupRouter);
 // /city : 위치 테이블 출력
 app.get('/city', async (req, res) => {
   try{
