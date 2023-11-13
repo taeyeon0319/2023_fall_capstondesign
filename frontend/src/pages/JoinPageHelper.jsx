@@ -1,6 +1,7 @@
 import styled from "styled-components";
-import Header from "../components/Header";
+import Header2 from "../components/Header2";
 import React, { useState } from 'react';
+import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 
 const Root = styled.div`
@@ -14,52 +15,77 @@ align-items: center;
 `
 
 const JoinHInputBox = styled.div`
+padding:10px;
 display: flex;
-align-items: center;
+flex-direction:column;
+align-items: flex-start;
 justify-content: space-between;
-width : 600px;
-height : 70px;
-margin: 6px auto;
 `
 
 const JoinHInput = styled.input`
-width:70%;
-height: 50px;
-background: #FFF;
-border: 1px solid #BB6C25;
-border-radius: 20px;
+width: 48.54vw;
+height: 5.3vh;
+flex-shrink: 0;
+margin-top:5px;
+
+border-radius: 5px;
+border: 1px solid var(--Gray-30, #EBEAEA);
+background: var(--white, #FFF);
 `
 
 const JoinHText = styled.p`
-witdth: 30%;
-color: #000;
-font-family: Noto Serif KR;
-font-size: 32px;
+padding-top:20px;
+color: var(--Gray-70, #707070);
+
+font-family: Noto Sans KR;
+font-size: 18px;
 font-style: normal;
-font-weight: 600;
-line-height: 48px; /* 150% */
+font-weight: 500;
+line-height: normal;
 `
 const JoinHBtn = styled.div`
-width : 600px;
-height : 80px;
-border-radius: 20px;
-background: #BB6C25;
+width : 14.6875vw;
+height : 4.9vh;
+flex-shrink: 0;
+margin:10px;
+
+border-radius: 5px;
+border: 1px solid var(--Gray-40, #C2C1C1);
+background: var(--white, #FFF);
 
 display: flex;
 align-items: center;
 justify-content:center;
-margin: 50px auto;
 
-color: #FFF;
-text-align: center;
-font-family: Roboto Flex;
-font-size: 40px;
+color: var(--Gray-70, #707070);
+
+font-family: Noto Sans KR;
+font-size: 0.9375vw;
 font-style: normal;
-font-weight: 800;
+font-weight: 700;
 line-height: normal;
 `
 
+const JoinBtnBox = styled.div`
+width: 51.875vw;
+height:76.86vh;
+flex-shrink: 0;
+margin-top:20px;
+
+border-radius: 5px;
+border: 1px solid var(--Gray-30, #EBEAEA);
+background: var(--white, #FFF);
+
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+`
+
 export const JoinPageHelper = () =>{
+
+    const navigate = useNavigate();
+
     const [JoinData, setJoinData] = useState({
         id: '',
         password: '',
@@ -83,41 +109,37 @@ export const JoinPageHelper = () =>{
             const response = await axios.post('http://localhost:5000/signup', JoinData);
             console.log('회원가입 성공:', response.data);
         } catch (error) {
+            alert("로그인 실패 : 모든 정보를 정확히 기입해주세요.");
             console.error('회원가입 실패:', error.message);
         }
     };
 
+    const OnclickHandler = () =>{
+        navigate("/join");
+    };
+
     return (
         <Root>
-            <Header></Header>
-            <div style={{height:'100%',display:'flex',flexDirection:'column',justifyContent:'space-between',alignItems:'center'}}>
-                <div style={{margin: '50px auto auto auto'}}>
-                    <JoinHInputBox>
-                        <JoinHText>이름</JoinHText>
-                        <JoinHInput type="text" name="name" value={JoinData.name} onChange={handleChange}></JoinHInput>
-                    </JoinHInputBox>
-                    <JoinHInputBox>
-                        <JoinHText>아이디</JoinHText>
-                        <JoinHInput type="text" name="id" value={JoinData.id} onChange={handleChange}></JoinHInput>
-                    </JoinHInputBox>
-                    <JoinHInputBox>
-                        <JoinHText >비밀번호</JoinHText>
-                        <JoinHInput type="password" name="password" value={JoinData.password} onChange={handleChange}></JoinHInput>
-                    </JoinHInputBox>
-                    <JoinHInputBox>
-                        <JoinHText >비밀번호 확인</JoinHText>
-                        <JoinHInput type="password" name="password_confirm" value={JoinData.password_confirm} onChange={handleChange}></JoinHInput>
-                    </JoinHInputBox>
-                    <JoinHInputBox>
-                        <JoinHText>이메일</JoinHText>
-                        <JoinHInput type="text" name="email" value={JoinData.email} onChange={handleChange}></JoinHInput>
-                    </JoinHInputBox>
-                    <JoinHInputBox>
-                        <JoinHText>전화번호</JoinHText>
-                        <JoinHInput type="text" name="mobile" value={JoinData.mobile} onChange={handleChange}></JoinHInput>
-                    </JoinHInputBox>
-                </div>
-                <JoinHBtn onClick={ Join }>회원가입</JoinHBtn>
+            <Header2></Header2>
+            <JoinBtnBox>
+                <JoinHInputBox>
+                    <JoinHText>이름</JoinHText>
+                    <JoinHInput type="text" name="name" value={JoinData.name} onChange={handleChange}></JoinHInput>
+                    <JoinHText>아이디</JoinHText>
+                    <JoinHInput type="text" name="id" value={JoinData.id} onChange={handleChange}></JoinHInput>
+                    <JoinHText >비밀번호</JoinHText>
+                    <JoinHInput type="password" name="password" value={JoinData.password} onChange={handleChange}></JoinHInput>
+                    <JoinHText >비밀번호 확인</JoinHText>
+                    <JoinHInput type="password" name="password_confirm" value={JoinData.password_confirm} onChange={handleChange}></JoinHInput>
+                    <JoinHText>이메일</JoinHText>
+                    <JoinHInput type="text" name="email" value={JoinData.email} onChange={handleChange}></JoinHInput>
+                    <JoinHText>전화번호</JoinHText>
+                    <JoinHInput type="text" name="mobile" value={JoinData.mobile} onChange={handleChange}></JoinHInput>
+                </JoinHInputBox>
+            </JoinBtnBox>
+            <div style={{display:"flex"}}>
+                <JoinHBtn onClick={ OnclickHandler }>뒤로가기</JoinHBtn>
+                <JoinHBtn style={{background: "var(--Gray-30, #EBEAEA)"}} onClick={ Join }>회원가입</JoinHBtn>
             </div>
         </Root>
     );

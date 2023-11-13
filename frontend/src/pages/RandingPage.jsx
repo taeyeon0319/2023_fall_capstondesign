@@ -272,12 +272,21 @@ export const RandingPage = () => {
 
     const [loginBtn, setLoginBtn] = useState(0);
     const [login, setLogin] = useState(0);
+    const [reRender, setreRender] = useState(0);
     const [id, setId] = useState('');
     const [pw, setPw] = useState('');
     const [loginData, setloginData] = useState({
         id: '',
         password: '',
     });
+    
+    React.useEffect(() => {
+        console.log(localStorage.getItem("loginState"));
+    }, []);
+
+    React.useEffect(() => {
+        console.log(localStorage.getItem("loginState"));
+    }, [reRender]);
 
     const clickLoginBtn = () =>{
         if (loginBtn===1){
@@ -290,6 +299,9 @@ export const RandingPage = () => {
     const clickLogoutBtn = () =>{
         if(window.confirm('로그아웃하시겠습니까?')){
             setLogin(0);
+            localStorage.setItem("loginState",false);
+            console.log(localStorage.getItem("loginState"));
+            setreRender(prevState => (prevState === 0 ? 1 : 0));
         }
     };
 
@@ -302,9 +314,12 @@ export const RandingPage = () => {
         try {
             const response = await axios.post('http://localhost:5000/login', loginData);
             console.log('로그인 성공:', response.data);
-            setLogin(1);
+            localStorage.setItem("loginState", true);
+            localStorage.setItem("loginId", loginData.id);
+            setreRender(prevState => (prevState === 0 ? 1 : 0));
         } catch (error) {
             console.error('로그인 실패:', error.message);
+            alert("아이디 또는 비밀번호가 일치하지 않습니다.");
         }
 
         /*
@@ -356,20 +371,26 @@ export const RandingPage = () => {
                 </RandTextBox>
                 <RandButtonBox>
                     <RandLoginBox>
-                        {loginBtn!==1&&(<>
-                        <RandLoginBoxText>서비스 이용시 <br/> 로그인이 필요합니다.</RandLoginBoxText>
-                        </>)}
+                        {(localStorage.getItem("loginState")==="false")&&loginBtn===0&&(<>
                         <div style={{width:"14.16666vw", display:"flex", justifyContent:"space-between"}}>
                             <RandBtnSmall id={'cypresslogin'} toggle={loginBtn} onClick={clickLoginBtn}>로그인</RandBtnSmall>
                             <RandBtnSmall onClick={JoinOnclickHandler}>회원가입</RandBtnSmall>
                         </div>
-                    {loginBtn===1&&login===0&&(
+                        <RandLoginBoxText>서비스 이용시 <br/> 로그인이 필요합니다.</RandLoginBoxText>
+                        </>)}
+                    {(localStorage.getItem("loginState"))==="false"&&loginBtn===1&&(
                     <>
+                    <div style={{width:"14.16666vw", display:"flex", justifyContent:"space-between"}}>
+                        <RandBtnSmall id={'cypresslogin'} toggle={loginBtn} onClick={clickLoginBtn}>로그인</RandBtnSmall>
+                        <RandBtnSmall onClick={JoinOnclickHandler}>회원가입</RandBtnSmall>
+                    </div>
                     <RandLogin>
+                        {/*
                         <div style={{width:"12.4999vw", display:"flex", justifyContent:"space-between"}}>
                             <RandBtnSmall style={{width:"5.833275vw"}}>이용자</RandBtnSmall>
                             <RandBtnSmall style={{width:"5.833275vw"}}>도우미</RandBtnSmall>
                         </div>
+                        */}
                         <RandBtnBox>
                             <RandLoginText>아이디</RandLoginText>
                             <RandLoginInput type="text" name="id" value={loginData.id} id="cypressid" className="input" onChange= { handleChange }></RandLoginInput>
@@ -383,7 +404,7 @@ export const RandingPage = () => {
                     </RandLogin>
                     </>
                     )}
-                    {login===1&&(
+                    {localStorage.getItem("loginState")==="true"&&(
                     <RandLogin>
                         <RandAfterLoginBox>
                             <RandAfterLoginImg src={userImg}></RandAfterLoginImg>
