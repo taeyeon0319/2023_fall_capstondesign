@@ -1,6 +1,7 @@
 import styled from "styled-components";
-import React from 'react';
 import Header from "../components/Header";
+import React, { useState } from 'react';
+import axios from 'axios';
 
 const Root = styled.div`
 width: 100vw;
@@ -59,6 +60,33 @@ line-height: normal;
 `
 
 export const JoinPageHelper = () =>{
+    const [JoinData, setJoinData] = useState({
+        id: '',
+        password: '',
+        password_confirm: '',
+        name: '',
+        email: '',
+        mobile: '',
+        type: '도우미',
+    });
+    
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setJoinData((prevData) => ({
+          ...prevData,
+          [name]: value,
+        }));
+    };
+
+    const Join = async () =>{
+        try {
+            const response = await axios.post('http://localhost:5000/signup', JoinData);
+            console.log('회원가입 성공:', response.data);
+        } catch (error) {
+            console.error('회원가입 실패:', error.message);
+        }
+    };
+
     return (
         <Root>
             <Header></Header>
@@ -66,22 +94,30 @@ export const JoinPageHelper = () =>{
                 <div style={{margin: '50px auto auto auto'}}>
                     <JoinHInputBox>
                         <JoinHText>이름</JoinHText>
-                        <JoinHInput></JoinHInput>
+                        <JoinHInput type="text" name="name" value={JoinData.name} onChange={handleChange}></JoinHInput>
                     </JoinHInputBox>
                     <JoinHInputBox>
                         <JoinHText>아이디</JoinHText>
-                        <JoinHInput></JoinHInput>
+                        <JoinHInput type="text" name="id" value={JoinData.id} onChange={handleChange}></JoinHInput>
                     </JoinHInputBox>
                     <JoinHInputBox>
-                        <JoinHText>비밀번호</JoinHText>
-                        <JoinHInput></JoinHInput>
+                        <JoinHText >비밀번호</JoinHText>
+                        <JoinHInput type="password" name="password" value={JoinData.password} onChange={handleChange}></JoinHInput>
+                    </JoinHInputBox>
+                    <JoinHInputBox>
+                        <JoinHText >비밀번호 확인</JoinHText>
+                        <JoinHInput type="password" name="password_confirm" value={JoinData.password_confirm} onChange={handleChange}></JoinHInput>
+                    </JoinHInputBox>
+                    <JoinHInputBox>
+                        <JoinHText>이메일</JoinHText>
+                        <JoinHInput type="text" name="email" value={JoinData.email} onChange={handleChange}></JoinHInput>
                     </JoinHInputBox>
                     <JoinHInputBox>
                         <JoinHText>전화번호</JoinHText>
-                        <JoinHInput></JoinHInput>
+                        <JoinHInput type="text" name="mobile" value={JoinData.mobile} onChange={handleChange}></JoinHInput>
                     </JoinHInputBox>
                 </div>
-                <JoinHBtn>회원가입</JoinHBtn>
+                <JoinHBtn onClick={ Join }>회원가입</JoinHBtn>
             </div>
         </Root>
     );
