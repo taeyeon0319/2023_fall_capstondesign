@@ -70,6 +70,7 @@ userRouter.get('/helper/search', async (req, res) => {
             conditions.push(`helper_time.day = '${targetDay}'`);
         }
 
+        // Check if needtime_s and needtime_e are provided
         if (needtime_s && needtime_e) {
             conditions.push(`helper_time.start_time <= '${needtime_s}'`);
             conditions.push(`helper_time.end_time >= '${needtime_e}'`);
@@ -95,6 +96,7 @@ userRouter.get('/helper/search', async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
+
 
 
 
