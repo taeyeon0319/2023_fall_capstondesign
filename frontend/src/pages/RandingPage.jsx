@@ -319,6 +319,7 @@ export const RandingPage = () => {
             setreRender(prevState => (prevState === 0 ? 1 : 0));
         } catch (error) {
             console.error('로그인 실패:', error.message);
+            alert("아이디 또는 비밀번호가 일치하지 않습니다.");
         }
 
         /*
@@ -371,14 +372,18 @@ export const RandingPage = () => {
                 <RandButtonBox>
                     <RandLoginBox>
                         {(localStorage.getItem("loginState")==="false")&&loginBtn===0&&(<>
-                        <RandLoginBoxText>서비스 이용시 <br/> 로그인이 필요합니다.</RandLoginBoxText>
                         <div style={{width:"14.16666vw", display:"flex", justifyContent:"space-between"}}>
                             <RandBtnSmall id={'cypresslogin'} toggle={loginBtn} onClick={clickLoginBtn}>로그인</RandBtnSmall>
                             <RandBtnSmall onClick={JoinOnclickHandler}>회원가입</RandBtnSmall>
                         </div>
+                        <RandLoginBoxText>서비스 이용시 <br/> 로그인이 필요합니다.</RandLoginBoxText>
                         </>)}
                     {(localStorage.getItem("loginState"))==="false"&&loginBtn===1&&(
                     <>
+                    <div style={{width:"14.16666vw", display:"flex", justifyContent:"space-between"}}>
+                        <RandBtnSmall id={'cypresslogin'} toggle={loginBtn} onClick={clickLoginBtn}>로그인</RandBtnSmall>
+                        <RandBtnSmall onClick={JoinOnclickHandler}>회원가입</RandBtnSmall>
+                    </div>
                     <RandLogin>
                         {/*
                         <div style={{width:"12.4999vw", display:"flex", justifyContent:"space-between"}}>
