@@ -6,6 +6,7 @@ import helperImg from '../img/woman.png'
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header2 from "../components/Header2";
+import axios from 'axios';
 
 const Root = styled.div`
 width: 100vw;
@@ -273,6 +274,10 @@ export const RandingPage = () => {
     const [login, setLogin] = useState(0);
     const [id, setId] = useState('');
     const [pw, setPw] = useState('');
+    const [loginData, setloginData] = useState({
+        id: '',
+        password: '',
+    });
 
     const clickLoginBtn = () =>{
         if (loginBtn===1){
@@ -292,7 +297,17 @@ export const RandingPage = () => {
         navigate("/Join");
     };
 
-    const clickLoginbtn = () =>{
+    const clickLoginbtn = async () =>{
+
+        try {
+            const response = await axios.post('http://localhost:5000/login', loginData);
+            console.log('로그인 성공:', response.data);
+            setLogin(1);
+        } catch (error) {
+            console.error('로그인 실패:', error.message);
+        }
+
+        /*
         if(id==='user' && pw==='user'){
             setLogin(1);
         }else if(id==='helper' && pw==='helper'){
@@ -305,6 +320,15 @@ export const RandingPage = () => {
                 inputItem[i].value='';
             }
         }
+        */
+    };
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setloginData((prevData) => ({
+          ...prevData,
+          [name]: value,
+        }));
     };
 
     const clickMain = () =>{
@@ -348,11 +372,11 @@ export const RandingPage = () => {
                         </div>
                         <RandBtnBox>
                             <RandLoginText>아이디</RandLoginText>
-                            <RandLoginInput id="cypressid" className="input" onChange={(e) => setId(e.target.value)}></RandLoginInput>
+                            <RandLoginInput type="text" name="id" value={loginData.id} id="cypressid" className="input" onChange= { handleChange }></RandLoginInput>
                         </RandBtnBox>
                         <RandBtnBox>
                             <RandLoginText>비밀번호</RandLoginText>
-                            <RandLoginInput id="cypresspw" className="input" type='password' onChange={(e) => setPw(e.target.value)}></RandLoginInput>
+                            <RandLoginInput type="password" name="password" value={loginData.password} id="cypresspw" className="input" onChange={ handleChange }></RandLoginInput>
                         </RandBtnBox>
                         <RandBtn style={{width:"12.4999vw"}} onClick={clickLoginbtn}>로그인</RandBtn>
                         <RandLoginTextF>로그인 정보를 잊으셨나요?</RandLoginTextF>
