@@ -1,6 +1,7 @@
 import styled from "styled-components";
-import React from 'react';
 import Header from "../components/Header";
+import React, { useState } from 'react';
+import axios from 'axios';
 
 const Root = styled.div`
 width: 100vw;
@@ -59,29 +60,64 @@ line-height: normal;
 `
 
 export const JoinPageUser = () =>{
+    const [JoinData, setJoinData] = useState({
+        id: '',
+        password: '',
+        password_confirm: '',
+        name: '',
+        email: '',
+        mobile: '',
+        type: '이용자',
+    });
+    
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setJoinData((prevData) => ({
+          ...prevData,
+          [name]: value,
+        }));
+    };
+
+    const Join = async () =>{
+        try {
+            const response = await axios.post('http://localhost:5000/signup', JoinData);
+            console.log('회원가입 성공:', response.data);
+        } catch (error) {
+            console.error('회원가입 실패:', error.message);
+        }
+    };
+
     return (
         <Root>
             <Header></Header>
             <div style={{height:'100%',display:'flex',flexDirection:'column',justifyContent:'space-between',alignItems:'center'}}>
-                <div style={{margin: '50px auto auto auto'}}>
+            <div style={{margin: '50px auto auto auto'}}>
                     <JoinUInputBox>
                         <JoinUText>이름</JoinUText>
-                        <JoinUInput></JoinUInput>
+                        <JoinUInput type="text" name="name" value={JoinData.name} onChange={handleChange}></JoinUInput>
                     </JoinUInputBox>
                     <JoinUInputBox>
                         <JoinUText>아이디</JoinUText>
-                        <JoinUInput></JoinUInput>
+                        <JoinUInput type="text" name="id" value={JoinData.id} onChange={handleChange}></JoinUInput>
                     </JoinUInputBox>
                     <JoinUInputBox>
-                        <JoinUText>비밀번호</JoinUText>
-                        <JoinUInput></JoinUInput>
+                        <JoinUText >비밀번호</JoinUText>
+                        <JoinUInput type="password" name="password" value={JoinData.password} onChange={handleChange}></JoinUInput>
+                    </JoinUInputBox>
+                    <JoinUInputBox>
+                        <JoinUText >비밀번호 확인</JoinUText>
+                        <JoinUInput type="password" name="password_confirm" value={JoinData.password_confirm} onChange={handleChange}></JoinUInput>
+                    </JoinUInputBox>
+                    <JoinUInputBox>
+                        <JoinUText>이메일</JoinUText>
+                        <JoinUInput type="text" name="email" value={JoinData.email} onChange={handleChange}></JoinUInput>
                     </JoinUInputBox>
                     <JoinUInputBox>
                         <JoinUText>전화번호</JoinUText>
-                        <JoinUInput></JoinUInput>
+                        <JoinUInput type="text" name="mobile" value={JoinData.mobile} onChange={handleChange}></JoinUInput>
                     </JoinUInputBox>
                 </div>
-                <JoinUBtn>회원가입</JoinUBtn>
+                <JoinUBtn onClick={ Join }>회원가입</JoinUBtn>
             </div>
         </Root>
         
