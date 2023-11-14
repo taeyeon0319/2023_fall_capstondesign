@@ -1,8 +1,6 @@
 // helper.mjs
 import express, { request } from "express";
 import pg from "pg";
-import bodyParser from "body-parser";
-import cors from "cors";
 import dotenv from "dotenv";
 
 const helperRouter = express.Router();
@@ -223,43 +221,5 @@ helperRouter.post("/helper", async (req, res) => {
 
 //   }
 // })
-
-// 평점정보 반환하는 엔드포인트 user_id와 helper_id 받아서 조인해서 평점정보 반환
-helperRouter.get("/stars/:helper_id", async (req, res) => {
-  const client = await pool.connect();
-  const helperId = parseInt(req.params.helper_id);
-  try {
-    const stars = await client.query(
-      `SELECT * FROM reveiw,user_data WHERE reveiw.user_id = user_data.id AND reveiw.helper_id = $1`,
-      [helperId]
-    );
-    res.json(stars.rows);
-    client.release();
-  } catch (err) {
-    console.error("Error fetching request data:", err);
-    res
-      .status(500)
-      .json({ error: "An error occurred while fetching the request data." });
-  }
-});
-
-// 도우미별 평점 평균 반환하는 엔드포인트
-helperRouter.get("/stars/:helper_id/average", async (req, res) => {
-  const client = await pool.connect();
-  const helperId = parseInt(req.params.helper_id);
-  try {
-    const stars = await client.query(
-      `SELECT AVG(rating) FROM reveiw WHERE helper_id = $1`,
-      [helperId]
-    );
-    res.json(stars.rows);
-    client.release();
-  } catch (err) {
-    console.error("Error fetching request data:", err);
-    res
-      .status(500)
-      .json({ error: "An error occurred while fetching the request data." });
-  }
-});
 
 export default helperRouter;
