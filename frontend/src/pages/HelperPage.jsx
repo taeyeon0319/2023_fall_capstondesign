@@ -19,6 +19,8 @@ const Root = styled.div`
 const UserHelperListImg = styled.img`
   margin: auto 1.48148vh;
   height: 55%;
+  width: 13%;
+  border-radius: 70%;
 `;
 const UserBtnBox = styled.div`
   margin: 3% 0% 6% 0%;
@@ -218,7 +220,7 @@ export const HelperPage = () => {
           <HelperRect>
             {responseData.map((item, index) => (
               <HelperReqList onClick={() => UserListClickHandler(index)}>
-                <UserHelperListImg src={userImg}></UserHelperListImg>
+                <UserHelperListImg src={item.user.image}></UserHelperListImg>
                 <div
                   style={{
                     display: "flex",
