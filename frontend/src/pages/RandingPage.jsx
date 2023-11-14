@@ -371,7 +371,7 @@ export const RandingPage = () => {
                 </RandTextBox>
                 <RandButtonBox>
                     <RandLoginBox>
-                        {(localStorage.getItem("loginState")==="false")&&loginBtn===0&&(<>
+                        {((localStorage.getItem("loginState")==="false")||(localStorage.getItem("loginState")===null))&&loginBtn===0&&(<>
                         <div style={{width:"14.16666vw", display:"flex", justifyContent:"space-between"}}>
                             <RandBtnSmall id={'cypresslogin'} toggle={loginBtn} onClick={clickLoginBtn}>로그인</RandBtnSmall>
                             <RandBtnSmall onClick={JoinOnclickHandler}>회원가입</RandBtnSmall>
