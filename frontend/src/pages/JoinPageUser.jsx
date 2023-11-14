@@ -108,8 +108,10 @@ export const JoinPageUser = () =>{
         try {
             const response = await axios.post('http://localhost:5000/signup', JoinData);
             console.log('회원가입 성공:', response.data);
+            alert("환영합니다! 가입하신 아이디와 비밀번호로 로그인해주세요.");
+            navigate("/");
         } catch (error) {
-            alert("로그인 실패 : 모든 정보를 정확히 기입해주세요.");
+            alert("회원가입 실패 : 모든 정보를 정확히 기입해주세요.");
             console.error('회원가입 실패:', error.message);
         }
     };
