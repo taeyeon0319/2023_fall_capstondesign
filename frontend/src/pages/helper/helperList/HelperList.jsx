@@ -3,7 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import './helper.css';
 import axios from "axios";
 import { Button, Modal, DatePicker, Space, TimePicker  } from 'antd';
-
+import Header2 from "../../../components/Header2";
+import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 
 const HelperList = ()=>{
     const [city, setCity] = useState(""); //시/도 : 서울
@@ -26,6 +28,27 @@ const HelperList = ()=>{
     const [services, setServices] = useState([]);//분야 selectbox
     const [helperlist, setHelperlist] = useState([]);
     
+    //DatePicker 지난 날짜.시간 비활성화 > 
+    dayjs.extend(customParseFormat);
+    // const { RangePicker } = DatePicker;
+    const range = (start, end) => {
+    const result = [];
+    for (let i = start; i < end; i++) {
+        result.push(i);
+    }
+    return result;
+    };
+        // eslint-disable-next-line arrow-body-style
+    const disabledDate = (current) => {
+        // Can not select days before today and today
+        return current < dayjs().startOf('day') ;
+        //console.log(dayjs().add(0,'days'));
+    };
+    const disabledDateTime = () => ({
+        disabledHours: () => range(0, 24).splice(4, 20),
+        disabledMinutes: () => range(30, 60),
+        disabledSeconds: () => [55, 56],
+    });
     // const a = {
     //     'b' : 1,
     //     c: 2,
@@ -57,6 +80,7 @@ const HelperList = ()=>{
                     districtInfo[`${district.region_state}`].push(district.region_country)
                 }
                 setDistricts(districtInfo)
+                
             } catch (error) {
                 console.log('Error fetching data:', error);
             }
@@ -83,13 +107,13 @@ const HelperList = ()=>{
         if (!!districts) {
         
             const districtList = Object.keys(districts)
-          return districtList.map((el, idx) => (
-            <option key={idx} value={el}>
-              {el}
-            </option>
-          ));
-        }
-      };
+            return districtList.map((el, idx) => (
+                <option key={idx} value={el}>
+                {el}
+                </option>
+            ));
+            }
+        };
 
     const getDistrict = ()=>{
         if(city !== "" ){
@@ -102,21 +126,21 @@ const HelperList = ()=>{
             return []
         }
     }
-      
+
 
 
     const getServices = () => {
         if (!!services && services.length > 0) {
-          return services.map((service) => (
-            <option 
-            
-            key={service.id} value={service.field_name}>
-              {service.field_name}
-            </option>
-          ));
-        }
-        return null;
-      };
+            return services.map((service) => (
+                <option 
+                
+                key={service.id} value={service.field_name}>
+                {service.field_name}
+                </option>
+            ));
+            }
+            return null;
+        };
 
 
     const getHelperSearch = async()=>{
@@ -182,7 +206,7 @@ const HelperList = ()=>{
     return (
         <div className="app">
 
-            <header className='header'>
+            {/* <header className='header'>
                 <select className='select-type' placeholder='종류 선택'>
                     <option value="" >종류선택</option>
                     <option value="">A</option>
@@ -193,7 +217,8 @@ const HelperList = ()=>{
                 <div className="logo">
                     <img src={require('./images/home_logo.png')}></img>
                 </div>                
-            </header>
+            </header> */}
+            <Header2></Header2>
 
             <div className="helper-list-container">
                 <div className="helper-search-form">
@@ -234,6 +259,8 @@ const HelperList = ()=>{
                             <div><b>날짜</b></div>
                             <div className="select-container-1">
                                 <DatePicker 
+                                    disabledDate={disabledDate}
+                                    disabledTime={disabledDateTime}
                                     placeholder="날짜를 입력해주세요."
                                     inputReadOnly={true}
                                     style={{width: '100%'}}
