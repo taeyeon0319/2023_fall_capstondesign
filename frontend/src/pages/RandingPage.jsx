@@ -378,7 +378,7 @@ export const RandingPage = () => {
                         </div>
                         <RandLoginBoxText>서비스 이용시 <br/> 로그인이 필요합니다.</RandLoginBoxText>
                         </>)}
-                    {(localStorage.getItem("loginState"))==="false"&&loginBtn===1&&(
+                    {((localStorage.getItem("loginState"))==="false"||(localStorage.getItem("loginState")===null))&&loginBtn===1&&(
                     <>
                     <div style={{width:"14.16666vw", display:"flex", justifyContent:"space-between"}}>
                         <RandBtnSmall id={'cypresslogin'} toggle={loginBtn} onClick={clickLoginBtn}>로그인</RandBtnSmall>
