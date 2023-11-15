@@ -41,7 +41,7 @@ const HelperList = ()=>{
         // eslint-disable-next-line arrow-body-style
     const disabledDate = (current) => {
         // Can not select days before today and today
-        return current < dayjs().startOf('day') ;
+        return current < dayjs().startOf('day') || current > dayjs().add(6,'day');
         //console.log(dayjs().add(0,'days'));
     };
     const disabledDateTime = () => ({
@@ -264,7 +264,7 @@ const HelperList = ()=>{
                                     placeholder="날짜를 입력해주세요."
                                     inputReadOnly={true}
                                     style={{width: '100%'}}
-                                    size='large' onChange={(dayjs, dayString)=>{console.log(dayString)}}
+                                    size='large' onChange={(dayjs, dayString)=>{setDate(dayString)}}
                                     />
                             </div>
                         </li>
