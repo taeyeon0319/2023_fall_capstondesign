@@ -93,7 +93,7 @@ export const JoinPageHelper = () =>{
         name: '',
         email: '',
         mobile: '',
-        type: '도우미',
+        type: 'helper',
     });
     
     const handleChange = (e) => {
