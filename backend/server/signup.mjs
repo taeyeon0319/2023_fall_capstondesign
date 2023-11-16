@@ -9,9 +9,21 @@ signupRouter.get('/s', (req, res) => {
 });
 
 // /signup : 회원가입 
+const passwordRegex = /^.{8,16}$/;
+
 signupRouter.post('/signup', async (req, res) => {
   try {
     const { id, name, password, password_confirm, email, mobile, type } = req.body;
+
+    // 비밀번호 유효성 검사
+    if (!passwordRegex.test(password)) {
+      return res.status(400).json({ error: '8~16자의 영문 대소문자, 숫자, 특수문자만 가능' });
+    }
+
+    // 비밀번호와 확인 비밀번호가 일치하는지 확인
+    if (password !== password_confirm) {
+      return res.status(400).json({ error: '비밀번호가 일치하지 않습니다.' });
+    }
 
     // 사용자 생성
     const query = `
@@ -30,9 +42,11 @@ signupRouter.post('/signup', async (req, res) => {
     res.json({ token });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: '내부 서버 오류' });
   }
 });
+
+
 
 signupRouter.post('/login', async (req, res) => {
   try {
