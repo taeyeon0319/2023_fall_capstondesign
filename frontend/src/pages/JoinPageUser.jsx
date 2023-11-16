@@ -93,7 +93,7 @@ export const JoinPageUser = () =>{
         name: '',
         email: '',
         mobile: '',
-        type: '이용자',
+        type: 'user',
     });
     
     const handleChange = (e) => {
