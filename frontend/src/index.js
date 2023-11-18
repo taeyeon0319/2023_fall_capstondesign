@@ -13,7 +13,9 @@ import HelperPage from './pages/HelperPage';
 import HelperRequestPage from './pages/HeplerRequest';
 import HelperMyPage from './pages/HelperMyPage';
 import Header2 from './components/Header2';
+import UserMyPageEdit from './pages/user/userMyPage/UserMyPageEdit'
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import {Provider, KeepAlive} from 'react-keep-alive';
 
 const router = createBrowserRouter([
   {
@@ -68,14 +70,19 @@ const router = createBrowserRouter([
     path: "/header2",
     element : <Header2/>,
   },
+  {
+    path: "/usermypage/edit",
+    element: <UserMyPageEdit />
+  }
 ]);
 
 sessionStorage.setItem('id', 'yys')
-sessionStorage.setItem('user_id', '1')
+sessionStorage.setItem('user_id', '2')
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
+    
     <RouterProvider router={router} />
   </React.StrictMode>
 );
