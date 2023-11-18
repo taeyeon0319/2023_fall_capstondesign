@@ -108,7 +108,7 @@ helperRouter.get("/requests-helper/:helper_id", async (req, res) => {
           `SELECT * FROM user_data WHERE id = $1`,
           [request.user_id]
         );
-        return { ...request, user: userData.rows[0] };
+        return { ...request, helper: userData.rows[0] };
       })
     );
     res.json(requestsWithUserData);
