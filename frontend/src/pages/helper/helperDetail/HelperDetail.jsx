@@ -34,6 +34,9 @@ const HelperDetail = ()=>{
     const [districts, setDistricts] = useState([]);//시/군/구 selectbox
     const [services, setServices] = useState([]);//분야 selectbox
     const [helperlist, setHelperlist] = useState([]);
+
+    const [cityData, setCityData] = useState([])
+
     
     //DatePicker 오늘 이후의 시간만 선택 가능한 component
     dayjs.extend(customParseFormat);
@@ -45,30 +48,106 @@ const HelperDetail = ()=>{
     }
     return result;
     };
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/city`);
+                const data = response.data;
+                setCityData(data);
+                const districtInfo = {}
+
+                for(let district of data){
+                    districtInfo[`${district.region_state}`] = []
+                }
+                
+                for(let district of data){
+                    districtInfo[`${district.region_state}`].push(district.region_country)
+                }
+                setDistricts(districtInfo)
+                
+            } catch (error) {
+                console.log('Error fetching data:', error);
+            }
+        }
+        fetchData();
+
+        const fetchData2 = async ()=>{
+            try {
+                const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/fields`);
+                setServices(response.data)
+            }catch(error){
+                console.log('Error fetching data :', error);
+            }
+        }
+        fetchData2();
+        
+    }, [])
+    //도로명 주소
+    // const findAddr = async()=> {
+    //         try {
+    //             new defaultMethod.Postcode({
+    //             oncomplete : function(data) {
+    //                 var addr=' ';
+    //                 if(data.userSelectedType === 'R'){
+    //                     addr = data.roadAddress;
+    //                 }else{
+    //                     addr = data.jibunAddress;
+    //                 }
+    //                 $("#c_main_address").val(addr);
+    //             }
+    //             }).open()
+    //     }catch(error){
+    //         console.log('Error fetching data :', error);
+    //     }
+    // }
+    
+    const getCities = () => {
+        if (!!districts) {
+        
+            const districtList = Object.keys(districts)
+            return districtList.map((el, idx) => (
+                <option key={idx} value={el}>
+                {el}
+                </option>
+            ));
+            }
+        };
+
+    const getDistrict = ()=>{
+        if(city !== "" ){
+            console.log(districts)
+            return districts[`${city}`].map((d, idx)=>{
+                return <option key={idx} value={d}>{d}</option>
+            })
+
+        } else {
+            return []
+        }
+    }
+    const getServices = () => {
+        if (!!services && services.length > 0) {
+            return services.map((service) => (
+                <option 
+                
+                key={service.id} value={service.field_name}>
+                {service.field_name}
+                </option>
+            ));
+            }
+            return null;
+        };
+
     // eslint-disable-next-line arrow-body-style
     const disabledDate = (current) => {
         // Can not select days before today and today
-        return current && current < dayjs().endOf('day');
+        return current < dayjs().startOf('day') || current > dayjs().add(6,'day');
+        //console.log(dayjs().add(0,'days'));
     };
     const disabledDateTime = () => ({
         disabledHours: () => range(0, 24).splice(4, 20),
         disabledMinutes: () => range(30, 60),
         disabledSeconds: () => [55, 56],
     });
-    const disabledRangeTime = (_, type) => {
-        if (type === 'start') {
-        return {
-            disabledHours: () => range(0, 60).splice(4, 20),
-            disabledMinutes: () => range(30, 60),
-            disabledSeconds: () => [55, 56],
-        };
-        }
-        return {
-        disabledHours: () => range(0, 60).splice(20, 4),
-        disabledMinutes: () => range(0, 31),
-        disabledSeconds: () => [55, 56],
-        };
-    };
     
     useEffect(() => {
         const response = axios.get(`${process.env.REACT_APP_SERVER_URL}/user/helper/${helper_id}`);
@@ -133,8 +212,13 @@ const HelperDetail = ()=>{
                         <li className='filter-list-item'> 
                             <div className="select-container-2">
                                 <select onChange={(e)=>{setCity(e.target.value)}} className="select-container-item" name="" id="">
-                                    <option value=""  >시/도</option>
-                                    {/* {getCities()} */}
+                                    <option value=""  >지역</option>
+                                    {/* <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script> */}
+                                    {/* <label for = "c_main_address">주소</label>
+                                    <input type = "text" id="c_main_address" ></input>
+                                    <button type='button' id="addressSearch" onClick="findAddr()">주소 검색</button> */}
+                                    {getCities()}
+                                    
 
                                     {/* <option value="서울" >서울</option>
                                     <option value="광주" >광주</option>
@@ -142,12 +226,12 @@ const HelperDetail = ()=>{
                                 </select>
 
                                 <select onChange={(e)=>{setDistrict(e.target.value)}} className="select-container-item" name="" id="">
-                                    <option value="" >시</option>
-                                    {/* {getDistricts()} */}
+                                    <option value="" >시/군/구</option>
+                                    {getDistrict()}
                                 </select>
 
                                 <select onChange={(e)=>{setDistrict(e.target.value)}} className="select-container-item" name="" id="">
-                                    <option value="" >군/구</option>
+                                    <option value="" >읍/면/동</option>
                                     {/* {getDistricts()} */}
                                 </select>
                             </div>
@@ -156,13 +240,13 @@ const HelperDetail = ()=>{
                             <div><b>도우미 분야</b></div>
                             <div className="select-container-1">
                                 <select onChange={(e)=>{setServiceType(e.target.value)}} className="select-container-item" name="" id="">
-                                    {/* {getServices()} */}
-                                    <option value="" >분야선택</option>
+                                    {getServices()}
+                                    {/* <option value="" >분야선택</option>
                                     <option value="" >베이비시터</option>
                                     <option value="" >등하원도우미  </option>
                                     <option value="" >요양보호사</option>
                                     <option value="" >간병인</option>
-                                    <option value="" >기타</option>
+                                    <option value="" >기타</option> */}
                                 </select>
                             </div>
                         </li>
@@ -171,11 +255,13 @@ const HelperDetail = ()=>{
                             <div><b>날짜</b></div>
                             <div className="select-container-1">
                                 <DatePicker 
-                                    
+                                    disabledDate={disabledDate}
+                                    disabledTime={disabledDateTime}
                                     placeholder="날짜를 입력해주세요."
                                     inputReadOnly={true}
                                     style={{width: '100%'}}
-                                    size='large' onChange={()=>{}} />
+                                    size='large' onChange={(dayjs, dayString)=>{setDate(dayString)}}
+                                    />
                             </div>
                         </li>
 
