@@ -82,6 +82,25 @@ const HelperDetail = ()=>{
         fetchData2();
         
     }, [])
+    //도로명 주소
+    // const findAddr = async()=> {
+    //         try {
+    //             new defaultMethod.Postcode({
+    //             oncomplete : function(data) {
+    //                 var addr=' ';
+    //                 if(data.userSelectedType === 'R'){
+    //                     addr = data.roadAddress;
+    //                 }else{
+    //                     addr = data.jibunAddress;
+    //                 }
+    //                 $("#c_main_address").val(addr);
+    //             }
+    //             }).open()
+    //     }catch(error){
+    //         console.log('Error fetching data :', error);
+    //     }
+    // }
+    
     const getCities = () => {
         if (!!districts) {
         
@@ -105,9 +124,6 @@ const HelperDetail = ()=>{
             return []
         }
     }
-
-
-
     const getServices = () => {
         if (!!services && services.length > 0) {
             return services.map((service) => (
@@ -197,7 +213,12 @@ const HelperDetail = ()=>{
                             <div className="select-container-2">
                                 <select onChange={(e)=>{setCity(e.target.value)}} className="select-container-item" name="" id="">
                                     <option value=""  >지역</option>
+                                    {/* <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script> */}
+                                    {/* <label for = "c_main_address">주소</label>
+                                    <input type = "text" id="c_main_address" ></input>
+                                    <button type='button' id="addressSearch" onClick="findAddr()">주소 검색</button> */}
                                     {getCities()}
+                                    
 
                                     {/* <option value="서울" >서울</option>
                                     <option value="광주" >광주</option>
