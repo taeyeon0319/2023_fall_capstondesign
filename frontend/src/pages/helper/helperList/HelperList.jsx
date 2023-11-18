@@ -181,7 +181,7 @@ const HelperList = ()=>{
 
     const getHelperList = ()=>{
         const result = helperlist.map((helper, idx)=>{
-            return  <li onClick={()=>{navigate(`/user/helper/${helper.id}`)}} key={idx} className='helper-list-searched-item'>
+            return  <li onClick={()=>{navigate(`/user/helper/${helper.helper_id}`)}} key={idx} className='helper-list-searched-item'>
                         <img className='profile' src={helper.image} />
                         <div className='description'>
                             <h4 className='name'>{helper.name} <span style={{fontSize: '13px'}}>도우미</span></h4>

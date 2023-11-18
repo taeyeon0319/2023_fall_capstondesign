@@ -17,7 +17,7 @@ signupRouter.post('/signup', async (req, res) => {
 
     // 비밀번호 유효성 검사
     if (!passwordRegex.test(password)) {
-      return res.status(400).json({ error: '8~16자의 영문 대소문자, 숫자, 특수문자만 가능' });
+      return res.status(400).json({ error: '8~16자의 영문 대소문자, 숫자, 특수문자만 가능합니다' });
     }
 
     // 비밀번호와 확인 비밀번호가 일치하는지 확인
@@ -79,19 +79,42 @@ signupRouter.post('/login', async (req, res) => {
 signupRouter.get('/mypage', verifyToken, async (req, res) => {
   try {
     // req.userId를 사용하여 특정 사용자의 정보를 가져오는 쿼리를 작성
-    const user = await db.oneOrNone('SELECT * FROM signup WHERE id = $1', [req.userId]);
+    const userType = await db.oneOrNone('SELECT type FROM signup WHERE id = $1', [req.userId]);
 
-    if (!user) {
+    if (!userType) {
       return res.status(404).json({ error: '사용자를 찾을 수 없습니다' });
     }
 
-    // 사용자 정보를 응답
-    res.json({ user });
+    if (userType.type === 'user') {
+      // type이 user인 경우 user_mypage 테이블에서 정보를 가져오기
+      const userMypage = await db.oneOrNone('SELECT * FROM user_mypage WHERE user_id = $1', [req.userId]);
+
+      if (!userMypage) {
+        return res.status(404).json({ error: '사용자 마이페이지를 찾을 수 없습니다' });
+      }
+
+      // 사용자 마이페이지 정보를 응답
+      res.json({ userMypage });
+    } else if (userType.type === 'helper') {
+      // type이 helper인 경우 helper 테이블에서 정보를 가져오기
+      const helperInfo = await db.oneOrNone('SELECT * FROM helper WHERE user_id = $1', [req.userId]);
+
+      if (!helperInfo) {
+        return res.status(404).json({ error: 'Helper 정보를 찾을 수 없습니다' });
+      }
+
+      // Helper 정보를 응답
+      res.json({ helperInfo });
+    } else {
+      // 기타 처리 (다른 타입의 사용자)
+      res.json({ message: '기타 처리' });
+    }
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: '내부 서버 오류' });
   }
 });
+
 
 // JWT를 확인하는 미들웨어
 function verifyToken(req, res, next) {
