@@ -11,18 +11,16 @@ userRouter.get('/', (req, res) => {
 userRouter.get('/helper/all', async (req, res) => {
     try {
         const rawData = await db.any(`
-        SELECT signup.id as user_id, signup.name, signup.email, signup.mobile, helper_mypage.*, helper_time2.day, helper_time2.start_time, helper_time2.end_time
-        FROM signup
-        LEFT JOIN helper_mypage ON signup.id = helper_mypage.helper_id  -- 사용자 ID에 해당하는 열로 수정
-        LEFT JOIN helper_time2 ON signup.id = helper_time2.helper_id
-        WHERE signup.type = 'helper'
-        ORDER BY signup.id;
-        
+            SELECT signup.id as id, signup.name, signup.email, signup.mobile, helper_mypage.region_state, helper_mypage.region_country, helper_mypage.field, helper_mypage.image, helper_mypage.age, helper_mypage.gender, helper_mypage.introduction, helper_mypage.career, helper_mypage.stars, helper_mypage.certification, helper_time.day, helper_time.start_time, helper_time.end_time
+            FROM signup
+            LEFT JOIN helper_mypage ON signup.id = helper_mypage.helper_id
+            LEFT JOIN helper_time ON signup.id = helper_time.helper_id
+            WHERE signup.type = 'helper';
         `);
 
         // 데이터를 가공하여 중복되는 항목을 합치기
         const mergedData = rawData.reduce((acc, current) => {
-            const existingData = acc.find(item => item.user_id === current.user_id);
+            const existingData = acc.find(item => item.id === current.id);
 
             if (!existingData) {
                 // 새로운 데이터를 추가
@@ -72,20 +70,21 @@ userRouter.get('/helper/search', async (req, res) => {
             const targetDate = new Date(date);
             const daysOfWeek = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
             targetDay = daysOfWeek[targetDate.getDay()];
-            conditions.push(`helper_time2.day = '${targetDay}'`);
+            conditions.push(`helper_time.day = '${targetDay}'`);
         }
 
         if (needtime_s && needtime_e) {
-            conditions.push(`helper_time2.start_time <= '${needtime_s}'`);
-            conditions.push(`helper_time2.end_time >= '${needtime_e}'`);
+            conditions.push(`helper_time.start_time <= '${needtime_s}'`);
+            conditions.push(`helper_time.end_time >= '${needtime_e}'`);
         }
 
         let whereClause = conditions.length > 0 ? 'WHERE ' + conditions.join(' AND ') : '';
 
         const query = `
-            SELECT helper_mypage.*, helper_time2.day, helper_time2.start_time, helper_time2.end_time
-            FROM helper_mypage
-            LEFT JOIN helper_time2 ON helper_mypage.helper_id = helper_time2.helper_id
+            SELECT signup.id as id, signup.name, signup.email, signup.mobile, helper_mypage.region_state, helper_mypage.region_country, helper_mypage.field, helper_mypage.image, helper_mypage.age, helper_mypage.gender, helper_mypage.introduction, helper_mypage.career, helper_mypage.stars, helper_mypage.certification, helper_time.day, helper_time.start_time, helper_time.end_time
+            FROM signup
+            LEFT JOIN helper_mypage ON signup.id = helper_mypage.helper_id
+            LEFT JOIN helper_time ON signup.id = helper_time.helper_id
             ${whereClause}
             ORDER BY helper_mypage.helper_id
         `;
@@ -123,20 +122,21 @@ userRouter.get('/helper/search/orderbystars', async (req, res) => {
             const targetDate = new Date(date);
             const daysOfWeek = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
             targetDay = daysOfWeek[targetDate.getDay()];
-            conditions.push(`helper_time2.day = '${targetDay}'`);
+            conditions.push(`helper_time.day = '${targetDay}'`);
         }
 
         if (needtime_s && needtime_e) {
-            conditions.push(`helper_time2.start_time <= '${needtime_s}'`);
-            conditions.push(`helper_time2.end_time >= '${needtime_e}'`);
+            conditions.push(`helper_time.start_time <= '${needtime_s}'`);
+            conditions.push(`helper_time.end_time >= '${needtime_e}'`);
         }
 
         let whereClause = conditions.length > 0 ? 'WHERE ' + conditions.join(' AND ') : '';
 
         const query = `
-            SELECT helper_mypage.*, helper_time2.day, helper_time2.start_time, helper_time2.end_time
-            FROM helper_mypage
-            LEFT JOIN helper_time2 ON helper_mypage.helper_id = helper_time2.helper_id
+            SELECT signup.id as id, signup.name, signup.email, signup.mobile, helper_mypage.region_state, helper_mypage.region_country, helper_mypage.field, helper_mypage.image, helper_mypage.age, helper_mypage.gender, helper_mypage.introduction, helper_mypage.career, helper_mypage.stars, helper_mypage.certification, helper_time.day, helper_time.start_time, helper_time.end_time
+            FROM signup
+            LEFT JOIN helper_mypage ON signup.id = helper_mypage.helper_id
+            LEFT JOIN helper_time ON signup.id = helper_time.helper_id
             ${whereClause}
             ORDER BY helper_mypage.stars DESC, helper_mypage.helper_id
         `;
@@ -157,20 +157,31 @@ userRouter.get('/helper/:id', async (req, res) => {
 
     try {
         // 데이터베이스에서 해당 ID의 도우미 정보와 회원 정보를 검색합니다.
-        const searchResult = await db.oneOrNone(`
-            SELECT helper_mypage.*, signup.*
-            FROM helper_mypage
-            LEFT JOIN signup ON helper_mypage.helper_id = signup.id
-            WHERE helper_mypage.helper_id = $1
+        const rawData = await db.any(`
+            SELECT signup.id as id, signup.name, signup.email, signup.mobile, helper_mypage.region_state, helper_mypage.region_country, helper_mypage.field, helper_mypage.image, helper_mypage.age, helper_mypage.gender, helper_mypage.introduction, helper_mypage.career, helper_mypage.stars, helper_mypage.certification, helper_time.day, helper_time.start_time, helper_time.end_time
+            FROM signup
+            LEFT JOIN helper_mypage ON signup.id = helper_mypage.helper_id
+            LEFT JOIN helper_time ON signup.id = helper_time.helper_id
+            WHERE signup.type = 'helper' AND helper_mypage.helper_id = $1;
         `, [helperId]);
 
-        if (searchResult) {
-            // 도우미 정보를 찾은 경우 해당 정보를 반환합니다.
-            res.json(searchResult);
-        } else {
-            // 도우미 정보를 찾지 못한 경우 에러 메시지를 반환합니다.
-            res.status(404).json({ error: '도우미를 찾을 수 없습니다.' });
-        }
+        const mergedData = rawData.reduce((acc, current) => {
+            const existingData = acc.find(item => item.user_id === current.user_id);
+
+            if (!existingData) {
+                // 새로운 데이터를 추가
+                acc.push(current);
+            } else {
+                // 이미 있는 데이터에 day, start_time, end_time 추가
+                existingData.day = existingData.day + ', ' + current.day;
+                existingData.start_time = existingData.start_time + ', ' + current.start_time;
+                existingData.end_time = existingData.end_time + ', ' + current.end_time;
+            }
+
+            return acc;
+        }, []);
+
+        res.json(mergedData);
     } catch (error) {
         console.error('Error: ', error);
         res.status(500).json({ error: 'Internal Server Error' });
