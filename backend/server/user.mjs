@@ -78,16 +78,34 @@ userRouter.get('/helper/search', async (req, res) => {
             conditions.push(`helper_time.end_time >= '${needtime_e}'`);
         }
 
-        let whereClause = conditions.length > 0 ? 'WHERE ' + conditions.join(' AND ') : '';
+        let whereClause = conditions.length > 0 ? 'WHERE ' + conditions.join(' AND ') : 'WHERE 1=1';
 
         const query = `
-            SELECT signup.id as id, signup.name, signup.email, signup.mobile, helper_mypage.region_state, helper_mypage.region_country, helper_mypage.field, helper_mypage.image, helper_mypage.age, helper_mypage.gender, helper_mypage.introduction, helper_mypage.career, helper_mypage.stars, helper_mypage.certification, helper_time.day, helper_time.start_time, helper_time.end_time
+            SELECT
+            signup.id as id,
+            signup.name,
+            signup.email,
+            signup.mobile,
+            helper_mypage.region_state,
+            helper_mypage.region_country,
+            helper_mypage.field,
+            helper_mypage.image,
+            helper_mypage.age,
+            helper_mypage.gender,
+            helper_mypage.introduction,
+            helper_mypage.career,
+            helper_mypage.stars,
+            helper_mypage.certification,
+            helper_time.day,
+            helper_time.start_time,
+            helper_time.end_time
             FROM signup
             LEFT JOIN helper_mypage ON signup.id = helper_mypage.helper_id
             LEFT JOIN helper_time ON signup.id = helper_time.helper_id
-            ${whereClause}
-            ORDER BY helper_mypage.helper_id
-        `;
+            ${whereClause} AND helper_time.helper_id IS NOT NULL
+            ORDER BY helper_mypage.helper_id;
+`;
+
 
         const data = await db.any(query);
         res.json(data);
@@ -130,15 +148,33 @@ userRouter.get('/helper/search/orderbystars', async (req, res) => {
             conditions.push(`helper_time.end_time >= '${needtime_e}'`);
         }
 
-        let whereClause = conditions.length > 0 ? 'WHERE ' + conditions.join(' AND ') : '';
+
+        let whereClause = conditions.length > 0 ? 'WHERE ' + conditions.join(' AND ') : 'WHERE 1=1';
 
         const query = `
-            SELECT signup.id as id, signup.name, signup.email, signup.mobile, helper_mypage.region_state, helper_mypage.region_country, helper_mypage.field, helper_mypage.image, helper_mypage.age, helper_mypage.gender, helper_mypage.introduction, helper_mypage.career, helper_mypage.stars, helper_mypage.certification, helper_time.day, helper_time.start_time, helper_time.end_time
+            SELECT
+            signup.id as id,
+            signup.name,
+            signup.email,
+            signup.mobile,
+            helper_mypage.region_state,
+            helper_mypage.region_country,
+            helper_mypage.field,
+            helper_mypage.image,
+            helper_mypage.age,
+            helper_mypage.gender,
+            helper_mypage.introduction,
+            helper_mypage.career,
+            helper_mypage.stars,
+            helper_mypage.certification,
+            helper_time.day,
+            helper_time.start_time,
+            helper_time.end_time
             FROM signup
             LEFT JOIN helper_mypage ON signup.id = helper_mypage.helper_id
             LEFT JOIN helper_time ON signup.id = helper_time.helper_id
-            ${whereClause}
-            ORDER BY helper_mypage.stars DESC, helper_mypage.helper_id
+            ${whereClause} AND helper_time.helper_id IS NOT NULL
+            ORDER BY helper_mypage.stars DESC;
         `;
 
         const data = await db.any(query);

@@ -185,7 +185,7 @@ const HelperList = ()=>{
                         <img className='profile' src={helper.image} />
                         <div className='description'>
                             <h4 className='name'>{helper.name} <span style={{fontSize: '13px'}}>도우미</span></h4>
-                            <p className='region'>{helper.region_state} / {helper.region_county}</p>
+                            <p className='region'>{helper.region_state} / {helper.region_country}</p>
                             <p className='time-range'>
                             <span class="materail-time material-symbols-outlined">schedule</span>
                             <span>{helper.start_time}</span>
