@@ -1,6 +1,6 @@
 import Header2 from "../components/Header2";
 import styled from "styled-components";
-import React from 'react';
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import userImg from '../img/Ellipse1.png';
 import sendImg from '../img/send.png';
@@ -75,10 +75,10 @@ const dummyDataChatList = {
 
 const dummyDataChat = [
     {
-        chatId:"D231120U01H01",
+        chatId:"전현정",
         chatList:[
             {
-                type:"date",
+                type:"Date",
                 data:"2023년 11월 11일",
                 time:"10:45"
             },
@@ -124,7 +124,68 @@ const dummyDataChat = [
             },
         ]
     },
+    {
+        chatId:"김철수",
+        chatList:[
+            {
+                type:"Date",
+                data:"2023년 11월 11일",
+                time:"10:45"
+            },
+            {
+                type:"Reply",
+                data:"안녕하세요 도우미 아직 구하시나요?",
+                time:"10:45"
+            },
+            {
+                type:"Send",
+                data:"아니요 구했습니다~",
+                time:"10:45"
+            },
+            {
+                type:"Reply",
+                data:"넵",
+                time:"10:45"
+            }
+        ]
+    },
+    {
+        chatId:"김영희",
+        chatList:[
+            {
+                type:"Date",
+                data:"2023년 11월 11일",
+                time:"10:45"
+            },
+            {
+                type:"Reply",
+                data:"안녕하세요! 김영희 도우미라고 합니다.",
+                time:"10:46"
+            },
+            {
+                type:"Reply",
+                data:"도우미 찾으신다고 하셔서 연락드렸어요~",
+                time:"10:46"
+            },
+            {
+                type:"Send",
+                data:"아 네 안녕하세요~",
+                time:"10:46"
+            },
+            {
+                type:"Send",
+                data:"시간이 좀 바뀌었는데,",
+                time:"10:46"
+            },
+            {
+                type:"Send",
+                data:"혹시 다른 시간대는 어떠신가요?",
+                time:"10:46"
+            }
+        ]
+    }
 ];
+
 
 const Root = styled.div`
 width: 100vw;
@@ -420,9 +481,21 @@ line-height: normal;
 export const ChatPage = () => {
     const [selectedReq, setSelectedReq] = useState('');
     const [selectedHelper, setSelectedHelper] = useState(null);
+    const [chatId, setChatId] = useState('');
+    const [selectedChatList, setSelectedChatList] = useState([{chatId:"",chatList:[{type:"Notification",data:"채팅 내역이 없습니다.",time:""}]}]);
+    
+    useEffect(() => {
+        setSelectedChatList(dummyDataChat.filter((data) => data.chatId === chatId).length > 0
+        ? dummyDataChat.filter((data) => data.chatId === chatId)
+        : [{chatId:"",chatList:[{type:"Notification",data:"채팅 내역이 없습니다.",time:""}]}]);
+        console.log(selectedChatList);
+    }, [chatId]);
 
-    const handleHelperClick = (index) => {
+    const handleHelperClick = (index,name) => {
         setSelectedHelper(index === selectedHelper ? null : index);
+        setChatId(name);
+        console.log(chatId);
+        console.log(selectedChatList);
     };
     const handleSelectChange = (event) => {
         setSelectedReq(event.target.value);
@@ -443,11 +516,7 @@ export const ChatPage = () => {
                 </ChatSelect>
                 {dummyDataChatList.data.map((item, index) => (
                     item.sub === selectedReq && (
-                    <HelperReqList
-                        key={index}
-                        className={index === selectedHelper ? 'selected' : ''}
-                        onClick={() => handleHelperClick(index)}
-                    >
+                    <HelperReqList key={item.name} className={index === selectedHelper ? 'selected' : ''} onClick={() => handleHelperClick(index,item.name)}>
                         <UserHelperListImg src={item.img} />
                         <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "center" }}>
                         <div style={{ display: "flex", alignItems: "flex-end" }}>
@@ -471,31 +540,21 @@ export const ChatPage = () => {
                     </div>
                 </ChatRectTitle2>
                 <ChatRect style={{height:"71.855vh", boxShadow:"0px 0px 0px 0px"}}>
-                    <div style={{width:"100%", height:"67.155vh", overflow:"auto",display:"flex",flexDirection:"column",alignItems:"center",padding:"0px 10px"}}>
-                        <ChatDate>2023년 11월 11일</ChatDate>
-                        <div style={{width:"100%",display:"flex",alignItems:"flex-end",justifyContent:"flex-end",margin:"6px 0px 0px 0px"}}>
-                            <ChatTime>오전 10:46</ChatTime>
-                            <ChatSend>안녕하세요~ 글 보고 연락드립니다.</ChatSend>
-                            <ChatSendTri src={arrowSendImg}></ChatSendTri>
-                        </div>
-                        <div style={{width:"100%",display:"flex",alignItems:"flex-end",justifyContent:"flex-start",margin:"6px 0px 0px 0px"}}>
-                            <ChatReplyTri src={arrowReplyImg}></ChatReplyTri>
-                            <ChatReply>네 안녕하세요~ 1시부터 3시까지 괜찮으실까요?</ChatReply>
-                            <ChatTime>오전 10:46</ChatTime>
-                        </div>
-                        <div style={{width:"100%",display:"flex",alignItems:"flex-end",justifyContent:"flex-end",margin:"6px 0px 0px 0px"}}>
-                            <ChatTime>오전 10:47</ChatTime>
-                            <ChatSend>네네~</ChatSend>
-                            <ChatSendTri src={arrowSendImg}></ChatSendTri>
-                        </div>
-                        <div style={{width:"100%",display:"flex",alignItems:"flex-end",justifyContent:"flex-start",margin:"6px 0px 0px 0px"}}>
-                            <ChatReplyTri src={arrowReplyImg}></ChatReplyTri>
-                            <ChatReply>그럼 좀 부탁드릴게요^^</ChatReply>
-                            <ChatTime>오전 10:48</ChatTime>
-                        </div>
-                        <ChatNotification>김이용님이 매칭 성공 버튼을 누르셨습니다.</ChatNotification>
-                        <ChatNotification>김헬퍼님이 매칭 성공 버튼을 누르셨습니다.</ChatNotification>
-                    </div>
+                    {<div style={{width:"100%", height:"67.155vh", overflow:"auto",display:"flex",flexDirection:"column",alignItems:"center",padding:"0px 10px"}}>
+                        {selectedChatList[0].chatList.map((chat,index)=>(
+                            (chat.type==="Date")&&(<ChatDate>{chat.data}</ChatDate>)||(chat.type==="Send")&&(
+                                <div style={{width:"100%",display:"flex",alignItems:"flex-end",justifyContent:"flex-end",margin:"6px 0px 0px 0px"}}>
+                                    <ChatTime>{chat.time}</ChatTime>
+                                    <ChatSend>{chat.data}</ChatSend>
+                                    <ChatSendTri src={arrowSendImg}></ChatSendTri>
+                                </div>)||(chat.type==="Reply")&&(
+                                <div style={{width:"100%",display:"flex",alignItems:"flex-end",justifyContent:"flex-start",margin:"6px 0px 0px 0px"}}>
+                                    <ChatReplyTri src={arrowReplyImg}></ChatReplyTri>
+                                    <ChatReply>{chat.data}</ChatReply>
+                                    <ChatTime>{chat.time}</ChatTime>
+                                </div>)||(chat.type==="Notification")&&(<ChatNotification>{chat.data}</ChatNotification>)
+                            ))}
+                    </div>}
                     <ChatSendBtn>아이가 3살인데 주의할만한 사항이 있을까요? <img src={sendImg}></img></ChatSendBtn>
                 </ChatRect>
 
