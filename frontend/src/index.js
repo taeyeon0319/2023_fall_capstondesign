@@ -13,6 +13,7 @@ import HelperPage from './pages/HelperPage';
 import HelperRequestPage from './pages/HeplerRequest';
 import HelperMyPage from './pages/HelperMyPage';
 import Header2 from './components/Header2';
+import ChatPage from './pages/ChatPage';
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 const router = createBrowserRouter([
@@ -67,6 +68,10 @@ const router = createBrowserRouter([
   {
     path: "/header2",
     element : <Header2/>,
+  },
+  {
+    path: "/Chat",
+    element : <ChatPage/>,
   },
 ]);
 
