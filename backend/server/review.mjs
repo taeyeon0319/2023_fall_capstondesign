@@ -40,7 +40,7 @@ reviewRouter.post("/user-review", async (req, res) => {
 // 이용자 자신이 작성한 리뷰들 출력하는 엔드포인드 : 이윤서 조회 확인완료 ++ helper data랑 조인해서 helper이름도 같이 출력
 reviewRouter.get("/user-review/:user_id", async (req, res) => {
   const client = await pool.connect();
-  const userId = parseInt(req.params.user_id);
+  const userId = req.params.user_id;
   try {
     // request 테이블에서 start_time, end_time, timepay,totalpay도 같이 가져오기
 
@@ -52,7 +52,7 @@ reviewRouter.get("/user-review/:user_id", async (req, res) => {
     const reviewWithHelperData = await Promise.all(
       review.rows.map(async (request) => {
         const helperData = await client.query(
-          `SELECT * FROM helper WHERE id = $1`,
+          `SELECT * FROM signup WHERE id = $1 and type = 'helper'`,
           [request.helper_id]
         );
         return { ...request, user: helperData.rows[0] };
@@ -73,10 +73,10 @@ reviewRouter.get("/user-review/:user_id", async (req, res) => {
 // 도우미 자신에 대한 리뷰들 출력하는 엔드포인트 : 확인완료  ++ user data랑 조인해서 user 이름도 같이 출력
 reviewRouter.get("/helper-review/:helper_id", async (req, res) => {
   const client = await pool.connect();
-  const helperId = parseInt(req.params.helper_id);
+  const helperId = req.params.helper_id;
   try {
     const review = await client.query(
-      `SELECT * FROM review,user_data WHERE review.user_id = user_data.id AND review.helper_id = $1`,
+      `SELECT * FROM review, signup WHERE review.user_id = signup.id AND review.helper_id = $1`,
       [helperId]
     );
     res.json(review.rows);
@@ -92,7 +92,7 @@ reviewRouter.get("/helper-review/:helper_id", async (req, res) => {
 // 도우미별 리뷰들의 평균 출력하는 엔드포인트 : 확인완료
 reviewRouter.get("/helper-review/:helper_id/average", async (req, res) => {
   const client = await pool.connect();
-  const helperId = parseInt(req.params.helper_id);
+  const helperId = req.params.helper_id;
   try {
     const review = await client.query(
       `SELECT AVG(rating) FROM review WHERE helper_id = $1`,
@@ -159,7 +159,7 @@ reviewRouter.delete("/user-review/delete/:review_id", async (req, res) => {
 //도우미 월 도움 횟수 ---> 수정필요
 reviewRouter.get("/helper-review/:helper_id/month", async (req, res) => {
   const client = await pool.connect();
-  const helperId = parseInt(req.params.helper_id);
+  const helperId = req.params.helper_id;
   try {
     const review = await client.query(
       `SELECT COUNT(*) FROM requests WHERE helper_id = $1 AND status='수락' AND date_part('month', date) = date_part('month', now())`,

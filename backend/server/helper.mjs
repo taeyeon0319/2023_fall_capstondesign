@@ -58,7 +58,7 @@ helperRouter.put("/response-request/:request_id", async (req, res) => {
   const { status } = req.body;
   try {
     const result = await client.query(
-      `UPDATE requests_data SET status=$1 WHERE id = $2`,
+      `UPDATE requests SET status=$1 WHERE id = $2`,
       [requestId, status]
     );
   } catch (err) {
