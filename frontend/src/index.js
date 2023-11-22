@@ -13,7 +13,11 @@ import HelperPage from './pages/HelperPage';
 import HelperRequestPage from './pages/HeplerRequest';
 import HelperMyPage from './pages/HelperMyPage';
 import Header2 from './components/Header2';
+
 import UserMyPageEdit from './pages/user/userMyPage/UserMyPageEdit'
+
+import ChatPage from './pages/ChatPage';
+
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import {Provider, KeepAlive} from 'react-keep-alive';
 
@@ -71,9 +75,15 @@ const router = createBrowserRouter([
     element : <Header2/>,
   },
   {
+
     path: "/usermypage/edit",
     element: <UserMyPageEdit />
-  }
+  },
+  {
+    path: "/Chat",
+    element : <ChatPage/>,
+  },
+
 ]);
 
 sessionStorage.setItem('id', 'yys')

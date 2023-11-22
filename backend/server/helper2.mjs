@@ -3,7 +3,7 @@ import express, { request } from "express";
 import pg from "pg";
 import dotenv from "dotenv";
 
-const helperRouter = express.Router();
+const helperRouter2 = express.Router();
 dotenv.config();
 
 const pool = new pg.Pool({
@@ -14,15 +14,20 @@ const pool = new pg.Pool({
   ssl: { rejectUnauthorized: false },
 });
 
-helperRouter.get("/", (req, res) => {
-  res.json("success도우미");
+helperRouter2.get("/", (req, res) => {
+  res.json("success도우미 - 수정 버전");
 });
 
 // 이용자 목록을 반환하는 엔드포인트
-helperRouter.get("/users", async (req, res) => {
+helperRouter2.get("/users", async (req, res) => {
   const client = await pool.connect();
   try {
-    const users = await client.query(`SELECT * FROM user_data`);
+    const users = await client.query(`
+      SELECT signup.id as id, signup.name, signup.email, signup.mobile, user_mypage.region_state, user_mypage.region_country, user_mypage.image, user_mypage.age, user_mypage.gender
+      FROM signup
+      LEFT JOIN user_mypage ON signup.id = user_mypage.user_id
+      WHERE signup.type = 'user';
+    `);
     res.json(users.rows);
     client.release();
   } catch (err) {
@@ -34,25 +39,30 @@ helperRouter.get("/users", async (req, res) => {
 });
 
 // 특정 이용자 정보 반환하는 엔드포인트
-helperRouter.get("/users/:user_id", async (req, res) => {
+helperRouter2.get("/users/:id", async (req, res) => {
   const client = await pool.connect();
-  const userId = parseInt(req.params.user_id);
+
   try {
-    const user = await client.query(`SELECT * FROM user_data WHERE id = $1`, [
-      userId,
-    ]);
+    const userId = req.params.id; // 수정: req.params.user_id -> req.params.id
+    const user = await client.query(`
+      SELECT signup.id as id, signup.name, signup.email, signup.mobile, user_mypage.region_state, user_mypage.region_country, user_mypage.image, user_mypage.age, user_mypage.gender
+      FROM signup
+      LEFT JOIN user_mypage ON signup.id = user_mypage.user_id
+      WHERE signup.type = 'user' AND user_mypage.user_id = $1;
+    `, [userId]);
     res.json(user.rows);
-    client.release();
   } catch (err) {
     console.error("Error fetching user data:", err);
-    res
-      .status(500)
-      .json({ error: "An error occurred while fetching the user data." });
+    res.status(500).json({ error: "An error occurred while fetching the user data." });
+  } finally {
+    client.release(); // 추가: 클라이언트 항상 반환
   }
 });
 
+
+//여기부터 수정 필요!!!!!!
 // 도우미가 수락/거절했을경우 이용자의 요구사항목록 데이터에서 status를 수락/거절으로 변경하는 엔드포인트
-helperRouter.put("/response-request/:request_id", async (req, res) => {
+helperRouter2.put("/response-request/:request_id", async (req, res) => {
   const client = await pool.connect();
   const requestId = parseInt(req.params.request_id);
   const { status } = req.body;
@@ -70,7 +80,7 @@ helperRouter.put("/response-request/:request_id", async (req, res) => {
 });
 
 // 이용자의 요구사항 목록을 반환하는 엔드포인트
-helperRouter.get("/requests-user/:user_id", async (req, res) => {
+helperRouter2.get("/requests-user/:user_id", async (req, res) => {
   const client = await pool.connect();
   const userId = parseInt(req.params.user_id);
   try {
@@ -89,7 +99,7 @@ helperRouter.get("/requests-user/:user_id", async (req, res) => {
 });
 
 // 도우미의 호출된 목록 반환하는 엔드포인트
-helperRouter.get("/requests-helper/:helper_id", async (req, res) => {
+helperRouter2.get("/requests-helper/:helper_id", async (req, res) => {
   const client = await pool.connect();
   const helperId = parseInt(req.params.helper_id);
   if (isNaN(helperId)) {
@@ -122,7 +132,7 @@ helperRouter.get("/requests-helper/:helper_id", async (req, res) => {
 });
 
 // 도우미의 호출된 목록 중 수락된 목록 반환하는 엔드포인트
-helperRouter.get("/requests-helper/:helper_id/accepted", async (req, res) => {
+helperRouter2.get("/requests-helper/:helper_id/accepted", async (req, res) => {
   const client = await pool.connect();
   const helperId = parseInt(req.params.helper_id);
   try {
@@ -141,7 +151,7 @@ helperRouter.get("/requests-helper/:helper_id/accepted", async (req, res) => {
 });
 
 // 도우미 총수입 불러오기
-helperRouter.get("/requests-helper/:helper_id/totalpay", async (req, res) => {
+helperRouter2.get("/requests-helper/:helper_id/totalpay", async (req, res) => {
   const client = await pool.connect();
   const helperId = parseInt(req.params.helper_id);
   try {
@@ -160,7 +170,7 @@ helperRouter.get("/requests-helper/:helper_id/totalpay", async (req, res) => {
 });
 
 // 도우미가 일하는시간 설정하고 확정 누르면 success table에 request_id, 일하는 시작시간 끝나는 시간 추가하고 request table의 matching을 true로 바꾸는 엔드포인트
-helperRouter.post("/requests-helper/confirmed", async (req, res) => {
+helperRouter2.post("/requests-helper/confirmed", async (req, res) => {
   const client = await pool.connect();
   const request_id = req.body.request_id;
   const start_time = req.body.start_time;
@@ -183,7 +193,7 @@ helperRouter.post("/requests-helper/confirmed", async (req, res) => {
 });
 
 // 도우미 정보 insert하는 엔드포인트
-helperRouter.post("/helper", async (req, res) => {
+helperRouter2.post("/helper", async (req, res) => {
   const client = await pool.connect();
   try {
     await client.query(
@@ -222,4 +232,4 @@ helperRouter.post("/helper", async (req, res) => {
 //   }
 // })
 
-export default helperRouter;
+export default helperRouter2;

@@ -42,11 +42,25 @@ reviewRouter.get("/user-review/:user_id", async (req, res) => {
   const client = await pool.connect();
   const userId = parseInt(req.params.user_id);
   try {
+    // request 테이블에서 start_time, end_time, timepay,totalpay도 같이 가져오기
+
     const review = await client.query(
-      `SELECT * FROM review, helper WHERE review.helper_id = helper.id and review.user_id = $1`,
+      `SELECT * FROM review, requests WHERE review.user_id = $1 and requests.id = review.request_id`,
       [userId]
     );
-    res.json(review.rows);
+    // 한 이용자에 대한 리뷰데이터와 도우미정보 합치기
+    const reviewWithHelperData = await Promise.all(
+      review.rows.map(async (request) => {
+        const helperData = await client.query(
+          `SELECT * FROM helper WHERE id = $1`,
+          [request.helper_id]
+        );
+        return { ...request, user: helperData.rows[0] };
+      })
+    );
+    res.json(reviewWithHelperData);
+
+    res.json(reviewWithHelperData.rows);
     client.release();
   } catch (err) {
     console.error("Error fetching user data:", err);

@@ -17,7 +17,7 @@ signupRouter.post('/signup', async (req, res) => {
 
     // 비밀번호 유효성 검사
     if (!passwordRegex.test(password)) {
-      return res.status(400).json({ error: '8~16자의 영문 대소문자, 숫자, 특수문자만 가능' });
+      return res.status(400).json({ error: '8~16자의 영문 대소문자, 숫자, 특수문자만 가능합니다' });
     }
 
     // 비밀번호와 확인 비밀번호가 일치하는지 확인
@@ -79,19 +79,65 @@ signupRouter.post('/login', async (req, res) => {
 signupRouter.get('/mypage', verifyToken, async (req, res) => {
   try {
     // req.userId를 사용하여 특정 사용자의 정보를 가져오는 쿼리를 작성
-    const user = await db.oneOrNone('SELECT * FROM signup WHERE id = $1', [req.userId]);
+    const userData = await db.oneOrNone(
+      'SELECT * FROM signup WHERE id = $1',
+      [req.userId]
+    );
 
-    if (!user) {
+    if (!userData) {
       return res.status(404).json({ error: '사용자를 찾을 수 없습니다' });
     }
 
-    // 사용자 정보를 응답
-    res.json({ user });
+    let userMypageData;
+    if (userData.type === 'user') {
+      // type이 user인 경우 user_mypage 테이블에서 정보를 가져오기
+      userMypageData = await db.oneOrNone(
+        'SELECT * FROM user_mypage WHERE user_id = $1',
+        [req.userId]
+      );
+    } else if (userData.type === 'helper') {
+      // type이 helper인 경우 helper_mypage 테이블에서 정보를 가져오기
+      userMypageData = await db.oneOrNone(
+        'SELECT * FROM helper_mypage WHERE helper_id = $1',
+        [req.userId]
+      );
+    }
+
+    if (!userMypageData) {
+      return res.status(404).json({ error: '마이페이지 정보를 찾을 수 없습니다' });
+    }
+
+    // 사용자 및 마이페이지 정보를 응답
+    const mergedData = {
+      userData: {
+        ...userData,
+        region_state: userMypageData.region_state,
+        region_country: userMypageData.region_country,
+        image: userMypageData.image,
+        age: userMypageData.age,
+        gender: userMypageData.gender
+      }
+    };
+
+    // type이 helper인 경우 certification 속성 추가
+    if (userData.type === 'helper') {
+      mergedData.userData.introduction = userMypageData.introduction;
+      mergedData.userData.career = userMypageData.career;
+      mergedData.userData.stars = userMypageData.stars;
+      mergedData.userData.certification = userMypageData.certification;
+      mergedData.userData.activity = userMypageData.activity ;
+      mergedData.userData.quick_matching = userMypageData.quick_matching;
+    }
+
+    res.json(mergedData);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: '내부 서버 오류' });
   }
 });
+
+
+
 
 // JWT를 확인하는 미들웨어
 function verifyToken(req, res, next) {
