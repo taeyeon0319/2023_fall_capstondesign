@@ -259,11 +259,11 @@ export const HelperMyPage = () => {
                 </HelperMyImg>
                 <div style={{display:"flex",flexDirection:"column",alignItems:"flex-start",justifyContent:"center"}}>
                     <div style={{display:"flex",alignItems:"flex-end"}}>
-                        <HelperMyText>김헬퍼</HelperMyText>
+                        <HelperMyText>{JSON.parse(localStorage.getItem("userInfo")).name}</HelperMyText>
                         <HelperMyText2>도우미님</HelperMyText2>
                     </div>
-                    <HelperMyText3>서울특별시 중구 충무로 1길 36</HelperMyText3>
-                    <HelperMyText3>010-5641-7997</HelperMyText3>
+                    <HelperMyText3>{JSON.parse(localStorage.getItem("userInfo")).region_state+' '+JSON.parse(localStorage.getItem("userInfo")).region_country}</HelperMyText3>
+                    <HelperMyText3>{JSON.parse(localStorage.getItem("userInfo")).mobile}</HelperMyText3>
                 </div>
                 <div style={{width:"25vw"}}></div>
                 <div style={{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center"}}>
