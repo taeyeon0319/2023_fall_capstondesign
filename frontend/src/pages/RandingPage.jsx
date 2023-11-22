@@ -358,6 +358,10 @@ export const RandingPage = () => {
         }));
     };
 
+    const onClickHandlerMy = () =>{
+        navigate("/helperMy");
+    };
+
     const clickMain = () =>{
         if(localStorage.getItem("loginState")==="false"){
             alert("서비스 이용시 로그인이 필요합니다.");
@@ -440,7 +444,7 @@ export const RandingPage = () => {
                                 <RandAfterLoginText id="cypressname">{JSON.parse(localStorage.getItem("userInfo")).name}</RandAfterLoginText>
                                 <RandAfterLoginText style={{fontSize:"16px", fontWeight:"400", color:"#8F8F8F"}}>{JSON.parse(localStorage.getItem("userInfo")).region_state+' '+JSON.parse(localStorage.getItem("userInfo")).region_country}</RandAfterLoginText>
                                 <div style={{display:"flex"}}>
-                                    <RandAfterLoginBtn>마이페이지</RandAfterLoginBtn>
+                                    <RandAfterLoginBtn onClick={onClickHandlerMy}>마이페이지</RandAfterLoginBtn>
                                     <RandAfterLoginBtn onClick={clickLogoutBtn}>로그아웃</RandAfterLoginBtn>
                                 </div>
                             </div>
