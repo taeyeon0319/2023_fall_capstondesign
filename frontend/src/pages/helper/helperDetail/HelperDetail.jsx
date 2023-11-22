@@ -153,7 +153,8 @@ const HelperDetail = ()=>{
         const response = axios.get(`${process.env.REACT_APP_SERVER_URL}/user/helper/${helper_id}`);
 
         response.then(res => {
-            setHelperInfo(res.data)
+            setHelperInfo(res.data[0])
+            console.log(res.data[0])
         })
     }, [])
 
