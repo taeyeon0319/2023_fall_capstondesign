@@ -273,6 +273,7 @@ export const RandingPage = () => {
     const [loginBtn, setLoginBtn] = useState(0);
     const [login, setLogin] = useState(0);
     const [reRender, setreRender] = useState(0);
+    const [render, setrender] = useState(0);
     const [id, setId] = useState('');
     const [pw, setPw] = useState('');
     const [loginData, setloginData] = useState({
@@ -286,7 +287,7 @@ export const RandingPage = () => {
 
     React.useEffect(() => {
         console.log(localStorage.getItem("loginState"));
-    }, [reRender]);
+    }, [reRender,render]);
 
     const clickLoginBtn = () =>{
         if (loginBtn===1){
@@ -361,9 +362,13 @@ export const RandingPage = () => {
         navigate("/");
     };
 
+    const handlerenderChange = () =>{
+        setrender(prevState => (prevState === 0 ? 1 : 0));
+    };
+
     return(
         <Root>
-            <Header2></Header2>
+            <Header2 data={render} onDataChange={handlerenderChange}></Header2>
             <RandBody>
                 <RandTextBox>
                     <div style={{display:"flex",flexDirection:"column",alignItems:"flex-start"}}>

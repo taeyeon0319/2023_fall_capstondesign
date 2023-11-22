@@ -2,6 +2,7 @@ import styled from "styled-components";
 import React from 'react';
 import logoImg from '../img/임시로고.png'
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 const HeaderRoot = styled.div`
 width:100vw;
@@ -42,8 +43,13 @@ const HeadImg = styled.img`
 height:80%;
 `
 
-export const Header = () => {
+export const Header = ({ data, onDataChange }) => {
     const navigate = useNavigate();
+    const [reRender, setreRender] = useState(0);
+
+    React.useEffect(() => {
+        console.log(localStorage.getItem("loginState"));
+    }, [reRender]);
 
     const OnClickHandler = () => {
         navigate("/HelperMy");
@@ -51,6 +57,14 @@ export const Header = () => {
 
     const OnClickHandler2 = () => {
         navigate("/");
+    };
+
+    const OnClickHandler3 = () => {
+        if(window.confirm('로그아웃하시겠습니까?')){
+            localStorage.setItem("loginState",false);
+            setreRender(prevState => (prevState === 0 ? 1 : 0));
+            onDataChange();
+        };
     };
 
     return(
@@ -74,7 +88,7 @@ export const Header = () => {
                     <HeadButtonLine></HeadButtonLine>
                     <HeadButtonText onClick={OnClickHandler}>마이페이지</HeadButtonText>
                     <HeadButtonLine></HeadButtonLine>
-                    <HeadButtonText>로그아웃</HeadButtonText></>
+                    <HeadButtonText onClick={OnClickHandler3}>로그아웃</HeadButtonText></>
                     )}
                 </HeadButtonSet2>
             </HeaderRoot>
