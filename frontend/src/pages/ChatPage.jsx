@@ -557,7 +557,6 @@ export const ChatPage = () => {
                     </div>}
                     <ChatSendBtn>아이가 3살인데 주의할만한 사항이 있을까요? <img src={sendImg}></img></ChatSendBtn>
                 </ChatRect>
-
             </div>
             </ChatRectBox>
         </Root>
