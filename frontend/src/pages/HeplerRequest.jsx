@@ -112,6 +112,7 @@ export const HelperRequestPage = () => {
   const { state } = useLocation();
 
   const [Data, setData] = useState([]);
+  const [render, setrender] = useState(0);
 
   useEffect(() => {
     fetchData();
@@ -129,9 +130,13 @@ export const HelperRequestPage = () => {
     }
   };
 
+  const handlerenderChange = () =>{
+    setrender(prevState => (prevState === 0 ? 1 : 0));
+  };
+
   return (
     <Root>
-      <Header2></Header2>
+      <Header2 data={render} onDataChange={handlerenderChange}></Header2>
       <HelperRectBox>
         <div style={{ height: "81.855vh", margin: "auto" }}>
           <HelperRectTitle>도우미 신청</HelperRectTitle>

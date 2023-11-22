@@ -119,7 +119,6 @@ export const JoinPageUser = () =>{
     const OnclickHandler = () =>{
         navigate("/join");
     };
-
     return (
         <Root>
             <Header2></Header2>

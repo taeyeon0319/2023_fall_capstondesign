@@ -61,6 +61,7 @@ export const Header = ({ data, onDataChange }) => {
 
     const OnClickHandler3 = () => {
         if(window.confirm('로그아웃하시겠습니까?')){
+            navigate("/");
             localStorage.setItem("loginState",false);
             setreRender(prevState => (prevState === 0 ? 1 : 0));
             onDataChange();
