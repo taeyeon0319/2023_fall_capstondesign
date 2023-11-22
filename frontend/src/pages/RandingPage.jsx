@@ -359,7 +359,19 @@ export const RandingPage = () => {
     };
 
     const clickMain = () =>{
-        navigate("/");
+        if(localStorage.getItem("loginState")==="false"){
+            alert("서비스 이용시 로그인이 필요합니다.");
+        }
+        if(localStorage.getItem("loginState")==="true"){
+            if(JSON.parse(localStorage.getItem("userInfo")).type==="helper"){
+                alert("안녕하세요 "+JSON.parse(localStorage.getItem("userInfo")).name+" 도우미님!");
+                navigate("/helper");
+            }
+            if(JSON.parse(localStorage.getItem("userInfo")).type==="user"){
+                alert("안녕하세요 "+JSON.parse(localStorage.getItem("userInfo")).name+"님!");
+                navigate("/user");
+            }
+        }
     };
 
     const handlerenderChange = () =>{
