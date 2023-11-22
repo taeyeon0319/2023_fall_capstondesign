@@ -68,7 +68,7 @@ export const Header = () => {
                 </HeadButtonSet>
                 <div style={{width:"55%"}}></div>
                 <HeadButtonSet2>
-                    {localStorage.getItem("loginState")==="false"&&(<HeadButtonText style={{width:"100%",marginRight:"4.33%",display:"flex",alignItems:"center",justifyContent:"flex-end"}}>로그인이 필요합니다</HeadButtonText>)}
+                    {(localStorage.getItem("loginState")==="false"||localStorage.getItem("loginState")===null)&&(<HeadButtonText style={{width:"100%",marginRight:"4.33%",display:"flex",alignItems:"center",justifyContent:"flex-end"}}>로그인이 필요합니다</HeadButtonText>)}
                     {localStorage.getItem("loginState")==="true"&&(
                     <><HeadButtonText>{JSON.parse(localStorage.getItem("userInfo")).name+" "+(JSON.parse(localStorage.getItem("userInfo")).type==="helper"?"도우미":"")}님</HeadButtonText>
                     <HeadButtonLine></HeadButtonLine>
