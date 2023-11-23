@@ -27,6 +27,8 @@ const HelperList = ()=>{
 
     const [services, setServices] = useState([]);//분야 selectbox
     const [helperlist, setHelperlist] = useState([]);
+
+    const [render, setrender] = useState(0);
     
     //DatePicker 지난 날짜.시간 비활성화 > 
     dayjs.extend(customParseFormat);
@@ -179,6 +181,10 @@ const HelperList = ()=>{
         getHelperSearch();
     },[])
 
+    const handlerenderChange = () =>{
+        setrender(prevState => (prevState === 0 ? 1 : 0));
+    };
+
     const getHelperList = ()=>{
         const result = helperlist.map((helper, idx)=>{
             return  <li onClick={()=>{navigate(`/user/helper/${helper.id}`)}} key={idx} className='helper-list-searched-item'>
@@ -218,7 +224,7 @@ const HelperList = ()=>{
                     <img src={require('./images/home_logo.png')}></img>
                 </div>                
             </header> */}
-            <Header2></Header2>
+            <Header2 data={render} onDataChange={handlerenderChange}></Header2>
 
             <div className="helper-list-container">
                 <div className="helper-search-form">
