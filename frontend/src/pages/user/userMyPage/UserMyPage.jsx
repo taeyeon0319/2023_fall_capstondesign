@@ -24,22 +24,26 @@ const UserMyPage = ()=>{
     const [reviewlist, setReviewlist] = useState([]);
 
     useEffect(()=>{
-        const user_id = sessionStorage.getItem('user_id')
+        // const user_id = sessionStorage.getItem('user_id')
+        const userInfoString = localStorage.getItem('userInfo')
+        const userInfo = JSON.parse(userInfoString)
+        console.log(userInfo)
         const fetchData = async () => {
             try {
-                const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/review/user-review/${user_id}`);
+                const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/review/user-review/${userInfo.id}`);
                 const data = response.data;
+                console.log(data)
                 setReviewlist(data);
             } catch (error) {
                 console.log('Error fetching data:', error);
             }
         }
         fetchData();
-        if(user_id === undefined || user_id === null){
+        if(userInfo === undefined && userInfo.id === undefined){
             console.error('로그인된 유저가 아닙니다.')
         }
 
-        axios.get(`${process.env.REACT_APP_SERVER_URL}/helper/users/${user_id}`).then((res)=>{
+        axios.get(`${process.env.REACT_APP_SERVER_URL}/helper/user/${userInfo.id}`).then((res)=>{
             setUserInfo(res.data[0])
         })
         
