@@ -1,6 +1,6 @@
 import Header2 from "../components/Header2";
 import styled from "styled-components";
-import React from 'react';
+import React, { useState } from 'react';
 import Join5 from '../img/Join5.png'
 import Join6 from '../img/Join6.png'
 import ArrowRight from '../img/arrow-right.png'

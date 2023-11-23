@@ -273,6 +273,7 @@ export const RandingPage = () => {
     const [loginBtn, setLoginBtn] = useState(0);
     const [login, setLogin] = useState(0);
     const [reRender, setreRender] = useState(0);
+    const [render, setrender] = useState(0);
     const [id, setId] = useState('');
     const [pw, setPw] = useState('');
     const [loginData, setloginData] = useState({
@@ -286,7 +287,7 @@ export const RandingPage = () => {
 
     React.useEffect(() => {
         console.log(localStorage.getItem("loginState"));
-    }, [reRender]);
+    }, [reRender,render]);
 
     const clickLoginBtn = () =>{
         if (loginBtn===1){
@@ -314,6 +315,17 @@ export const RandingPage = () => {
         try {
             const response = await axios.post('http://localhost:5000/login', loginData);
             console.log('로그인 성공:', response.data);
+            localStorage.setItem("token", response.data.token);
+            localStorage.setItem("userType", response.data.type);
+            localStorage.setItem("userId", response.data.userId);
+            try{
+                const response2 = await axios.get('http://localhost:5000/mypage',{headers: {Authorization: response.data.token}});
+                console.log(response2.data.userData);
+                localStorage.setItem("userInfo",JSON.stringify(response2.data.userData));
+            }catch (error) {
+                console.error('정보가져오기 실패:', error);
+                alert("정보 가져오기에 실패했습니다.");
+            }
             localStorage.setItem("loginState", true);
             localStorage.setItem("loginId", loginData.id);
             setreRender(prevState => (prevState === 0 ? 1 : 0));
@@ -346,13 +358,33 @@ export const RandingPage = () => {
         }));
     };
 
+    const onClickHandlerMy = () =>{
+        navigate("/helperMy");
+    };
+
     const clickMain = () =>{
-        navigate("/");
+        if(localStorage.getItem("loginState")==="false"){
+            alert("서비스 이용시 로그인이 필요합니다.");
+        }
+        if(localStorage.getItem("loginState")==="true"){
+            if(JSON.parse(localStorage.getItem("userInfo")).type==="helper"){
+                alert("안녕하세요 "+JSON.parse(localStorage.getItem("userInfo")).name+" 도우미님!");
+                navigate("/helper");
+            }
+            if(JSON.parse(localStorage.getItem("userInfo")).type==="user"){
+                alert("안녕하세요 "+JSON.parse(localStorage.getItem("userInfo")).name+"님!");
+                navigate("/user");
+            }
+        }
+    };
+
+    const handlerenderChange = () =>{
+        setrender(prevState => (prevState === 0 ? 1 : 0));
     };
 
     return(
         <Root>
-            <Header2></Header2>
+            <Header2 data={render} onDataChange={handlerenderChange}></Header2>
             <RandBody>
                 <RandTextBox>
                     <div style={{display:"flex",flexDirection:"column",alignItems:"flex-start"}}>
@@ -407,12 +439,12 @@ export const RandingPage = () => {
                     {localStorage.getItem("loginState")==="true"&&(
                     <RandLogin>
                         <RandAfterLoginBox>
-                            <RandAfterLoginImg src={userImg}></RandAfterLoginImg>
+                            <RandAfterLoginImg src={JSON.parse(localStorage.getItem("userInfo")).image}></RandAfterLoginImg>
                             <div style={{display:"flex", flexDirection:"column"}}>
-                                <RandAfterLoginText id="cypressname">{user.name}</RandAfterLoginText>
-                                <RandAfterLoginText style={{fontSize:"16px", fontWeight:"400", color:"#8F8F8F"}}>{user.address}</RandAfterLoginText>
+                                <RandAfterLoginText id="cypressname">{JSON.parse(localStorage.getItem("userInfo")).name}</RandAfterLoginText>
+                                <RandAfterLoginText style={{fontSize:"16px", fontWeight:"400", color:"#8F8F8F"}}>{JSON.parse(localStorage.getItem("userInfo")).region_state+' '+JSON.parse(localStorage.getItem("userInfo")).region_country}</RandAfterLoginText>
                                 <div style={{display:"flex"}}>
-                                    <RandAfterLoginBtn>마이페이지</RandAfterLoginBtn>
+                                    <RandAfterLoginBtn onClick={onClickHandlerMy}>마이페이지</RandAfterLoginBtn>
                                     <RandAfterLoginBtn onClick={clickLogoutBtn}>로그아웃</RandAfterLoginBtn>
                                 </div>
                             </div>
