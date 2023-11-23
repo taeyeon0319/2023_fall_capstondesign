@@ -242,10 +242,15 @@ font-weight: 500;
 line-height: normal;
 `
 export const HelperMyPage = () => {
+    const [render, setrender] = useState(0);
+    
+    const handlerenderChange = () =>{
+        setrender(prevState => (prevState === 0 ? 1 : 0));
+    };
 
     return(
         <Root>
-            <Header2></Header2>
+            <Header2 data={render} onDataChange={handlerenderChange}></Header2>
             <HelperMyProfileBox>
                 <HelperMyImg xmlns="http://www.w3.org/2000/svg" width="5.52vw" height="9.814vh" viewBox="0 0 106 106" fill="none">
                     <path d="M53 106C82.2711 106 106 82.2711 106 53C106 23.7289 82.2711 0 53 0C23.7289 0 0 23.7289 0 53C0 82.2711 23.7289 106 53 106Z" fill="#EBEAEA"/>
@@ -254,11 +259,11 @@ export const HelperMyPage = () => {
                 </HelperMyImg>
                 <div style={{display:"flex",flexDirection:"column",alignItems:"flex-start",justifyContent:"center"}}>
                     <div style={{display:"flex",alignItems:"flex-end"}}>
-                        <HelperMyText>김헬퍼</HelperMyText>
+                        <HelperMyText>{JSON.parse(localStorage.getItem("userInfo")).name}</HelperMyText>
                         <HelperMyText2>도우미님</HelperMyText2>
                     </div>
-                    <HelperMyText3>서울특별시 중구 충무로 1길 36</HelperMyText3>
-                    <HelperMyText3>010-5641-7997</HelperMyText3>
+                    <HelperMyText3>{JSON.parse(localStorage.getItem("userInfo")).region_state+' '+JSON.parse(localStorage.getItem("userInfo")).region_country}</HelperMyText3>
+                    <HelperMyText3>{JSON.parse(localStorage.getItem("userInfo")).mobile}</HelperMyText3>
                 </div>
                 <div style={{width:"25vw"}}></div>
                 <div style={{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center"}}>

@@ -11,7 +11,7 @@ userRouter.get('/', (req, res) => {
 userRouter.get('/helper/all', async (req, res) => {
     try {
         const rawData = await db.any(`
-            SELECT signup.id as id, signup.name, signup.email, signup.mobile, helper_mypage.region_state, helper_mypage.region_country, helper_mypage.field, helper_mypage.image, helper_mypage.age, helper_mypage.gender, helper_mypage.introduction, helper_mypage.career, helper_mypage.stars, helper_mypage.certification, helper_time.day, helper_time.start_time, helper_time.end_time
+            SELECT signup.id as id, signup.name, signup.email, signup.mobile, helper_mypage.region_state, helper_mypage.region_country, helper_mypage.field, helper_mypage.image, helper_mypage.age, helper_mypage.gender, helper_mypage.introduction, helper_mypage.career, helper_mypage.stars, helper_mypage.certification, helper_mypage.quick_matching, helper_time.day, helper_time.start_time, helper_time.end_time
             FROM signup
             LEFT JOIN helper_mypage ON signup.id = helper_mypage.helper_id
             LEFT JOIN helper_time ON signup.id = helper_time.helper_id
@@ -96,6 +96,7 @@ userRouter.get('/helper/search', async (req, res) => {
             helper_mypage.career,
             helper_mypage.stars,
             helper_mypage.certification,
+            helper_mypage.quick_matching, 
             helper_time.day,
             helper_time.start_time,
             helper_time.end_time
@@ -167,6 +168,7 @@ userRouter.get('/helper/search/orderbystars', async (req, res) => {
             helper_mypage.career,
             helper_mypage.stars,
             helper_mypage.certification,
+            helper_mypage.quick_matching, 
             helper_time.day,
             helper_time.start_time,
             helper_time.end_time
@@ -194,7 +196,7 @@ userRouter.get('/helper/:id', async (req, res) => {
     try {
         // 데이터베이스에서 해당 ID의 도우미 정보와 회원 정보를 검색합니다.
         const rawData = await db.any(`
-            SELECT signup.id as id, signup.name, signup.email, signup.mobile, helper_mypage.region_state, helper_mypage.region_country, helper_mypage.field, helper_mypage.image, helper_mypage.age, helper_mypage.gender, helper_mypage.introduction, helper_mypage.career, helper_mypage.stars, helper_mypage.certification, helper_time.day, helper_time.start_time, helper_time.end_time
+            SELECT signup.id as id, signup.name, signup.email, signup.mobile, helper_mypage.region_state, helper_mypage.region_country, helper_mypage.field, helper_mypage.image, helper_mypage.age, helper_mypage.gender, helper_mypage.introduction, helper_mypage.career, helper_mypage.stars, helper_mypage.certification, helper_mypage.quick_matching, helper_time.day, helper_time.start_time, helper_time.end_time
             FROM signup
             LEFT JOIN helper_mypage ON signup.id = helper_mypage.helper_id
             LEFT JOIN helper_time ON signup.id = helper_time.helper_id

@@ -2,6 +2,7 @@ import styled from "styled-components";
 import React from 'react';
 import logoImg from '../img/임시로고.png'
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 const HeaderRoot = styled.div`
 width:100vw;
@@ -18,10 +19,10 @@ align-items:center;
 justify-content:space-between;
 `
 const HeadButtonSet2 = styled.div`
-width:20%;
+width:23%;
 display:flex;
 align-items:center;
-justify-content:space-between;
+justify-content:flex-end;
 `
 const HeadButtonText = styled.div`
 color: var(--Point-6, #54493F);
@@ -32,7 +33,7 @@ font-weight: 700;
 line-height: normal;
 `
 const HeadButtonLine = styled.div`
-margin: 0% 0.833%;
+margin: 0% 4.33%;
 
 width: 1px;
 height: 21px;
@@ -42,8 +43,13 @@ const HeadImg = styled.img`
 height:80%;
 `
 
-export const Header = () => {
+export const Header = ({ data, onDataChange }) => {
     const navigate = useNavigate();
+    const [reRender, setreRender] = useState(0);
+
+    React.useEffect(() => {
+        console.log(localStorage.getItem("loginState"));
+    }, [reRender]);
 
     const OnClickHandler = () => {
         navigate("/HelperMy");
@@ -51,6 +57,15 @@ export const Header = () => {
 
     const OnClickHandler2 = () => {
         navigate("/");
+    };
+
+    const OnClickHandler3 = () => {
+        if(window.confirm('로그아웃하시겠습니까?')){
+            navigate("/");
+            localStorage.setItem("loginState",false);
+            setreRender(prevState => (prevState === 0 ? 1 : 0));
+            onDataChange();
+        };
     };
 
     return(
@@ -68,11 +83,14 @@ export const Header = () => {
                 </HeadButtonSet>
                 <div style={{width:"55%"}}></div>
                 <HeadButtonSet2>
-                    <HeadButtonText>김헬퍼 도우미님</HeadButtonText>
+                    {(localStorage.getItem("loginState")==="false"||localStorage.getItem("loginState")===null)&&(<HeadButtonText style={{width:"100%",marginRight:"4.33%",display:"flex",alignItems:"center",justifyContent:"flex-end"}}>로그인이 필요합니다</HeadButtonText>)}
+                    {localStorage.getItem("loginState")==="true"&&(
+                    <><HeadButtonText>{JSON.parse(localStorage.getItem("userInfo")).name+" "+(JSON.parse(localStorage.getItem("userInfo")).type==="helper"?"도우미":"")}님</HeadButtonText>
                     <HeadButtonLine></HeadButtonLine>
                     <HeadButtonText onClick={OnClickHandler}>마이페이지</HeadButtonText>
                     <HeadButtonLine></HeadButtonLine>
-                    <HeadButtonText>로그아웃</HeadButtonText>
+                    <HeadButtonText onClick={OnClickHandler3}>로그아웃</HeadButtonText></>
+                    )}
                 </HeadButtonSet2>
             </HeaderRoot>
         </>

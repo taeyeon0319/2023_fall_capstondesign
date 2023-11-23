@@ -182,6 +182,7 @@ const HelperReqText3 = styled.div`
 export const HelperPage = () => {
   const navigate = useNavigate();
 
+  const [render, setrender] = useState(0);
   const [responseData, setresponseData] = useState([]);
   const [displayData, setdisplayData] = useState([]);
 
@@ -192,7 +193,7 @@ export const HelperPage = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:5000/helper/requests-helper/1"
+        "http://localhost:5000/helper2/requests-helper/"+JSON.parse(localStorage.getItem("userInfo")).id
       );
       setresponseData(response.data);
     } catch (error) {
@@ -209,9 +210,13 @@ export const HelperPage = () => {
     setdisplayData(responseData[index]);
   };
 
+  const handlerenderChange = () =>{
+    setrender(prevState => (prevState === 0 ? 1 : 0));
+  };
+
   return (
     <Root>
-      <Header2></Header2>
+      <Header2 data={render} onDataChange={handlerenderChange}></Header2>
       <HelperRectBox>
         <div style={{ height: "81.855vh", margin: "auto" }}>
           <HelperRectTitle>
