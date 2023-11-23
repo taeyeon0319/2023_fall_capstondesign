@@ -4,7 +4,6 @@ import cors from "cors";
 import db from "./db.mjs";
 import userRouter from "./server/user.mjs"; // user 모듈 불러오기
 import helperRouter from "./server/helper.mjs"; // helper 모듈 불러오기
-import helperRouter2 from "./server/helper2.mjs";
 import signupRouter from "./server/signup.mjs";
 import reviewRouter from "./server/review.mjs";
 
@@ -26,7 +25,6 @@ app.use("/user", userRouter);
 
 //도우미용
 app.use("/helper", helperRouter);
-app.use("/helper2", helperRouter2);
 
 app.use("/", signupRouter);
 
