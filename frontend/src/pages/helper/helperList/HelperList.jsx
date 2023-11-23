@@ -295,14 +295,14 @@ const HelperList = ()=>{
                                 <button className='select-container-item' onClick={()=>setGender('')}>상관 없음</button>
                             </div>
                         </li>
-                        <li className='filter-list-item'>
+                        {/* <li className='filter-list-item'>
                             <div><b>자격증</b></div>
                             <div className="select-container-3">
                                 <button placeholder='' onClick={()=>{setCertification(true)}} className='select-container-item ft-center' type="text">O</button>
                                 <button placeholder='' onClick={()=>{setCertification(false)}} className='select-container-item ft-center' type="text">X</button>
                                 <button className='select-container-item' onClick={()=>setCertification('')}>상관 없음</button>
                             </div>
-                        </li>
+                        </li> */}
                         
                     </ul>
 
