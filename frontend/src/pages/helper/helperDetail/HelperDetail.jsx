@@ -153,7 +153,8 @@ const HelperDetail = ()=>{
         const response = axios.get(`${process.env.REACT_APP_SERVER_URL}/user/helper/${helper_id}`);
 
         response.then(res => {
-            setHelperInfo(res.data)
+            setHelperInfo(res.data[0])
+            console.log(res.data[0])
         })
     }, [])
 
@@ -173,7 +174,7 @@ const HelperDetail = ()=>{
                         <img className='profile' src={helperInfo.image} />
                         <div className='description'>
                             <h4 className='name'>{helperInfo.name} <span style={{fontSize: '13px'}}>도우미</span></h4>
-                            <p className='region'>{helperInfo.region_state} / {helperInfo.region_county}</p>
+                            <p className='region'>{helperInfo.region_state} / {helperInfo.region_country}</p>
                             <p className='time-range'>
                             <span className="materail-time material-symbols-outlined">schedule</span>
                             <span>{helperInfo.start_time}</span>
@@ -197,7 +198,7 @@ const HelperDetail = ()=>{
                     !secondStep && 
                     <div className="helper-list-searched-container">
                         <div className='title'><span className='fl'>후기</span> <span className='count ft-size15 fr'>평균 4.5점 | 총 0건의 후기</span></div>
-                        
+                            
                         <div></div>
                     </div>
                 }

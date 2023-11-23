@@ -18,7 +18,7 @@ const HelperList = ()=>{
     const [date, setDate] = useState("");
     const [age, setAge] = useState("");
     const [career, setCareer] = useState("");
-    const [certification, setCertification] = useState("");
+    const [certification, setCertification] = useState(""); //자격증 유무
 
 
     const [cityData, setCityData] = useState([])
@@ -234,6 +234,7 @@ const HelperList = ()=>{
                                     <option value="광주" >광주</option>
                                 <option value="대전" >대전</option> */}
                                 </select>
+                                
 
                                 <select defaultValue={""} onChange={(e)=>{setDistrict(e.target.value)}} className="select-container-item" name="" id="">
                                     <option value="" >시/군/구</option>
@@ -241,6 +242,10 @@ const HelperList = ()=>{
                                 </select>
                             </div>
                         </li>
+                        
+                        <button className = "fast-match-button" onClick={()=>{}}>빠른 매칭</button>
+                        <div className='match-text'>채팅 없이 빠른 매칭을 원한다면 클릭하시오</div>
+                        
                         <li className='filter-list-item'>
                             <div><b>도우미 분야</b></div>
                             <div className="select-container-1">
@@ -286,10 +291,19 @@ const HelperList = ()=>{
                             <div><b>성별</b></div>
                             <div className="select-container-3">
                                 <button placeholder='' onClick={()=>{setGender('남')}} className='select-container-item ft-center' type="text">남자</button>
-                                <button placeholder='00:00' onClick={()=>{setGender('여')}} className='select-container-item ft-center' type="text">여자</button>
+                                <button placeholder='' onClick={()=>{setGender('여')}} className='select-container-item ft-center' type="text">여자</button>
                                 <button className='select-container-item' onClick={()=>setGender('')}>상관 없음</button>
                             </div>
                         </li>
+                        <li className='filter-list-item'>
+                            <div><b>자격증</b></div>
+                            <div className="select-container-3">
+                                <button placeholder='' onClick={()=>{setCertification(true)}} className='select-container-item ft-center' type="text">O</button>
+                                <button placeholder='' onClick={()=>{setCertification(false)}} className='select-container-item ft-center' type="text">X</button>
+                                <button className='select-container-item' onClick={()=>setCertification('')}>상관 없음</button>
+                            </div>
+                        </li>
+                        
                     </ul>
 
                     <button onClick={()=>{getHelperSearch()}} className='search-helper-button'>도우미 찾기</button>

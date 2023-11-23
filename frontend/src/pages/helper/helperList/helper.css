@@ -139,8 +139,37 @@ body {
     row-gap: 15px;
 }
 
+.fast-match-button {
+    width: 20%;
+    border: 2px solid #eee;
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-size: 13px;
+    font-weight: bold;
+    background: none;
+    color: #8F8F8F;
+    position:absolute;
+    top:60px;
+    right:20px;
+}
+.fast-match-button:hover{
+    cursor : pointer;
 
-
+}
+.fast-match-button:hover + .match-text{
+    display: block;
+    
+}
+.match-text {
+    padding: 8px;
+    background-color: #8F8F8F;
+    border-radius: 5px;
+    color: #ffffff;
+    position: absolute;
+    display: none;
+    top:100px;
+    right:20px;
+}
 .helper-list-container .helper-list-searched-container {
     background-color: #FFF;
     height: 884px;
