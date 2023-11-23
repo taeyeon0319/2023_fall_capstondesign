@@ -22,18 +22,21 @@ align-items: center;
 const UserMyPage = ()=>{
     const [userInfo, setUserInfo] = useState({});
     const [reviewlist, setReviewlist] = useState([]);
-
+    const handlerenderChange = () =>{
+        setrender(prevState => (prevState === 0 ? 1 : 0));
+    };
+    const [render, setrender] = useState(0);
     useEffect(()=>{
         // const user_id = sessionStorage.getItem('user_id')
         const userInfoString = localStorage.getItem('userInfo')
         const userInfo = JSON.parse(userInfoString)
-        console.log(userInfo)
+        // console.log(userInfo)
         const fetchData = async () => {
             try {
                 const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/review/user-review/${userInfo.id}`);
                 const data = response.data;
-                console.log(data)
-                setReviewlist(data);
+                // console.log(data)
+                // setReviewlist(data);
             } catch (error) {
                 console.log('Error fetching data:', error);
             }
@@ -43,8 +46,9 @@ const UserMyPage = ()=>{
             console.error('로그인된 유저가 아닙니다.')
         }
 
-        axios.get(`${process.env.REACT_APP_SERVER_URL}/helper/user/${userInfo.id}`).then((res)=>{
-            setUserInfo(res.data[0])
+        axios.get(`${process.env.REACT_APP_SERVER_URL}/helper/users/${userInfo.id}`).then((res)=>{
+            // setUserInfo(res.data)
+            console.log(res.data)
         })
         
     }, [])
@@ -82,7 +86,8 @@ const UserMyPage = ()=>{
     return (
         
         <div>
-            <Header2></Header2>
+            {/* <Header2></Header2> */}
+            <Header2 data={render} onDataChange={handlerenderChange}></Header2>
             <div className="user-mypage-container">
                 <div className="user-mypage-profile-change">
                     <div className="user-mypage-image">
