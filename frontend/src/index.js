@@ -19,7 +19,6 @@ import UserMyPageEdit from './pages/user/userMyPage/UserMyPageEdit'
 import ChatPage from './pages/ChatPage';
 
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import {Provider, KeepAlive} from 'react-keep-alive';
 
 const router = createBrowserRouter([
   {
