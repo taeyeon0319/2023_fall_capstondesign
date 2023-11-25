@@ -60,7 +60,7 @@ reviewRouter.get("/user-review/:user_id", async (req, res) => {
     );
     res.json(reviewWithHelperData);
 
-    res.json(reviewWithHelperData.rows);
+    // res.json(reviewWithHelperData.rows);
     client.release();
   } catch (err) {
     console.error("Error fetching user data:", err);
