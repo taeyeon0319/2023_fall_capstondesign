@@ -52,10 +52,10 @@ reviewRouter.get("/user-review/:user_id", async (req, res) => {
     const reviewWithHelperData = await Promise.all(
       review.rows.map(async (request) => {
         const helperData = await client.query(
-          `SELECT * FROM signup WHERE id = $1 and type = 'helper'`,
+          `SELECT * FROM signup right join helper_mypage on helper_mypage.helper_id = signup.id WHERE signup.id = $1 and signup.type = 'helper'  `,
           [request.helper_id]
         );
-        return { ...request, user: helperData.rows[0] };
+        return { ...request, helper: helperData.rows[0] };
       })
     );
     res.json(reviewWithHelperData);
