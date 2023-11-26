@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import './HelperDetail.css';
 import axios from "axios";
 import { Button, Modal, DatePicker, Space, TimePicker  } from 'antd';
@@ -10,6 +10,12 @@ import customParseFormat from 'dayjs/plugin/customParseFormat';
 const HelperDetail = ()=>{
     const navigate = useNavigate();
     const params = useParams();
+    const location = useLocation();
+
+
+    const searchParams = location.state;
+
+    // console.log(searchParams)
 
     const helper_id = params.id;
 
@@ -28,6 +34,8 @@ const HelperDetail = ()=>{
     const [age, setAge] = useState("");
     const [career, setCareer] = useState("");
     const [certification, setCertification] = useState("");
+    const [reviewList, setReviewList] = useState([]);
+    const [requestText, setRequestText] = useState("");
 
 
     const [cities, setCities] = useState([]);//시/도 selectbox
@@ -36,6 +44,8 @@ const HelperDetail = ()=>{
     const [helperlist, setHelperlist] = useState([]);
 
     const [cityData, setCityData] = useState([])
+
+
 
     
     //DatePicker 오늘 이후의 시간만 선택 가능한 component
@@ -48,6 +58,18 @@ const HelperDetail = ()=>{
     }
     return result;
     };
+
+    useEffect(()=>{
+        if(location.state){
+            setCity(location.state.city)
+            setDistrict(location.state.region)
+            setServiceType(location.state.field)
+            setDate(location.state.date)
+            setServiceStartTime(location.state.needtime_s)
+            setServiceEndTime(location.state.needtime_e)
+        }
+    }, [])
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -82,6 +104,12 @@ const HelperDetail = ()=>{
         fetchData2();
         
     }, [])
+
+    useEffect(()=>{
+        axios.get(`${process.env.REACT_APP_SERVER_URL}/review/helper-review/${helper_id}`).then(res=>{
+            setReviewList(res.data)
+        })
+    },[])
     //도로명 주소
     // const findAddr = async()=> {
     //         try {
@@ -103,19 +131,18 @@ const HelperDetail = ()=>{
     
     const getCities = () => {
         if (!!districts) {
-        
             const districtList = Object.keys(districts)
-            return districtList.map((el, idx) => (
-                <option key={idx} value={el}>
-                {el}
-                </option>
-            ));
+
+            return districtList.map((el, idx) => {
+                    return <option  key={idx} value={el}>
+                    {el}
+                    </option>
+                });
             }
         };
 
     const getDistrict = ()=>{
         if(city !== "" ){
-            console.log(districts)
             return districts[`${city}`].map((d, idx)=>{
                 return <option key={idx} value={d}>{d}</option>
             })
@@ -126,9 +153,8 @@ const HelperDetail = ()=>{
     }
     const getServices = () => {
         if (!!services && services.length > 0) {
-            return services.map((service) => (
+            return services.map((service, i) => (
                 <option 
-                
                 key={service.id} value={service.field_name}>
                 {service.field_name}
                 </option>
@@ -136,6 +162,28 @@ const HelperDetail = ()=>{
             }
             return null;
         };
+    
+    const getReviewList = ()=>{
+        return reviewList.map((review)=>{
+            return (
+                <div className='review-item'>
+                    <div className='left'>
+                        <div className='img-container' style={{background: '#eee'}}>
+                            <img className='img' src={''} alt="" />
+                        </div>
+                        <span style={{textAlign: 'center', width: '55px'}}>★ {review.rating}</span>
+                    </div>
+                    <div className='right'>
+                        <div className='item-name'>{review.name}</div>
+                        <div className='item-date'>{review.created_at}</div>
+                        <div className='item-content'>{review.contents}</div>
+                    </div>
+                </div>
+            )
+        })
+        
+        
+    }
 
     // eslint-disable-next-line arrow-body-style
     const disabledDate = (current) => {
@@ -148,13 +196,18 @@ const HelperDetail = ()=>{
         disabledMinutes: () => range(30, 60),
         disabledSeconds: () => [55, 56],
     });
+
+    const requestHelper = ()=>{
+        console.log('reqest!')
+        
+    }
     
     useEffect(() => {
         const response = axios.get(`${process.env.REACT_APP_SERVER_URL}/user/helper/${helper_id}`);
 
         response.then(res => {
             setHelperInfo(res.data[0])
-            console.log(res.data[0])
+            // console.log(res.data[0])
         })
     }, [])
 
@@ -197,9 +250,13 @@ const HelperDetail = ()=>{
                 {
                     !secondStep && 
                     <div className="helper-list-searched-container">
-                        <div className='title'><span className='fl'>후기</span> <span className='count ft-size15 fr'>평균 4.5점 | 총 0건의 후기</span></div>
+                        <div className='title'><span className='fl'>후기</span> <span className='count ft-size15 fr'>평균 {reviewList.reduce((sum, curValue)=>{
+                            return Math.round((sum + curValue.rating / reviewList.length)*100)/100
+                        }, 0)}점 | 총 {reviewList.length}건의 후기</span></div>
                             
-                        <div></div>
+                        <div className='review-list'>
+                            {getReviewList()}
+                        </div>
                     </div>
                 }
                 {
@@ -212,8 +269,8 @@ const HelperDetail = ()=>{
                         <div><b>지역</b></div>
                         <li className='filter-list-item'> 
                             <div className="select-container-2">
-                                <select onChange={(e)=>{setCity(e.target.value)}} className="select-container-item" name="" id="">
-                                    <option value=""  >지역</option>
+                                <select onChange={(e)=>{setCity(e.target.value)}} value={city} className="select-container-item" name="" id="">
+                                    <option value="">지역</option>
                                     {/* <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script> */}
                                     {/* <label for = "c_main_address">주소</label>
                                     <input type = "text" id="c_main_address" ></input>
@@ -226,7 +283,7 @@ const HelperDetail = ()=>{
                                     <option value="대전" >대전</option> */}
                                 </select>
 
-                                <select onChange={(e)=>{setDistrict(e.target.value)}} className="select-container-item" name="" id="">
+                                <select onChange={(e)=>{setDistrict(e.target.value)}} value={district} className="select-container-item" name="" id="">
                                     <option value="" >시/군/구</option>
                                     {getDistrict()}
                                 </select>
@@ -240,7 +297,9 @@ const HelperDetail = ()=>{
                         <li className='filter-list-item'>
                             <div><b>도우미 분야</b></div>
                             <div className="select-container-1">
-                                <select onChange={(e)=>{setServiceType(e.target.value)}} className="select-container-item" name="" id="">
+                                <select onChange={(e)=>{
+                                        setServiceType(e.target.value)                                  
+                                    }} className="select-container-item" value={serviceType} name="" id="">
                                     {getServices()}
                                     {/* <option value="" >분야선택</option>
                                     <option value="" >베이비시터</option>
@@ -256,6 +315,7 @@ const HelperDetail = ()=>{
                             <div><b>날짜</b></div>
                             <div className="select-container-1">
                                 <DatePicker 
+                                    defaultValue={dayjs(date)}
                                     disabledDate={disabledDate}
                                     disabledTime={disabledDateTime}
                                     placeholder="날짜를 입력해주세요."
@@ -269,9 +329,9 @@ const HelperDetail = ()=>{
                         <li className='filter-list-item'>
                             <div><b>시간</b></div>
                             <div className="select-container-4">
-                                <TimePicker placeholder='00:00' onChange={(time, timeString)=>setServiceStartTime(timeString)} format={'HH:mm'} />
+                                <TimePicker placeholder='00:00' defaultValue={dayjs(`${date} ${serviceStartTime}:00`)} onChange={(time, timeString)=>setServiceStartTime(timeString)} format={'HH:mm'} />
                                 <span className='ft-center'>~</span>
-                                <TimePicker placeholder='00:00' onChange={(time, timeString)=>setServiceStartTime(timeString)} format={'HH:mm'} />
+                                <TimePicker placeholder='00:00' defaultValue={dayjs(`${date} ${serviceEndTime}:00`)} onChange={(time, timeString)=>setServiceStartTime(timeString)} format={'HH:mm'} />
                                 <span> </span>
                                 <button className='select-container-item'>상관 없음</button>
 
@@ -280,7 +340,7 @@ const HelperDetail = ()=>{
                         <li className='filter-list-item'>
                             <div><b>요청 사항</b></div>
                             <div className="select-container-1">
-                                <textarea className='textarea-000'></textarea>
+                                <textarea className='textarea-000' onChange={(e)=>{setRequestText(e.target.value)}}></textarea>
                             </div>
                         </li>
                     </ul>
@@ -293,7 +353,13 @@ const HelperDetail = ()=>{
             <div className='btn-container'>
                 {!secondStep && <button className='btn-1' onClick={()=>{navigate(-1)}}>취소</button>}
                 {secondStep && <button className='btn-1' onClick={()=>{setSecondStep(false)}}>이전</button>}
-                <button disabled={secondStep} className='btn-2' onClick={()=>{setSecondStep(true); console.log('hi')}}>도우미 요청</button>
+                <button disabled={secondStep} className='btn-2' onClick={()=>{
+                    if(!secondStep){
+                        setSecondStep(true);
+                    } else {
+                        requestHelper();
+                    }
+                }}>도우미 요청</button>
             </div>
         </div>
     )
