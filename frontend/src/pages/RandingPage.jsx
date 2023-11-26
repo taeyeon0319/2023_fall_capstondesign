@@ -329,6 +329,14 @@ export const RandingPage = () => {
             localStorage.setItem("loginState", true);
             localStorage.setItem("loginId", loginData.id);
             setreRender(prevState => (prevState === 0 ? 1 : 0));
+
+            const userType = localStorage.getItem('userType')
+
+            if(userType === 'user'){
+                navigate("/user");
+            } else {
+                navigate("/")
+            }
         } catch (error) {
             console.error('로그인 실패:', error.message);
             alert("아이디 또는 비밀번호가 일치하지 않습니다.");
@@ -359,7 +367,14 @@ export const RandingPage = () => {
     };
 
     const onClickHandlerMy = () =>{
-        navigate("/helperMy");
+        const userType = localStorage.getItem('userType')
+
+        if(userType === 'user'){
+            navigate("/usermypage");
+        } else {
+            navigate("/helperMy")
+        }
+
     };
 
     const clickMain = () =>{

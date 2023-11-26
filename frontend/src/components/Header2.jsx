@@ -51,9 +51,17 @@ export const Header = ({ data, onDataChange }) => {
         console.log(localStorage.getItem("loginState"));
     }, [reRender]);
 
-    const OnClickHandler = () => {
-        navigate("/HelperMy");
+    const OnClickHandler = () =>{
+        const userType = localStorage.getItem('userType')
+
+        if(userType === 'user'){
+            navigate("/usermypage");
+        } else {
+            navigate("/helperMy")
+        }
+
     };
+
 
     const OnClickHandler2 = () => {
         navigate("/");
