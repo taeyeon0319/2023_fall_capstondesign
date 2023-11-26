@@ -169,12 +169,12 @@ const HelperDetail = ()=>{
                 <div className='review-item'>
                     <div className='left'>
                         <div className='img-container' style={{background: '#eee'}}>
-                            <img className='img' src={''} alt="" />
+                            <img className='img' src={review.user.image} alt="" />
                         </div>
                         <span style={{textAlign: 'center', width: '55px'}}>★ {review.rating}</span>
                     </div>
                     <div className='right'>
-                        <div className='item-name'>{review.name}</div>
+                        <div className='item-name'>{review.user.name}</div>
                         <div className='item-date'>{review.created_at}</div>
                         <div className='item-content'>{review.contents}</div>
                     </div>
@@ -199,7 +199,7 @@ const HelperDetail = ()=>{
 
     const requestHelper = ()=>{
         console.log('reqest!')
-        
+        // axios.post()
     }
     
     useEffect(() => {
