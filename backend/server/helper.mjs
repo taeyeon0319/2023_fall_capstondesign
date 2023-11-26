@@ -185,45 +185,47 @@ helperRouter.get("/requests-helper/:helper_id/totalpay", async (req, res) => {
       .json({ error: "An error occurred while fetching the request data." });
   }
 });
-
-// 도우미 정보 insert하는 엔드포인트
-// helperRouter2.post("/helper", async (req, res) => {
-//   const client = await pool.connect();
-//   try {
-//     await client.query(
-//       "INSERT INTO helper(name,region_state,region_country,field,gender,introduction,image,career,stars,certification,activity) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)",
-//       [
-//         req.body.name,
-//         req.body.region_state,
-//         req.body.region_country,
-//         req.body.field,
-//         req.body.gender,
-//         req.body.introduction,
-//         req.body.image,
-//         req.body.career,
-//         req.body.stars,
-//         req.body.certification,
-//         req.body.activity,
-//       ]
-//     );
-//     res.json("success");
-//     client.release();
-//   } catch (err) {
-//     console.error("Error updating request status:", err);
-//     res.status(500).json({
-//       error: "An error occurred while updating the request status.",
-//     });
-//   }
-// });
-
-// 이용자 정보 insert하는 엔드포인트
-// helperRouter.post("/user", async (req, res) => {
-//   const client = await pool.connect();
-//   try{
-//     await client.query(
-//       "INSERT"
-
-//   }
-// })
+//requests 테이블에 요청서 추가하는 엔드포인트
+helperRouter.post("/requests/add", async (req, res) => {
+  const client = await pool.connect();
+  const {
+    user_id,
+    helper_id,
+    field,
+    region_state,
+    region_country,
+    region_eupmyeondong,
+    date,
+    start_time,
+    end_time,
+    comment,
+  } = req.body;
+  const address =
+    region_state + " " + region_country + " " + region_eupmyeondong;
+  try {
+    const result = await client.query(
+      `INSERT INTO requests (user_id, helper_id, address, date, start_time,end_time,field , comment, care_gender,care_age,timepay,totalpay) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10,$11,$12) RETURNING *`,
+      [
+        user_id,
+        helper_id,
+        address,
+        date,
+        start_time,
+        end_time,
+        field,
+        comment,
+        "",
+        0,
+        0,
+        0,
+      ]
+    );
+    res.json(result.rows[0]);
+    client.release();
+  } catch (err) {
+    console.error("Error inserting data:", err);
+    res.status(500).json({ error: "An error occurred while inserting data." });
+  }
+});
 
 export default helperRouter;
