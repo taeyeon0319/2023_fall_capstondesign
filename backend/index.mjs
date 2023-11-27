@@ -38,7 +38,7 @@ app.use("/chat", chatRouter);
 // /city : 위치 테이블 출력
 app.get("/city", async (req, res) => {
   try {
-    const searchResult = await db.any("SELECT * FROM city");
+    const searchResult = await db.any("SELECT * FROM city ORDER BY id");
     res.json(searchResult);
   } catch (error) {
     console.error("Error: ", error);
