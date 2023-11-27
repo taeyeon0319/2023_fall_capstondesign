@@ -123,7 +123,7 @@ userRouter.get('/helper/search', async (req, res) => {
 // /helper/search/orderbystars? : 평점순
 userRouter.get('/helper/search/orderbystars', async (req, res) => {
     try {
-        const { region, field, gender, age, career, certification, date, needtime_s, needtime_e } = req.query;
+        const { region, field, gender, age, career, certification, quick_matching, date, needtime_s, needtime_e } = req.query;
         const conditions = [];
 
         if (region) conditions.push(`helper_mypage.region_country = '${region}'`);
@@ -136,7 +136,7 @@ userRouter.get('/helper/search/orderbystars', async (req, res) => {
         }
         if (career) conditions.push(`helper_mypage.career = '${career}'`);
         if (certification) conditions.push(`helper_mypage.certification = '${certification}'`);
-
+        if (quick_matching) conditions.push(`helper_mypage.quick_matching = '${quick_matching}'`);
         let targetDay = '';
         if (date) {
             const targetDate = new Date(date);
