@@ -185,7 +185,7 @@ export const HelperPage = () => {
   const [render, setrender] = useState(0);
   const [responseData, setresponseData] = useState([]);
   const [displayData, setdisplayData] = useState([]);
-  const testRestApi = "";
+  
   useEffect(() => {
     fetchData();
   }, []);
