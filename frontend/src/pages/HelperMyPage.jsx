@@ -265,7 +265,7 @@ export const HelperMyPage = () => {
           const response = await axios.get(
             "http://localhost:5000/helper/requests-helper/"+JSON.parse(localStorage.getItem("userInfo")).id+"/totalpay"
           );
-          setTotalPay(response.data[0].sum);
+          setTotalPay(response.data[0].sum===null?0:response.data[0].sum);
         } catch (error) {
           console.error("API 호출 중 오류 발생:", error);
         }
@@ -319,6 +319,7 @@ export const HelperMyPage = () => {
                             </UserHelperList>
                         ))}
                     </div>
+                    
                 </HelperRect>
             </div>
             {/*
