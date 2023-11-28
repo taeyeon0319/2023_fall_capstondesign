@@ -52,15 +52,13 @@ reviewRouter.get("/user-review/:user_id", async (req, res) => {
     const reviewWithHelperData = await Promise.all(
       review.rows.map(async (request) => {
         const helperData = await client.query(
-          `SELECT * FROM signup WHERE id = $1 and type = 'helper'`,
+          `SELECT * FROM signup right join helper_mypage on helper_mypage.helper_id = signup.id WHERE signup.id = $1 and signup.type = 'helper'  `,
           [request.helper_id]
         );
-        return { ...request, user: helperData.rows[0] };
+        return { ...request, helper: helperData.rows[0] };
       })
     );
     res.json(reviewWithHelperData);
-
-    res.json(reviewWithHelperData.rows);
     client.release();
   } catch (err) {
     console.error("Error fetching user data:", err);
@@ -75,11 +73,24 @@ reviewRouter.get("/helper-review/:helper_id", async (req, res) => {
   const client = await pool.connect();
   const helperId = req.params.helper_id;
   try {
+    // request 테이블에서 start_time, end_time, timepay,totalpay도 같이 가져오기
+
     const review = await client.query(
-      `SELECT * FROM review, signup WHERE review.user_id = signup.id AND review.helper_id = $1`,
+      `SELECT * FROM review, requests where requests.id = review.request_id and review.helper_id = $1`,
       [helperId]
     );
-    res.json(review.rows);
+    // 한 이용자에 대한 리뷰데이터와 도우미정보 합치기
+    const reviewWithUserData = await Promise.all(
+      review.rows.map(async (request) => {
+        const UserData = await client.query(
+          `SELECT * FROM signup right join user_mypage on user_mypage.user_id = signup.id WHERE signup.id = $1 and signup.type = 'user'  `,
+          [request.user_id]
+        );
+        return { ...request, user: UserData.rows[0] };
+      })
+    );
+    res.json(reviewWithUserData);
+
     client.release();
   } catch (err) {
     console.error("Error fetching user data:", err);

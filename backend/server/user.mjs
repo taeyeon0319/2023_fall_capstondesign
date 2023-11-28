@@ -51,7 +51,7 @@ userRouter.get('/helper/all', async (req, res) => {
 // 도우미 B씨 : 중구에 사는 여자 20대 베이비시터이다. career는 1년이상, 인증이 되어 있다. 수요일에는 10시부터 17시까지 일을 할 수 있다.
 userRouter.get('/helper/search', async (req, res) => {
     try {
-        const { region, field, gender, age, career, certification, date, needtime_s, needtime_e } = req.query;
+        const { region, field, gender, age, career, certification, quick_matching, date, needtime_s, needtime_e } = req.query;
         const conditions = [];
 
         if (region) conditions.push(`helper_mypage.region_country = '${region}'`);
@@ -64,6 +64,7 @@ userRouter.get('/helper/search', async (req, res) => {
         }
         if (career) conditions.push(`helper_mypage.career = '${career}'`);
         if (certification) conditions.push(`helper_mypage.certification = '${certification}'`);
+        if (quick_matching) conditions.push(`helper_mypage.quick_matching = '${quick_matching}'`);
 
         let targetDay = '';
         if (date) {
@@ -122,7 +123,7 @@ userRouter.get('/helper/search', async (req, res) => {
 // /helper/search/orderbystars? : 평점순
 userRouter.get('/helper/search/orderbystars', async (req, res) => {
     try {
-        const { region, field, gender, age, career, certification, date, needtime_s, needtime_e } = req.query;
+        const { region, field, gender, age, career, certification, quick_matching, date, needtime_s, needtime_e } = req.query;
         const conditions = [];
 
         if (region) conditions.push(`helper_mypage.region_country = '${region}'`);
@@ -135,7 +136,7 @@ userRouter.get('/helper/search/orderbystars', async (req, res) => {
         }
         if (career) conditions.push(`helper_mypage.career = '${career}'`);
         if (certification) conditions.push(`helper_mypage.certification = '${certification}'`);
-
+        if (quick_matching) conditions.push(`helper_mypage.quick_matching = '${quick_matching}'`);
         let targetDay = '';
         if (date) {
             const targetDate = new Date(date);

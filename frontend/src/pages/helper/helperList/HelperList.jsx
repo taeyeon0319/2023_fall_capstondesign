@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './helper.css';
 import axios from "axios";
@@ -19,6 +19,9 @@ const HelperList = ()=>{
     const [age, setAge] = useState("");
     const [career, setCareer] = useState("");
     const [certification, setCertification] = useState(""); //자격증 유무
+    const [fastmatch, setFastmatch] = useState(false)
+
+    const anonymousRef = useRef();
 
 
     const [cityData, setCityData] = useState([])
@@ -27,6 +30,8 @@ const HelperList = ()=>{
 
     const [services, setServices] = useState([]);//분야 selectbox
     const [helperlist, setHelperlist] = useState([]);
+
+    const [render, setrender] = useState(0);
     
     //DatePicker 지난 날짜.시간 비활성화 > 
     dayjs.extend(customParseFormat);
@@ -179,9 +184,33 @@ const HelperList = ()=>{
         getHelperSearch();
     },[])
 
+    const handlerenderChange = () =>{
+        setrender(prevState => (prevState === 0 ? 1 : 0));
+    };
+
     const getHelperList = ()=>{
         const result = helperlist.map((helper, idx)=>{
-            return  <li onClick={()=>{navigate(`/user/helper/${helper.id}`)}} key={idx} className='helper-list-searched-item'>
+            return  <li onClick={()=>{
+                const requestParams  = {
+                    city : city,
+                    region : district,
+                    field : serviceType,
+                    date :date,
+                    age: age,
+                    career:career,
+                    certification: true,
+                    needtime_s : serviceStartTime,
+                    needtime_e : serviceEndTime,
+                    gender : gender,
+                    // orderby : orderby,
+                };
+
+                navigate(`/user/helper/${helper.id}`, {
+                    state: {
+                        ...requestParams
+                    }
+                  })
+            }} key={idx} className='helper-list-searched-item'>
                         <img className='profile' src={helper.image} />
                         <div className='description'>
                             <h4 className='name'>{helper.name} <span style={{fontSize: '13px'}}>도우미</span></h4>
@@ -218,7 +247,7 @@ const HelperList = ()=>{
                     <img src={require('./images/home_logo.png')}></img>
                 </div>                
             </header> */}
-            <Header2></Header2>
+            <Header2 data={render} onDataChange={handlerenderChange}></Header2>
 
             <div className="helper-list-container">
                 <div className="helper-search-form">
@@ -243,7 +272,12 @@ const HelperList = ()=>{
                             </div>
                         </li>
                         
-                        <button className = "fast-match-button" onClick={()=>{}}>빠른 매칭</button>
+
+                        <button ref={anonymousRef} className = "fast-match-button" onClick={(e)=>{
+                            //console.log(anonymousRef.current)
+                            anonymousRef.current.classList.toggle('anonymous-click') 
+                            setFastmatch(!fastmatch)
+                            }} >빠른 매칭</button>
                         <div className='match-text'>채팅 없이 빠른 매칭을 원한다면 클릭하시오</div>
                         
                         <li className='filter-list-item'>
@@ -281,7 +315,11 @@ const HelperList = ()=>{
                                 <span className='ft-center'>~</span>
                                 <TimePicker placeholder='00:00' onChange={(time, timeString)=>setServiceEndTime(timeString)} format={'HH:mm'} />
                                 <span> </span>
-                                <button className='select-container-item' onClick={()=>setServiceEndTime('')}>상관 없음</button>
+                                <button className='select-container-item' onClick={()=>{
+                                    
+                                    setServiceEndTime('')
+                            
+                            }}>상관 없음</button>
 
                             </div>
                         </li>
@@ -295,14 +333,14 @@ const HelperList = ()=>{
                                 <button className='select-container-item' onClick={()=>setGender('')}>상관 없음</button>
                             </div>
                         </li>
-                        <li className='filter-list-item'>
+                        {/* <li className='filter-list-item'>
                             <div><b>자격증</b></div>
                             <div className="select-container-3">
                                 <button placeholder='' onClick={()=>{setCertification(true)}} className='select-container-item ft-center' type="text">O</button>
                                 <button placeholder='' onClick={()=>{setCertification(false)}} className='select-container-item ft-center' type="text">X</button>
                                 <button className='select-container-item' onClick={()=>setCertification('')}>상관 없음</button>
                             </div>
-                        </li>
+                        </li> */}
                         
                     </ul>
 

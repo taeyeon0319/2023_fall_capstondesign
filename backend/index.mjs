@@ -6,6 +6,7 @@ import userRouter from "./server/user.mjs"; // user 모듈 불러오기
 import helperRouter from "./server/helper.mjs"; // helper 모듈 불러오기
 import signupRouter from "./server/signup.mjs";
 import reviewRouter from "./server/review.mjs";
+import chatRouter from "./server/chat.js";
 
 //variable
 const PORT = 5000;
@@ -31,10 +32,13 @@ app.use("/", signupRouter);
 //리뷰
 app.use("/review", reviewRouter);
 
+//채팅
+app.use("/chat", chatRouter);
+
 // /city : 위치 테이블 출력
 app.get("/city", async (req, res) => {
   try {
-    const searchResult = await db.any("SELECT * FROM city");
+    const searchResult = await db.any("SELECT * FROM city ORDER BY id");
     res.json(searchResult);
   } catch (error) {
     console.error("Error: ", error);

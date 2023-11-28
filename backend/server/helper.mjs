@@ -185,45 +185,131 @@ helperRouter.get("/requests-helper/:helper_id/totalpay", async (req, res) => {
       .json({ error: "An error occurred while fetching the request data." });
   }
 });
+//requests 테이블에 요청서 추가하는 엔드포인트
+helperRouter.post("/requests/add", async (req, res) => {
+  const client = await pool.connect();
+  const {
+    user_id,
+    helper_id,
+    field,
+    region_state,
+    region_country,
+    region_eupmyeondong,
+    date,
+    start_time,
+    end_time,
+    comment,
+  } = req.body;
+  const address =
+    region_state + " " + region_country + " " + region_eupmyeondong;
+  try {
+    const result = await client.query(
+      `INSERT INTO requests (user_id, helper_id, address, date, start_time,end_time,field , comment, care_gender,care_age,timepay,totalpay) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10,$11,$12) RETURNING *`,
+      [
+        user_id,
+        helper_id,
+        address,
+        date,
+        start_time,
+        end_time,
+        field,
+        comment,
+        "",
+        0,
+        0,
+        0,
+      ]
+    );
+    res.json(result.rows[0]);
+    client.release();
+  } catch (err) {
+    console.error("Error inserting data:", err);
+    res.status(500).json({ error: "An error occurred while inserting data." });
+  }
+});
 
-// 도우미 정보 insert하는 엔드포인트
-// helperRouter2.post("/helper", async (req, res) => {
-//   const client = await pool.connect();
-//   try {
-//     await client.query(
-//       "INSERT INTO helper(name,region_state,region_country,field,gender,introduction,image,career,stars,certification,activity) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)",
-//       [
-//         req.body.name,
-//         req.body.region_state,
-//         req.body.region_country,
-//         req.body.field,
-//         req.body.gender,
-//         req.body.introduction,
-//         req.body.image,
-//         req.body.career,
-//         req.body.stars,
-//         req.body.certification,
-//         req.body.activity,
-//       ]
-//     );
-//     res.json("success");
-//     client.release();
-//   } catch (err) {
-//     console.error("Error updating request status:", err);
-//     res.status(500).json({
-//       error: "An error occurred while updating the request status.",
-//     });
-//   }
-// });
+//helpertimetable 정보 불러오는
+helperRouter.get("/helpertimetable/:helper_id", async (req, res) => {
+  const client = await pool.connect();
+  const helperId = parseInt(req.params.helper_id);
+  try {
+    const requests = await client.query(
+      `SELECT * FROM helper_timetable WHERE helper_id = $1`,
+      [helperId]
+    );
+    res.json(requests.rows);
+    client.release();
+  } catch (err) {
+    console.error("Error fetching request data:", err);
+    res
+      .status(500)
+      .json({ error: "An error occurred while fetching the request data." });
+  }
+});
+//helpertimetable에 정보 넣는
+helperRouter.post("/saveTimetable", async (req, res) => {
+  const client = await pool.connect();
+  const helper_id = req.body.helper_id;
+  const available_day = req.body.day;
+  const startTime = req.body.startTime;
+  const endTime = req.body.endTime;
 
-// 이용자 정보 insert하는 엔드포인트
-// helperRouter.post("/user", async (req, res) => {
-//   const client = await pool.connect();
-//   try{
-//     await client.query(
-//       "INSERT"
+  try {
+    console.log(helper_id, available_day, startTime, endTime);
+    await client.query(
+      `INSERT INTO helper_timetable(helper_id, available_day, startTime,endTime) VALUES( $1, $2, $3, $4)`,
+      [helper_id, available_day, startTime, endTime]
+    );
+    client.release();
+  } catch (err) {
+    console.error("Error updating request status:", err);
+    res.status(500).json({
+      error: "An error occurred while updating the request status.",
+    });
+  }
+});
 
-//   }
-// })
+//helpertimetable에 정보 수정
+helperRouter.post("/updateTimetable", async (req, res) => {
+  const client = await pool.connect();
+  const helper_id = req.body.helper_id;
+  const available_day = req.body.day;
+  const startTime = req.body.startTime;
+  const endTime = req.body.endTime;
+  try {
+    await client.query(
+      "UPDATE helper_timetable SET startTime = $1 endTime = $2 WHERE helper_id = $3 AND available_day = $4",
+      [startTime, endTime, helper_id, available_day]
+    );
+    client.release();
+  } catch (err) {
+    console.error("Error updating request status:", err);
+    res.status(500).json({
+      error: "An error occurred while updating the request status.",
+    });
+  }
+});
+
+// helpertimetable에 정보 삭제
+helperRouter.post("/deleteTimetable", async (req, res) => {
+  const client = await pool.connect();
+  const helper_id = req.body.helper_id;
+  const available_day = req.body.day;
+  const startTime = req.body.startTime;
+  //const endTime = req.body.endTime;
+
+  try {
+    await client.query(
+      "DELETE FROM helper_timetable WHERE helper_id = $1 AND available_day = $2 AND startTime = $3",
+      [helper_id, available_day, startTime]
+    );
+    client.release();
+  } catch (err) {
+    console.error("Error updating request status:", err);
+    res.status(500).json({
+      error: "An error occurred while updating the request status.",
+    });
+  }
+});
 
 export default helperRouter;
