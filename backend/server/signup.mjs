@@ -136,7 +136,11 @@ signupRouter.get('/mypage', verifyToken, async (req, res) => {
   }
 });
 
-
+// 현정 추가 아이디 확인용
+signupRouter.get('/signupTableCheck', async (req, res) => {
+  const signupTable = await db.many('SELECT * FROM signup');
+  res.json(signupTable);
+});
 
 
 // JWT를 확인하는 미들웨어
