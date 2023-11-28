@@ -185,7 +185,7 @@ export const HelperPage = () => {
   const [render, setrender] = useState(0);
   const [responseData, setresponseData] = useState([]);
   const [displayData, setdisplayData] = useState([]);
-
+  
   useEffect(() => {
     fetchData();
   }, []);
@@ -193,9 +193,11 @@ export const HelperPage = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:5000/helper2/requests-helper/"+JSON.parse(localStorage.getItem("userInfo")).id
+        "http://localhost:5000/helper/requests-helper/"+JSON.parse(localStorage.getItem("userInfo")).id
       );
+      console.log(response.data);
       setresponseData(response.data);
+      console.log(responseData);
     } catch (error) {
       console.error("API 호출 중 오류 발생:", error);
     }
@@ -225,7 +227,7 @@ export const HelperPage = () => {
           <HelperRect>
             {responseData.map((item, index) => (
               <HelperReqList onClick={() => UserListClickHandler(index)}>
-                <UserHelperListImg src={item.user.image}></UserHelperListImg>
+                <UserHelperListImg src={item.image}></UserHelperListImg>
                 <div
                   style={{
                     display: "flex",
@@ -235,10 +237,10 @@ export const HelperPage = () => {
                   }}
                 >
                   <div style={{ display: "flex", alignItems: "flex-end" }}>
-                    <HelperReqText>{item.user.user_name}</HelperReqText>
+                    <HelperReqText>{item.name}</HelperReqText>
                     <HelperReqText2>님</HelperReqText2>
                   </div>
-                  <HelperReqText3>{item.user.region_county}</HelperReqText3>
+                  <HelperReqText3>{item.region_county}</HelperReqText3>
                   <HelperReqText3>
                     {item.start_time}~{item.end_time}
                   </HelperReqText3>
@@ -261,7 +263,7 @@ export const HelperPage = () => {
                   }}
                 >
                   <UserInfoText>지역</UserInfoText>
-                  <UserInfoIpt>{displayData.user.region_county}</UserInfoIpt>
+                  <UserInfoIpt>{displayData.region_state+displayData.region_country}</UserInfoIpt>
                   <UserInfoText>도우미 분야</UserInfoText>
                   <UserInfoIpt>{displayData.field}</UserInfoIpt>
                   <UserInfoText>날짜</UserInfoText>

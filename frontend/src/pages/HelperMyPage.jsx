@@ -1,11 +1,12 @@
 import Header2 from "../components/Header2";
 import styled from "styled-components";
-import React from 'react';
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import userImg from '../img/profile.png';
 import userImg2 from '../img/profile3.png';
 import grayImg from '../img/gray.png';
 import { useState } from "react";
+import axios from "axios";
 
 const dummyData={
     data:[
@@ -205,7 +206,11 @@ box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.10);
 
 display:flex;
 `
-const HelperMyImg = styled.svg`
+const HelperMyImg = styled.img`
+width: 5.52vw;
+height: 5.52vw;
+border-radius: 106px;
+background: url(<path-to-image>), lightgray 50% / cover no-repeat;
 margin:auto 1.875vw;
 `
 
@@ -243,20 +248,45 @@ line-height: normal;
 `
 export const HelperMyPage = () => {
     const [render, setrender] = useState(0);
+    const [totalPay, setTotalPay] = useState(0);
+    const [accepted, setAccepted] = useState([]);
     
     const handlerenderChange = () =>{
         setrender(prevState => (prevState === 0 ? 1 : 0));
+    };
+    
+    useEffect(() => {
+        fetchDataTotalPay();
+        fetchDataAccept();
+    }, []);
+
+    const fetchDataTotalPay = async () => {
+        try {
+          const response = await axios.get(
+            "http://localhost:5000/helper/requests-helper/"+JSON.parse(localStorage.getItem("userInfo")).id+"/totalpay"
+          );
+          setTotalPay(response.data[0].sum);
+        } catch (error) {
+          console.error("API 호출 중 오류 발생:", error);
+        }
+    };
+
+    const fetchDataAccept = async () => {
+        try {
+          const response = await axios.get(
+            "http://localhost:5000/helper/requests-helper/"+JSON.parse(localStorage.getItem("userInfo")).id+"/accepted"
+          );
+          setAccepted(response.data);
+        } catch (error) {
+          console.error("API 호출 중 오류 발생:", error);
+        }
     };
 
     return(
         <Root>
             <Header2 data={render} onDataChange={handlerenderChange}></Header2>
             <HelperMyProfileBox>
-                <HelperMyImg xmlns="http://www.w3.org/2000/svg" width="5.52vw" height="9.814vh" viewBox="0 0 106 106" fill="none">
-                    <path d="M53 106C82.2711 106 106 82.2711 106 53C106 23.7289 82.2711 0 53 0C23.7289 0 0 23.7289 0 53C0 82.2711 23.7289 106 53 106Z" fill="#EBEAEA"/>
-                    <path d="M53.0002 22.9187C41.1396 22.9187 31.5137 32.5575 31.5137 44.4339C31.5137 56.0808 40.6239 65.5474 52.7137 65.8917C52.8856 65.8917 53.1148 65.8917 53.2293 65.8917C53.3439 65.8917 53.5158 65.8917 53.6304 65.8917C53.6877 65.8917 53.745 65.8917 53.745 65.8917C65.3191 65.4901 74.4293 56.0808 74.4866 44.4339C74.4866 32.5575 64.8607 22.9187 53.0002 22.9187Z" fill="white"/>
-                    <path d="M88.8111 88.8893C79.4094 97.7056 66.8387 103.135 53.0003 103.135C39.1619 103.135 26.5911 97.7056 17.1895 88.8893C18.4571 83.9973 21.8903 79.5354 26.908 76.0948C41.3274 66.3108 64.7788 66.3108 79.0925 76.0948C84.1631 79.5354 87.5434 83.9973 88.8111 88.8893Z" fill="white"/>
-                </HelperMyImg>
+                <HelperMyImg src={JSON.parse(localStorage.getItem("userInfo")).image}></HelperMyImg>
                 <div style={{display:"flex",flexDirection:"column",alignItems:"flex-start",justifyContent:"center"}}>
                     <div style={{display:"flex",alignItems:"flex-end"}}>
                         <HelperMyText>{JSON.parse(localStorage.getItem("userInfo")).name}</HelperMyText>
@@ -268,28 +298,24 @@ export const HelperMyPage = () => {
                 <div style={{width:"25vw"}}></div>
                 <div style={{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center"}}>
                     <UserPText4>이번달 총 수익</UserPText4>
-                    <UserPText>81,000</UserPText>
+                    <UserPText>{totalPay}</UserPText>
                 </div>
             </HelperMyProfileBox>
             <div style={{height:"81.855vh",margin:"auto"}}>
                 <HelperRectTitle>최근 도움 내역</HelperRectTitle>
                 <HelperRect>
                     <div style={{display:"flex",flexDirection:"column",alignItems:"center"}}>
-                        {dummyData.data.map((item,index)=>(
+                        {accepted.map((item,index)=>(
                             <UserHelperList style={{justifyContent:"space-between"}}>
                                 <div style={{display:"flex",width:"80%"}}>
-                                <HelperMyImg xmlns="http://www.w3.org/2000/svg" width="5.52vw" height="9.814vh" viewBox="0 0 106 106" fill="none">
-                                    <path d="M53 106C82.2711 106 106 82.2711 106 53C106 23.7289 82.2711 0 53 0C23.7289 0 0 23.7289 0 53C0 82.2711 23.7289 106 53 106Z" fill="#EBEAEA"/>
-                                    <path d="M53.0002 22.9187C41.1396 22.9187 31.5137 32.5575 31.5137 44.4339C31.5137 56.0808 40.6239 65.5474 52.7137 65.8917C52.8856 65.8917 53.1148 65.8917 53.2293 65.8917C53.3439 65.8917 53.5158 65.8917 53.6304 65.8917C53.6877 65.8917 53.745 65.8917 53.745 65.8917C65.3191 65.4901 74.4293 56.0808 74.4866 44.4339C74.4866 32.5575 64.8607 22.9187 53.0002 22.9187Z" fill="white"/>
-                                    <path d="M88.8111 88.8893C79.4094 97.7056 66.8387 103.135 53.0003 103.135C39.1619 103.135 26.5911 97.7056 17.1895 88.8893C18.4571 83.9973 21.8903 79.5354 26.908 76.0948C41.3274 66.3108 64.7788 66.3108 79.0925 76.0948C84.1631 79.5354 87.5434 83.9973 88.8111 88.8893Z" fill="white"/>
-                                </HelperMyImg>
+                                <HelperMyImg src={item.image}></HelperMyImg>
                                     <div style={{display:"flex",flexDirection:"column",justifyContent:"center"}}>
-                                        <UserPText5>{dummyData.data[index].sub} {dummyData.data[index].date}</UserPText5>
-                                        <UserPText6>{dummyData.data[index].time[0]}~{dummyData.data[index].time[1]}</UserPText6>
-                                        <UserPText6 style={{display:"flex"}}>요청자 <p style={{marginLeft:"0.8vh",fontWeight:"700"}}>{dummyData.data[index].reqname}</p></UserPText6>
+                                        <UserPText5>{dummyData.data[index].sub} {item.date.substr(0, 10)}</UserPText5>
+                                        <UserPText6 style={{display:"flex"}}>도움 시간 <p style={{marginLeft:"0.8vh",fontWeight:"700"}}>{item.start_time.substr(0,5)}~{item.end_time.substr(0,5)}</p></UserPText6>
+                                        <UserPText6 style={{display:"flex"}}>요청자 <p style={{marginLeft:"0.8vh",fontWeight:"700"}}>{item.name}</p></UserPText6>
                                     </div>
                                 </div>
-                                <UserPText8 style={{width:"20%"}}>{dummyData.data[index].income}</UserPText8>
+                                <UserPText8 style={{width:"20%"}}>{item.totalpay}</UserPText8>
                             </UserHelperList>
                         ))}
                     </div>

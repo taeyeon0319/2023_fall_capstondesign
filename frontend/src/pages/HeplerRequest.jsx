@@ -121,7 +121,7 @@ export const HelperRequestPage = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:5000/helper/requests-helper/1"
+        "http://localhost:5000/helper/requests-helper/"+JSON.parse(localStorage.getItem("userInfo")).id
       );
       setData(response.data.filter((item) => item.id === state));
       console.log(Data);
@@ -150,7 +150,7 @@ export const HelperRequestPage = () => {
                 }}
               >
                 <UserInfoText>지역</UserInfoText>
-                <UserInfoIpt>{Data[0].user.region_county}</UserInfoIpt>
+                <UserInfoIpt>{Data[0].region_country}</UserInfoIpt>
                 <UserInfoText>도우미 분야</UserInfoText>
                 <UserInfoIpt>{Data[0].field}</UserInfoIpt>
                 <UserInfoText>날짜</UserInfoText>
@@ -192,14 +192,14 @@ export const HelperRequestPage = () => {
                   }}
                 >
                   <UserInfoText>이름</UserInfoText>
-                  <UserInfoIpt>{Data[0].user.user_name}</UserInfoIpt>
+                  <UserInfoIpt>{Data[0].name}</UserInfoIpt>
                   <UserInfoText>주소</UserInfoText>
-                  <UserInfoIpt>{Data[0].user.region_county}</UserInfoIpt>
+                  <UserInfoIpt>{Data[0].region_country}</UserInfoIpt>
                   <HelperReqText>
                     더욱 자세한 주소는 직접 전달받아야 합니다.
                   </HelperReqText>
                   <UserInfoText>연락처</UserInfoText>
-                  <UserInfoIpt>{Data[0].user.phone}</UserInfoIpt>
+                  <UserInfoIpt>{Data[0].mobile}</UserInfoIpt>
                 </div>
               )}
             </HelperRect>
