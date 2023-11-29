@@ -188,7 +188,7 @@ export const HelperPage = () => {
   
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [render]);
 
   const fetchData = async () => {
     try {
@@ -205,26 +205,25 @@ export const HelperPage = () => {
 
   const fetchData2 = async () => {
     try{
-      console.log(displayData)
-      const response = await axios.put(`http://localhost:5000/response-request`, {
-        status: "거절",
-        id:displayData.id
-      });
+      console.log(String(displayData.request_id));
+      const response = await axios.put(`http://localhost:5000/helper/response-request`, {status: "거절", id:String(displayData.request_id)});
     } catch (error) {
       console.error("API 호출 중 오류 발생:", error);
     }
   };
 
   const OkayBtnHandler = () => {
-    alert("요청이 수락되었습니다.");
-    console.log(displayData.id);
-    navigate("/helperReq", { state: displayData.id });
+    console.log(displayData.user_id);
+    navigate("/helperReq", { state: displayData.user_id });
   };
 
   const RejBtnHandler = () => {
-    fetchData2();
-    alert("요청이 거절되었습니다.");
-    console.log(displayData.id);
+    if(window.confirm('요청을 거절하시겠습니까?')){
+      fetchData2();
+      alert("요청이 거절되었습니다.");
+      setdisplayData([]);
+      setrender(prevState => (prevState === 0 ? 1 : 0));
+    }
   };
 
   const UserListClickHandler = (index) => {
@@ -303,7 +302,7 @@ export const HelperPage = () => {
                   </UserInfoIpt>
                 </div>
                 <UserBtnBox>
-                  <UserBtn onClick={OkayBtnHandler}>수락</UserBtn>
+                  <UserBtn onClick={OkayBtnHandler}>자세히</UserBtn>
                   <UserBtn2 onClick={RejBtnHandler}>거절</UserBtn2>
                 </UserBtnBox>
               </>
