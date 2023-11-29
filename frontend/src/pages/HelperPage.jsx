@@ -203,9 +203,28 @@ export const HelperPage = () => {
     }
   };
 
+  const fetchData2 = async () => {
+    try{
+      console.log(displayData)
+      const response = await axios.put(`http://localhost:5000/response-request`, {
+        status: "거절",
+        id:displayData.id
+      });
+    } catch (error) {
+      console.error("API 호출 중 오류 발생:", error);
+    }
+  };
+
   const OkayBtnHandler = () => {
+    alert("요청이 수락되었습니다.");
     console.log(displayData.id);
     navigate("/helperReq", { state: displayData.id });
+  };
+
+  const RejBtnHandler = () => {
+    fetchData2();
+    alert("요청이 거절되었습니다.");
+    console.log(displayData.id);
   };
 
   const UserListClickHandler = (index) => {
@@ -242,7 +261,7 @@ export const HelperPage = () => {
                   </div>
                   <HelperReqText3>{item.region_county}</HelperReqText3>
                   <HelperReqText3>
-                    {item.start_time}~{item.end_time}
+                    {item.start_time.substr(0,5)}~{item.end_time.substr(0,5)}
                   </HelperReqText3>
                 </div>
               </HelperReqList>
@@ -263,14 +282,14 @@ export const HelperPage = () => {
                   }}
                 >
                   <UserInfoText>지역</UserInfoText>
-                  <UserInfoIpt>{displayData.region_state+displayData.region_country}</UserInfoIpt>
+                  <UserInfoIpt>{displayData.region_state+' '+displayData.region_country}</UserInfoIpt>
                   <UserInfoText>도우미 분야</UserInfoText>
                   <UserInfoIpt>{displayData.field}</UserInfoIpt>
                   <UserInfoText>날짜</UserInfoText>
                   <UserInfoIpt>{displayData.date.substr(0, 10)}</UserInfoIpt>
                   <UserInfoText>도우미 시간대</UserInfoText>
                   <UserInfoIpt>
-                    {displayData.start_time}~{displayData.end_time}
+                    {displayData.start_time.substr(0,5)}~{displayData.end_time.substr(0,5)}
                   </UserInfoIpt>
                   <UserInfoText>도우미 성별</UserInfoText>
                   <UserInfoIpt>
@@ -285,7 +304,7 @@ export const HelperPage = () => {
                 </div>
                 <UserBtnBox>
                   <UserBtn onClick={OkayBtnHandler}>수락</UserBtn>
-                  <UserBtn2>거절</UserBtn2>
+                  <UserBtn2 onClick={RejBtnHandler}>거절</UserBtn2>
                 </UserBtnBox>
               </>
             )}

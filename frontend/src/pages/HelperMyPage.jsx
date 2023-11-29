@@ -310,9 +310,9 @@ export const HelperMyPage = () => {
                                 <div style={{display:"flex",width:"80%"}}>
                                 <HelperMyImg src={item.image}></HelperMyImg>
                                     <div style={{display:"flex",flexDirection:"column",justifyContent:"center"}}>
-                                        <UserPText5>{dummyData.data[index].sub} {item.date.substr(0, 10)}</UserPText5>
+                                        <UserPText5>{item.name} {item.date.substr(0, 10)}</UserPText5>
                                         <UserPText6 style={{display:"flex"}}>도움 시간 <p style={{marginLeft:"0.8vh",fontWeight:"700"}}>{item.start_time.substr(0,5)}~{item.end_time.substr(0,5)}</p></UserPText6>
-                                        <UserPText6 style={{display:"flex"}}>요청자 <p style={{marginLeft:"0.8vh",fontWeight:"700"}}>{item.name}</p></UserPText6>
+                                        <UserPText6 style={{display:"flex"}}>분야 <p style={{marginLeft:"0.8vh",fontWeight:"700"}}>{item.field}</p></UserPText6>
                                     </div>
                                 </div>
                                 <UserPText8 style={{width:"20%"}}>{item.totalpay}</UserPText8>
