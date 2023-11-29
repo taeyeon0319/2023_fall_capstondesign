@@ -93,7 +93,7 @@ helperRouter.put("/response-request", async (req, res) => {
   console.log(id);
   try {
     const result = await client.query('UPDATE requests SET status=$1 WHERE id=$2',[status,id]);
-    //const result2 = await client.query('select * from requests where id=$1',[id]);
+    const result2 = await client.query('select * from requests where id=$1',[id]);
     res.json(result2.rows);
   } catch (err) {
     console.error("Error updating request status:", err);
