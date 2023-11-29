@@ -265,7 +265,7 @@ export const HelperMyPage = () => {
           const response = await axios.get(
             "http://localhost:5000/helper/requests-helper/"+JSON.parse(localStorage.getItem("userInfo")).id+"/totalpay"
           );
-          setTotalPay(response.data[0].sum);
+          setTotalPay(response.data[0].sum===null?0:response.data[0].sum);
         } catch (error) {
           console.error("API 호출 중 오류 발생:", error);
         }
@@ -310,15 +310,16 @@ export const HelperMyPage = () => {
                                 <div style={{display:"flex",width:"80%"}}>
                                 <HelperMyImg src={item.image}></HelperMyImg>
                                     <div style={{display:"flex",flexDirection:"column",justifyContent:"center"}}>
-                                        <UserPText5>{dummyData.data[index].sub} {item.date.substr(0, 10)}</UserPText5>
+                                        <UserPText5>{item.name} {item.date.substr(0, 10)}</UserPText5>
                                         <UserPText6 style={{display:"flex"}}>도움 시간 <p style={{marginLeft:"0.8vh",fontWeight:"700"}}>{item.start_time.substr(0,5)}~{item.end_time.substr(0,5)}</p></UserPText6>
-                                        <UserPText6 style={{display:"flex"}}>요청자 <p style={{marginLeft:"0.8vh",fontWeight:"700"}}>{item.name}</p></UserPText6>
+                                        <UserPText6 style={{display:"flex"}}>분야 <p style={{marginLeft:"0.8vh",fontWeight:"700"}}>{item.field}</p></UserPText6>
                                     </div>
                                 </div>
                                 <UserPText8 style={{width:"20%"}}>{item.totalpay}</UserPText8>
                             </UserHelperList>
                         ))}
                     </div>
+                    
                 </HelperRect>
             </div>
             {/*

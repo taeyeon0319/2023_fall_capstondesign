@@ -2,6 +2,7 @@
 import express, { request } from "express";
 import pg from "pg";
 import dotenv from "dotenv";
+import { stat } from "fs";
 
 const helperRouter = express.Router();
 dotenv.config();
@@ -65,7 +66,7 @@ helperRouter.get("/users/:id", async (req, res) => {
 });
 
 //여기부터 수정 필요!!!!!!
-// 도우미가 수락/거절했을경우 이용자의 요구사항목록 데이터에서 status를 수락/거절으로 변경하는 엔드포인트
+/*
 helperRouter.put("/response-request/:id", async (req, res) => {
   const client = await pool.connect();
   const requestId = req.params.request_id;
@@ -75,6 +76,25 @@ helperRouter.put("/response-request/:id", async (req, res) => {
       `UPDATE requests SET status=$1 WHERE id = $2`,
       [requestId, status]
     );
+  } catch (err) {
+    console.error("Error updating request status:", err);
+    res
+      .status(500)
+      .json({ error: "An error occurred while updating the request status." });
+  }
+});
+*/
+
+// 도우미가 수락/거절했을경우 이용자의 요구사항목록 데이터에서 status를 수락/거절으로 변경하는 엔드포인트
+helperRouter.put("/response-request", async (req, res) => {
+  const client = await pool.connect();
+  const { status , id } = req.body;
+  console.log(status);
+  console.log(id);
+  try {
+    const result = await client.query('UPDATE requests SET status=$1 WHERE id=$2',[status,id]);
+    //const result2 = await client.query('select * from requests where id=$1',[id]);
+    res.json(result2.rows);
   } catch (err) {
     console.error("Error updating request status:", err);
     res
@@ -128,7 +148,7 @@ helperRouter.get("/requests-helper/:id", async (req, res) => {
   }
   try {
     const requests = await client.query(
-      `SELECT requests.id as request_id, signup.name, signup.email, signup.mobile, requests.user_id, requests.helper_id, requests.field, requests.care_gender, requests.care_age, requests.comment, requests.start_time, requests.end_time, requests.totalpay, requests.timepay, requests.created_at, requests.quick_matching, requests.date, requests.address FROM requests
+      `SELECT region_country, region_state, image, requests.id as request_id, signup.name, signup.email, signup.mobile, requests.user_id, requests.helper_id, requests.field, requests.care_gender, requests.care_age, requests.comment, requests.start_time, requests.end_time, requests.totalpay, requests.timepay, requests.created_at, requests.quick_matching, requests.date, requests.address FROM requests
       LEFT JOIN signup on requests.user_id=signup.id 
       left join user_mypage on signup.id=user_mypage.user_id
       WHERE requests.helper_id = $1  AND requests.status = '요청' and signup.type = 'user' `,
@@ -267,6 +287,13 @@ helperRouter.post("/saveTimetable", async (req, res) => {
       error: "An error occurred while updating the request status.",
     });
   }
+});
+
+// 현정 추가 요청 확인용
+helperRouter.get('/requestsCheck', async (req, res) => {
+  const client = await pool.connect();
+  const reqTable = await client.query('SELECT * FROM requests');
+  res.json(reqTable);
 });
 
 //helpertimetable에 정보 수정
