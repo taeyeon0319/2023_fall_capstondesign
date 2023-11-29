@@ -94,7 +94,7 @@ const HelperList = ()=>{
 
         const fetchData2 = async ()=>{
             try {
-                const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/fields`);
+                const response = await axios.get(`http://localhost:5000/fields`);
                 setServices(response.data)
             }catch(error){
                 console.log('Error fetching data :', error);
