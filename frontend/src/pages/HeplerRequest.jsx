@@ -123,7 +123,7 @@ export const HelperRequestPage = () => {
       const response = await axios.get(
         "http://localhost:5000/helper/requests-helper/"+JSON.parse(localStorage.getItem("userInfo")).id
       );
-      setData(response.data.filter((item) => item.id === state));
+      setData(response.data.filter((item) => item.user_id === state));
       console.log(Data);
     } catch (error) {
       console.error("API 호출 중 오류 발생:", error);

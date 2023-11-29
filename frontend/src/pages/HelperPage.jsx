@@ -217,8 +217,8 @@ export const HelperPage = () => {
 
   const OkayBtnHandler = () => {
     alert("요청이 수락되었습니다.");
-    console.log(displayData.id);
-    navigate("/helperReq", { state: displayData.id });
+    console.log(displayData.user_id);
+    navigate("/helperReq", { state: displayData.user_id });
   };
 
   const RejBtnHandler = () => {
