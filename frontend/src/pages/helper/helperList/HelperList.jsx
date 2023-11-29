@@ -72,7 +72,7 @@ const HelperList = ()=>{
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/city`);
+                const response = await axios.get(`http://localhost:5000/city`);
                 const data = response.data;
                 setCityData(data);
                 const districtInfo = {}
