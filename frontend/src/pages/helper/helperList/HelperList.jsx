@@ -94,7 +94,7 @@ const HelperList = ()=>{
 
         const fetchData2 = async ()=>{
             try {
-                const response = await axios.get(`http://ec2-15-164-231-60.ap-northeast-2.compute.amazonaws.com:5000/fields`);
+                const response = await axios.get(`http://localhost:5000/fields`);
                 setServices(response.data)
             }catch(error){
                 console.log('Error fetching data :', error);
@@ -164,7 +164,7 @@ const HelperList = ()=>{
         };
 
         try {
-            const response = await axios.get(`http://ec2-15-164-231-60.ap-northeast-2.compute.amazonaws.com:5000/user/helper/search${orderby === '평점순' ? '/orderbystars': ''}`, { params: requestParams });
+            const response = await axios.get(`http://localhost:5000/user/helper/search${orderby === '평점순' ? '/orderbystars': ''}`, { params: requestParams });
             setHelperlist(response.data)
         }catch(error){
             console.log('Error fetching data :', error);
