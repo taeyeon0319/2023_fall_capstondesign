@@ -136,7 +136,7 @@ export const JoinPageUser = () =>{
         mobile: '',
         type: 'user',
     });
-    
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setJoinData((prevData) => ({
@@ -184,9 +184,9 @@ export const JoinPageUser = () =>{
                         <JoinUBtn2 onClick={OnclickCheckId}>아이디 중복 확인하기</JoinUBtn2>
                     </div>
                     <JoinUText >비밀번호</JoinUText>
-                    <JoinUInput type="password" name="password" value={JoinData.password} onChange={handleChange}></JoinUInput>
+                    <JoinUInput id="newPW" type="password" name="password" value={JoinData.password} onChange={handleChange}></JoinUInput>
                     <JoinUText >비밀번호 확인</JoinUText>
-                    <JoinUInput type="password" name="password_confirm" value={JoinData.password_confirm} onChange={handleChange}></JoinUInput>
+                    <JoinUInput id="confNewPW" type="password" name="password_confirm" value={JoinData.password_confirm} onChange={handleChange}></JoinUInput>
                     <JoinUText3>{checkPW===-1?"":checkPW===0?"비밀번호가 다릅니다":"비밀번호가 일치합니다"}</JoinUText3>
                     <JoinUText>이메일</JoinUText>
                     <JoinUInput type="text" name="email" value={JoinData.email} onChange={handleChange}></JoinUInput>
