@@ -21,11 +21,31 @@ reviewRouter.get("/", (req, res) => {
 // 이용자가 리뷰 작성시 리뷰 테이블에 리뷰를 추가하는 엔드포인트 : 이윤서 db 저장 확인완료
 reviewRouter.post("/user-review", async (req, res) => {
   const client = await pool.connect();
-  const { user_id, helper_id, title, content, rating } = req.body;
+  const {
+    user_id,
+    helper_id,
+    title,
+    content,
+    rating,
+    time_good,
+    kind,
+    child_like,
+    reliable,
+  } = req.body;
   try {
     const review = await client.query(
-      `INSERT INTO review (user_id, helper_id, title, contents, rating) VALUES ($1, $2, $3, $4, $5) RETURNING *`,
-      [user_id, helper_id, title, content, rating]
+      `INSERT INTO review (user_id, helper_id, title, contents, rating, time_good, kind, child_like, reliable) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *`,
+      [
+        user_id,
+        helper_id,
+        title,
+        content,
+        rating,
+        time_good,
+        kind,
+        child_like,
+        reliable,
+      ]
     );
     res.json(review.rows);
     client.release();
@@ -59,6 +79,54 @@ reviewRouter.get("/user-review/:user_id", async (req, res) => {
       })
     );
     res.json(reviewWithHelperData);
+    client.release();
+  } catch (err) {
+    console.error("Error fetching user data:", err);
+    res
+      .status(500)
+      .json({ error: "An error occurred while fetching the user data." });
+  }
+});
+//도우미 기타 정보 퍼센트 출력하는 api
+reviewRouter.get("/helper-review/:helper_id/percent", async (req, res) => {
+  const client = await pool.connect();
+  const helperId = req.params.helper_id;
+  try {
+    const time_good = await client.query(
+      `SELECT COUNT(*) FROM review WHERE helper_id = $1 AND time_good = 'true'`,
+      [helperId]
+    );
+    const kind = await client.query(
+      `SELECT COUNT(*) FROM review WHERE helper_id = $1 AND kind = 'true'`,
+      [helperId]
+    );
+    const child_like = await client.query(
+      `SELECT COUNT(*) FROM review WHERE helper_id = $1 AND child_like = 'true'`,
+      [helperId]
+    );
+    const reliable = await client.query(
+      `SELECT COUNT(*) FROM review WHERE helper_id = $1 AND reliable = 'true'`,
+      [helperId]
+    );
+    //도우미 총 도움 횟수
+    const total = await client.query(
+      `SELECT COUNT(*) FROM review WHERE helper_id = $1`,
+      [helperId]
+    );
+    const time_good_percent =
+      (time_good.rows[0].count / total.rows[0].count) * 100;
+    const kind_percent = (kind.rows[0].count / total.rows[0].count) * 100;
+    const child_like_percent =
+      (child_like.rows[0].count / total.rows[0].count) * 100;
+    const reliable_percent =
+      (reliable.rows[0].count / total.rows[0].count) * 100;
+    const percent = {
+      time_good_percent: time_good_percent,
+      kind_percent: kind_percent,
+      child_like_percent: child_like_percent,
+      reliable_percent: reliable_percent,
+    };
+    res.json(percent);
     client.release();
   } catch (err) {
     console.error("Error fetching user data:", err);

@@ -3,6 +3,7 @@ import express, { request } from "express";
 import pg from "pg";
 import dotenv from "dotenv";
 import { stat } from "fs";
+import { count } from "console";
 
 const helperRouter = express.Router();
 dotenv.config();
@@ -329,29 +330,24 @@ helperRouter.post("/saveTimetable", async (req, res) => {
   const available_day = req.body.day;
   const startTime = req.body.startTime;
   const endTime = req.body.endTime;
+  //값이 없을시 에러처리
+  if (!helper_id || !available_day || !startTime || !endTime) {
+    res.status(400).json({ error: "Incorrect request body" });
+    return;
+  }
 
   try {
-    if (available_day == "monday") {
-      available_day = "mon";
-    } else if (available_day == "tuesday") {
-      available_day = "tue";
-    } else if (available_day == "wednesday") {
-      available_day = "wed";
-    } else if (available_day == "thursday") {
-      available_day = "thu";
-    } else if (available_day == "friday") {
-      available_day = "fri";
-    } else if (available_day == "saturday") {
-      available_day = "sat";
-    } else if (available_day == "sunday") {
-      available_day = "sun";
-    }
-    console.log(helper_id, available_day, startTime, endTime);
-    await client.query(
-      `INSERT INTO helper_time(helper_id, day, start_time,end_time) VALUES( $1, $2, $3, $4)`,
-      [helper_id, available_day, startTime, endTime]
+    // helper_time의 행 수 +1 한 값으로 id 설정
+    const id = await client.query(
+      "SELECT COUNT(*) FROM helper_time WHERE helper_id = $1",
+      [helper_id]
     );
-    console.log("success");
+    //id에 +1 한 값으로 helper_time에 정보 넣기
+    await client.query(
+      `INSERT INTO helper_time(id,helper_id, day, start_time,end_time) VALUES( $1, $2, $3, $4,$5)`,
+      [id.rows[0].count + 1, helper_id, available_day, startTime, endTime]
+    );
+
     client.release();
   } catch (err) {
     console.error("Error updating request status:", err);
@@ -413,6 +409,10 @@ helperRouter.post("/deleteTimetable", async (req, res) => {
   const startTime = req.body.startTime;
   //const endTime = req.body.endTime;
 
+  //db는 요일이 MON, TUE, WED, THU, FRI, SAT, SUN로 되어있음
+  //그런데 프론트에서 받아오는 요일은 monday, tuesday, wednesday, thursday, friday, saturday, sunday로 되어있음
+  //그래서 요일을 db에 맞게 바꿔줌
+
   try {
     if (available_day == "monday") {
       available_day = "MON";
@@ -463,25 +463,6 @@ helperRouter.post("/changeHelper", async (req, res) => {
     res.status(500).json({
       error: "An error occurred while updating the request status.",
     });
-  }
-});
-
-//도우미별 평점들에 대한 평균 정보 불러오는 엔드포인트
-helperRouter.get("/helper-reveiw/:id/stars", async (req, res) => {
-  const client = await pool.connect();
-  const helperId = req.params.id;
-  try {
-    const result = await client.query(
-      `SELECT AVG(rating) FROM review WHERE helper_id = $1`,
-      [helperId]
-    );
-    res.json(result.rows);
-    client.release();
-  } catch (err) {
-    console.error("Error fetching helper data:", err);
-    res
-      .status(500)
-      .json({ error: "An error occurred while fetching the helper data." });
   }
 });
 

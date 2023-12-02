@@ -73,8 +73,8 @@ io.on('connection', function(socket) {
     });
 });
 
-server.listen(8080, function() {
-    console.log('✅ 채팅서버 : http://localhost:8080/chat')
+server.listen(5050, function() {
+    console.log('✅ 채팅서버 : http://localhost:5050/chat')
 })
 
 module.exports = chatRouter;
