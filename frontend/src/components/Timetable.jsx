@@ -32,7 +32,7 @@ const Timetable = () => {
   const [serviceStartTime, setServiceStartTime] = useState(""); //시작시간 : 0830
   const [serviceEndTime, setServiceEndTime] = useState(""); //끝시간 : 1130
   const [inputData, setInputData] = useState({
-    helper_id: 1,
+    helper_id: JSON.parse(localStorage.getItem("userInfo")).id,
     day: "",
     startTime: "",
     endTime: "",
@@ -46,7 +46,9 @@ const Timetable = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:5000/helper/helpertimetable/1"
+        `http://localhost:5000/helper/helpertimetable/${
+          JSON.parse(localStorage.getItem("userInfo")).id
+        }`
       );
       setResponseData(response.data);
     } catch (error) {
@@ -94,12 +96,15 @@ const Timetable = () => {
     target[day] = !target[day];
 
     // 클라이언트에서 서버로 해당 시간과 요일을 전송
-    try {
-      if (!target[day]) {
-        // 클릭 시 색칠된 경우
+    // 서버에서는 해당 시간과 요일을 가진 데이터를 찾아서 삭제
+    // css 이용해서 색 변경하는 코드
+    // 칠해져있지 않은 데이터 드래그시, 칠해져있는 데이터 드래그시 구분
 
+    try {
+      //흰부분 클릭시 서버에 전송 및 색 변경
+      if (!target[day]) {
         await axios.post("http://localhost:5000/helper/saveTimetable", {
-          helper_id: 1,
+          helper_id: JSON.parse(localStorage.getItem("userInfo")).id,
           day,
           startTime,
           endTime,
@@ -107,7 +112,7 @@ const Timetable = () => {
       } else {
         // 클릭 시 흰색으로 변경된 경우
         await axios.post("http://localhost:5000/helper/deleteTimetable", {
-          helper_id: 1,
+          helper_id: JSON.parse(localStorage.getItem("userInfo")).id,
           day,
           startTime: time,
         });
@@ -116,7 +121,7 @@ const Timetable = () => {
       // 성공적으로 서버에 전송되면 클라이언트의 상태 업데이트
       target[day] = !target[day];
       setData(newData);
-      // fetchData();
+      fetchData();
     } catch (error) {
       console.error("API 호출 중 오류 발생:", error);
     }
@@ -162,9 +167,9 @@ const Timetable = () => {
       const item = responseData[i];
 
       if (
-        item.available_day === day &&
-        item.starttime <= time &&
-        item.endtime >= time
+        item.day === day &&
+        item.start_time <= time &&
+        item.end_time >= time
       ) {
         return "#93796A";
       }
@@ -241,7 +246,7 @@ const Timetable = () => {
       console.log(inputData);
       console.log(inputData.day);
       await axios.post("http://localhost:5000/helper/saveTimetable", {
-        helper_id: 1,
+        helper_id: JSON.parse(localStorage.getItem("userInfo")).id,
         day: inputData.day,
         startTime: inputData.startTime,
         endTime: inputData.endTime,
