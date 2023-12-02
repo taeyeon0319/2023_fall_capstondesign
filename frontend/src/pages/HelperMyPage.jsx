@@ -246,6 +246,18 @@ font-style: normal;
 font-weight: 500;
 line-height: normal;
 `
+const HelperMyBtn = styled.div`
+margin:6px;
+padding:4px;
+border:1px solid #93796A;
+border-radius: 5px;
+display:flex;
+align-items:center;
+justify-content:center;
+color:#93796A;
+background:F9F8F7;
+`
+
 export const HelperMyPage = () => {
     const [render, setrender] = useState(0);
     const [totalPay, setTotalPay] = useState(0);
@@ -291,6 +303,9 @@ export const HelperMyPage = () => {
                     <div style={{display:"flex",alignItems:"flex-end"}}>
                         <HelperMyText>{JSON.parse(localStorage.getItem("userInfo")).name}</HelperMyText>
                         <HelperMyText2>도우미님</HelperMyText2>
+                        <div style={{height:"100%",display:"flex",justifyContent:"center",alignItems:"center"}}>
+                        <HelperMyBtn>내 정보 수정하기</HelperMyBtn>
+                        </div>
                     </div>
                     <HelperMyText3>{JSON.parse(localStorage.getItem("userInfo")).region_state+' '+JSON.parse(localStorage.getItem("userInfo")).region_country}</HelperMyText3>
                     <HelperMyText3>{JSON.parse(localStorage.getItem("userInfo")).mobile}</HelperMyText3>
