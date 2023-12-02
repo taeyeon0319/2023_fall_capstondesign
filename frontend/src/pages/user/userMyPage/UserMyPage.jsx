@@ -24,11 +24,14 @@ align-items: center;
 const UserMyPage = ()=>{
     const [userInfo, setUserInfo] = useState({});
     const [reviewlist, setReviewlist] = useState([]);
+    const [requestIngList, setRequestIngList] = useState([]);
     const handlerenderChange = () =>{
         setrender(prevState => (prevState === 0 ? 1 : 0));
     };
     const [render, setrender] = useState(0);
     const navigate = useNavigate();
+    const userInfoString = localStorage.getItem('userInfo')
+    const loginedUserInfo = JSON.parse(userInfoString)
     useEffect(()=>{
         // const user_id = sessionStorage.getItem('user_id')
         const userInfoString = localStorage.getItem('userInfo')
@@ -55,7 +58,8 @@ const UserMyPage = ()=>{
         })
 
         axios.get(`${process.env.REACT_APP_SERVER_URL}/helper/requests-helper/${userInfo.id}`).then(res=>{
-            console.log('helper request:::', res)
+            console.log('helper request:::', res.data)
+            // setRequestIngList(res.data.requests)
         })
         
     }, [])
@@ -67,6 +71,15 @@ const UserMyPage = ()=>{
         const day = date.getDay();
         return `${year}-${month}-${day}`
     }
+
+    useEffect(() => {
+        const response = axios.get(`${process.env.REACT_APP_SERVER_URL}/helper/requests-user-ing/${loginedUserInfo.id}`);
+
+        response.then(res => {
+            // console.log('ing:::',res.data[0].requests)
+            setRequestIngList(res.data[0].requests)
+        })
+    }, [])
 
     const historyItemList = ()=>{
 
@@ -91,6 +104,34 @@ const UserMyPage = ()=>{
                                 <ul style={{float: 'left', paddingTop: 5}}>
                                     <li style={{lineHeight: 2,}}><span style={{display: 'inline-block', fontWeight: 500, fontSize: 18, width: 100}}>도우미</span> <span style={{fontWeight: 700, fontSize: 20}}>{review.helper.name}</span> <span>도우미님</span></li>
                                     <li style={{lineHeight: 1.5,}}><span style={{display: 'inline-block', fontWeight: 500, fontSize: 18, width: 100}}>요청시각</span> <span style={{fontWeight: 700, fontSize: 20}}>{review.start_time} ~ {review._time}</span> </li>
+                                </ul>
+                            </div>
+                        </div>
+            )
+        })
+    }
+
+    const requestIngItemList = ()=>{
+
+
+        return requestIngList.map((request, idx)=>{
+            return (
+                        <div className="history-item">
+                            <div style={{position: "absolute", top: 20, right: 10}}>
+                                {/* <p style={{textAlign: 'right', fontWeight: 500, fontSize: 18, color: '#725F51'}}>도우미 비용</p>
+                                <p style={{textAlign: 'right', fontSize: 24, fontWeight: 700, color: '#54493F', lineHeight: 2}}>{1000}원</p> */}
+                            </div>
+                            <div style={{position: "absolute", bottom: 10, right: 10}}>
+                                <button disabled={true} style = {{padding : "6px 29px", border: "1px solid #725F51", backgroundColor: "#725F51", borderRadius :"5px", color:"#fff", marginRight:"13px"}}>요청중</button>
+                            </div>
+                            <div style={{width: 106, height: 106, margin: 25, borderRadius: '50%', overflow: 'hidden', display: 'flex', justifyContent: 'center', float: "left" }}>
+                                <img style={{height: 106}} src={''}></img>
+                            </div>
+                            <div className="history-item-desc">
+                                <p className="history-item-title" style={{width: 850}}>{request.comment} - {convertYYYYMMDD(request.date)}</p>
+                                <ul style={{float: 'left', paddingTop: 5}}>
+                                    <li style={{lineHeight: 2,}}><span style={{display: 'inline-block', fontWeight: 500, fontSize: 18, width: 100}}>도우미</span> <span style={{fontWeight: 700, fontSize: 20}}>{request.helper_id}</span> <span>도우미님</span></li>
+                                    <li style={{lineHeight: 1.5,}}><span style={{display: 'inline-block', fontWeight: 500, fontSize: 18, width: 100}}>요청시각</span> <span style={{fontWeight: 700, fontSize: 20}}>{request.start_time} ~ {request.end_time}</span> </li>
                                 </ul>
                             </div>
                         </div>
@@ -124,6 +165,7 @@ const UserMyPage = ()=>{
                         최근 이용 내역
                     </p>
                     <div className="history-list-container">
+                        {requestIngItemList()}
                         {historyItemList()}
                         {/* <div className="history-item">
                             <div style={{position: "absolute", top: 20, right: 10}}>

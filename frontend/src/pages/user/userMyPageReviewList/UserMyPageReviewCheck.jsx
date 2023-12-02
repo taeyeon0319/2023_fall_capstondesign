@@ -13,6 +13,9 @@ const UserMyPageReviewCheck = ()=>{
     const [helperReview, setHelperReview] = useState([]);
     const helper_id = params.helper_id;
 
+    const userInfoString = localStorage.getItem('userInfo')
+    const userInfo = JSON.parse(userInfoString)
+
     const getReviewList = ()=>{
         return helperReview.map((review)=>{
             return (
@@ -58,13 +61,17 @@ const UserMyPageReviewCheck = ()=>{
 
     //도우미 자신에 대한 리뷰 가져오기 : ./helper-review/:helper_id
     useEffect(() => {
-        const response = axios.get(`${process.env.REACT_APP_SERVER_URL}/review/helper-review/taeyeon0319`);
+        const response = axios.get(`${process.env.REACT_APP_SERVER_URL}/review/helper-review/${helper_id}`);
 
         response.then(res => {
             setHelperReview(res.data)
             console.log(res.data)
         })
     }, [])
+
+  
+
+
 
     return (
         <div className='app'>
