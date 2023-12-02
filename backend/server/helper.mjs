@@ -466,4 +466,23 @@ helperRouter.post("/changeHelper", async (req, res) => {
   }
 });
 
+//도우미별 평점들에 대한 평균 정보 불러오는 엔드포인트
+helperRouter.get("/helper-reveiw/:id/stars", async (req, res) => {
+  const client = await pool.connect();
+  const helperId = req.params.id;
+  try {
+    const result = await client.query(
+      `SELECT AVG(rating) FROM review WHERE helper_id = $1`,
+      [helperId]
+    );
+    res.json(result.rows);
+    client.release();
+  } catch (err) {
+    console.error("Error fetching helper data:", err);
+    res
+      .status(500)
+      .json({ error: "An error occurred while fetching the helper data." });
+  }
+});
+
 export default helperRouter;
