@@ -239,7 +239,7 @@ const HelperDetail = ()=>{
         console.log('reqest!')
         axios.post(`${process.env.REACT_APP_SERVER_URL}/helper/requests/add`,{
             user_id : userInfo.id,
-            helper_id : helperInfo.name,
+            helper_id : helperInfo.id,
             field : serviceType,
             region_state : city,
             region_country : district,
