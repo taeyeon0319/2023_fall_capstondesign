@@ -7,11 +7,12 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header2 from "../components/Header2";
 import axios from 'axios';
+import Footer from "../components/Footer";
 
 const Root = styled.div`
 width: 100vw;
 height: 100vh;
-background: var(--Point-1, #F9F8F7);
+background: #FFF8F3;
 display: flex;
 flex-direction:column;
 `
@@ -491,6 +492,7 @@ export const RandingPage = () => {
                     <RandBtn onClick={clickTeam}>팀 소개</RandBtn>
                 </RandButtonBox>
             </RandBody>
+            <Footer />
             {/*
             <RandBox>
                 <RandLine></RandLine>
