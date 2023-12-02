@@ -88,12 +88,17 @@ helperRouter.put("/response-request/:id", async (req, res) => {
 // 도우미가 수락/거절했을경우 이용자의 요구사항목록 데이터에서 status를 수락/거절으로 변경하는 엔드포인트
 helperRouter.put("/response-request", async (req, res) => {
   const client = await pool.connect();
-  const { status , id } = req.body;
+  const { status, id } = req.body;
   console.log(status);
   console.log(id);
   try {
-    const result = await client.query('UPDATE requests SET status=$1 WHERE id=$2',[status,id]);
-    const result2 = await client.query('select * from requests where id=$1',[id]);
+    const result = await client.query(
+      "UPDATE requests SET status=$1 WHERE id=$2",
+      [status, id]
+    );
+    const result2 = await client.query("select * from requests where id=$1", [
+      id,
+    ]);
     res.json(result2.rows);
   } catch (err) {
     console.error("Error updating request status:", err);
@@ -251,12 +256,29 @@ helperRouter.post("/requests/add", async (req, res) => {
 //helpertimetable 정보 불러오는
 helperRouter.get("/helpertimetable/:helper_id", async (req, res) => {
   const client = await pool.connect();
-  const helperId = parseInt(req.params.helper_id);
+  const helperId = req.params.helper_id;
   try {
     const requests = await client.query(
-      `SELECT * FROM helper_timetable WHERE helper_id = $1`,
+      `SELECT * FROM helper_time WHERE helper_id = $1`,
       [helperId]
     );
+    requests.rows.map((request) => {
+      if (request.day == "MON") {
+        request.day = "monday";
+      } else if (request.day == "TUE") {
+        request.day = "tuesday";
+      } else if (request.day == "WED") {
+        request.day = "wednesday";
+      } else if (request.day == "THU") {
+        request.day = "thursday";
+      } else if (request.day == "FRI") {
+        request.day = "friday";
+      } else if (request.day == "SAT") {
+        request.day = "saturday";
+      } else if (request.day == "SUN") {
+        request.day = "sunday";
+      }
+    });
     res.json(requests.rows);
     client.release();
   } catch (err) {
@@ -275,11 +297,27 @@ helperRouter.post("/saveTimetable", async (req, res) => {
   const endTime = req.body.endTime;
 
   try {
+    if (available_day == "monday") {
+      available_day = "mon";
+    } else if (available_day == "tuesday") {
+      available_day = "tue";
+    } else if (available_day == "wednesday") {
+      available_day = "wed";
+    } else if (available_day == "thursday") {
+      available_day = "thu";
+    } else if (available_day == "friday") {
+      available_day = "fri";
+    } else if (available_day == "saturday") {
+      available_day = "sat";
+    } else if (available_day == "sunday") {
+      available_day = "sun";
+    }
     console.log(helper_id, available_day, startTime, endTime);
     await client.query(
-      `INSERT INTO helper_timetable(helper_id, available_day, startTime,endTime) VALUES( $1, $2, $3, $4)`,
+      `INSERT INTO helper_time(helper_id, day, start_time,end_time) VALUES( $1, $2, $3, $4)`,
       [helper_id, available_day, startTime, endTime]
     );
+    console.log("success");
     client.release();
   } catch (err) {
     console.error("Error updating request status:", err);
@@ -290,9 +328,9 @@ helperRouter.post("/saveTimetable", async (req, res) => {
 });
 
 // 현정 추가 요청 확인용
-helperRouter.get('/requestsCheck', async (req, res) => {
+helperRouter.get("/requestsCheck", async (req, res) => {
   const client = await pool.connect();
-  const reqTable = await client.query('SELECT * FROM requests');
+  const reqTable = await client.query("SELECT * FROM requests");
   res.json(reqTable);
 });
 
@@ -303,9 +341,25 @@ helperRouter.post("/updateTimetable", async (req, res) => {
   const available_day = req.body.day;
   const startTime = req.body.startTime;
   const endTime = req.body.endTime;
+
   try {
+    if (available_day == "monday") {
+      available_day = "MON";
+    } else if (available_day == "tuesday") {
+      available_day = "TUE";
+    } else if (available_day == "wednesday") {
+      available_day = "WED";
+    } else if (available_day == "thursday") {
+      available_day = "THU";
+    } else if (available_day == "friday") {
+      available_day = "FRI";
+    } else if (available_day == "saturday") {
+      available_day = "SAT";
+    } else if (available_day == "sunday") {
+      available_day = "SUN";
+    }
     await client.query(
-      "UPDATE helper_timetable SET startTime = $1 endTime = $2 WHERE helper_id = $3 AND available_day = $4",
+      "UPDATE helper_time SET start_time = $1 end_time = $2 WHERE helper_id = $3 AND day = $4",
       [startTime, endTime, helper_id, available_day]
     );
     client.release();
@@ -326,9 +380,48 @@ helperRouter.post("/deleteTimetable", async (req, res) => {
   //const endTime = req.body.endTime;
 
   try {
+    if (available_day == "monday") {
+      available_day = "MON";
+    } else if (available_day == "tuesday") {
+      available_day = "TUE";
+    } else if (available_day == "wednesday") {
+      available_day = "WED";
+    } else if (available_day == "thursday") {
+      available_day = "THU";
+    } else if (available_day == "friday") {
+      available_day = "FRI";
+    } else if (available_day == "saturday") {
+      available_day = "SAT";
+    } else if (available_day == "sunday") {
+      available_day = "SUN";
+    }
     await client.query(
-      "DELETE FROM helper_timetable WHERE helper_id = $1 AND available_day = $2 AND startTime = $3",
+      "DELETE FROM helper_time WHERE helper_id = $1 AND day = $2 AND start_time = $3",
       [helper_id, available_day, startTime]
+    );
+    client.release();
+  } catch (err) {
+    console.error("Error updating request status:", err);
+    res.status(500).json({
+      error: "An error occurred while updating the request status.",
+    });
+  }
+});
+
+//마이페이 도우미 변경하는 엔드포인트
+helperRouter.post("/changeHelper", async (req, res) => {
+  const client = await pool.connect();
+  const { helper_id, region_country, region_state, name, password } = req.body;
+  try {
+    // helper_mypage랑 signup 테이블 동시에 업데이트
+    await client.query(
+      `UPDATE signup SET name = $1, password = $2 WHERE id = $3`,
+      [name, password, helper_id]
+    );
+    await client.query(
+      //이름, 패스워드, region_state, region_country
+      `UPDATE helper_mypage SET region_state=$2 region_country = $3  WHERE helper_id = $1`,
+      [helper_id, region_state, region_country]
     );
     client.release();
   } catch (err) {
