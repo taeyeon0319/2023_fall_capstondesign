@@ -120,26 +120,8 @@ body {
     font-weight: bold;
 }
 
-.helper-list-container {
-    display: grid;
-    min-width: 800px;
-    max-width: 1200px;
-    margin: 0 auto;
-    grid-template-columns: 1fr 1fr;
-    column-gap: 20px;
-    padding: 40px;
-    overflow: hidden;
-}
 
-.helper-list-container .helper-search-form {
-    background-color: #FFFFFF;
-    height: 750px;
-    position: relative;
-    border-radius: 5px;
-    box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.1);
-    padding-top: 20px;
 
-}
 
 .select-container-1 {
     width: 100%;
@@ -240,7 +222,6 @@ body {
     height: 720px;
     overflow-y: scroll;
     margin: 10px;
-
 }
 
 .helper-list-searched-container .title {
@@ -271,7 +252,6 @@ body {
 .helper-list-searched-item .profile {
     border-radius: 50%;
     width: 79px; height: 79px;
-
 }
 
 .helper-list-searched-item .description {
@@ -360,6 +340,7 @@ body {
     font-weight: 700;
     border: 1xp solid #C2C1C1;
     border-radius: 5px;
+    margin : 10px;
 }
 .btn-container .btn-2 {
     width: 288px;

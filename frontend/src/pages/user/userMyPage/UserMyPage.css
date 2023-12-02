@@ -90,10 +90,9 @@
 }
 
 .history-item-desc{
-    float: left;
+    /* float: left; */
     height: 156px;
     padding-top: 25px;
-
 }
 
 .history-item-title {

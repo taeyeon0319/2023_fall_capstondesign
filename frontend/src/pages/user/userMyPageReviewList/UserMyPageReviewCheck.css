@@ -1,0 +1,229 @@
+.helper-list-container {
+    display: grid;
+    min-width: 800px;
+    max-width: 1200px;
+    margin: 0 auto;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 20px;
+    padding: 40px;
+    overflow: hidden;
+}
+
+.helper-list-container .helper-search-form1 {
+    height: 750px;
+    position: relative;
+    padding-top: 0px;
+    
+}
+.helper-search-form1 .helper-review-profile {
+    background-color: #fff;
+    height: 270px;
+    position: relative;
+    border-radius: 5px;
+    box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.1);
+    padding-top: 20px;
+    margin-bottom: 20px;
+}
+
+.helper-search-form1 .helper-review-button {
+    background-color: #fff;
+    height: 460px;
+    position: relative;
+    border-radius: 5px;
+    box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.1);
+}
+
+
+.helper-list-searched-container .options-container {
+    width: 100%;
+    height: 50px;
+    position: relative;
+}
+
+
+
+.helper-list-searched-container .helper-list-searched {
+    height: 720px;
+    overflow-y: scroll;
+    margin: 10px;
+}
+
+.helper-list-searched-container .title {
+    background-color: #725F51;
+    padding: 0 25px;
+    color: #fff;
+    height: 67px;
+    line-height: 67px;
+    font-weight: bold;
+    font-size: 18px;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+}
+.btn-container {
+    margin: 0 auto;;
+}
+.btn-container .button-1 {
+    width: 282px;
+    height: 50px;
+    border-radius: 5px;
+    border: 1px solid #C2C1C1;
+    margin-right:5px;
+    background-color: #FFFFFF;
+}
+.btn-container .button-2 {
+    width: 282px;
+    height: 50px;
+    border-radius: 5px;
+    border: 1px solid #999797;
+    margin-left:5px;
+    background-color: #EBEAEA;
+}
+.helper-review-button .title {
+    background-color: #725F51;
+    padding: 0 25px;
+    color: #fff;
+    height: 67px;
+    line-height: 67px;
+    font-weight: bold;
+    font-size: 18px;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+}
+
+.helper-list-searched-container .title span{
+    color: #fff;
+}
+.review-list {
+    width: 94%;
+    height: 650px;
+    margin: 17px auto;
+    box-sizing: border-box;
+    padding: 3px;
+}
+
+
+.review-item .left {
+    width: 15%;
+    height: 100%;
+}
+
+.review-item .left .img-container {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #eee;
+    float: left;
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.review-item .left .img-container .img {
+    width: 100%; height: 100%;
+}
+
+.review-item .right {
+    width: 100%;
+    height: 100%;
+    border: 1px solid #EBEAEA;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.review-item .right .item-name {
+    font-size: 18px;
+    font-weight: bold;
+    color: #54493F;
+    margin-bottom: 5px;
+}
+
+.review-item .right .item-date {
+    font-size: 14px;
+    font-weight: 400;
+    color: #999797;
+    margin-bottom: 5px;
+}
+
+.review-item .right .item-date {
+    font-size: 14px;
+    font-weight: 500;
+    color: #725F51;
+
+}
+
+.helper-review-profile .profile {
+    border-radius: 50%;
+    width: 79px; height: 79px;
+    margin: 18px 15px 10px 15px;
+    float: left;
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+}
+.helper-review-profile .helper-name {
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 34.75px;
+}
+.helper-review-profile .helper-address {
+    font-weight: 400;
+    font-style: 18px;
+    line-height: 26.06px;
+    color: #725F51;
+}
+.helper-review-profile .certification-container {
+    display: inline-block;
+    margin : 30px 100px 10px 10px;
+}
+.helper-review-container .review-title {
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 60px;
+    color: #FFFFFF;
+    width: 130px;
+}
+.helper-review-container .stars{
+    float: right;
+}
+.helper-review-container .score {
+    float: right;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 60px;
+    
+}
+.literally-helper {
+    font-size: 20px;
+    line-height: 28.96px;
+    font-weight: 500;
+    display: inline-block;
+    margin-left: 10px;
+}
+.helper-review-container {
+    width: 96%;
+    height: 60px;
+    background-color: #D0B89E;
+    border-radius: 5px;
+    padding-left: 10px;
+    margin: 0 auto;
+}
+.review-button-container {
+    padding: 20px;
+}
+.review-button-container .btn-1 {
+    background-color: #F6F6F6;
+    border: 1px solid #EBEAEA;
+    width: 98%;
+    height: 70px;
+    border-radius: 5px;
+    padding: 16px 16px 16px 60px ;
+    margin-bottom: 20px;
+
+    line-height: 33px;
+    font-weight: 700;
+    font-size: 18px;
+}
+.review-button-percent {
+    float:right;
+}
