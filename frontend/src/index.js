@@ -15,6 +15,8 @@ import HelperMyPage from "./pages/HelperMyPage";
 import Header2 from "./components/Header2";
 import HelperTimetablePage from "./pages/HelperTimetable";
 import TeamMember from "./pages/TeamMember";
+import Introduce from "./pages/Introduce";
+import Guide from "./pages/Guide";
 
 import UserMyPageEdit from "./pages/user/userMyPage/UserMyPageEdit";
 
@@ -90,7 +92,15 @@ const router = createBrowserRouter([
   {
     path:"/team",
     element: <TeamMember />,
-  }
+  },
+  {
+    path:"/service",
+    element: <Introduce />,
+  },
+  {
+    path:"/guide",
+    element: <Guide />,
+  },
 ]);
 
 sessionStorage.setItem("id", "yys");
