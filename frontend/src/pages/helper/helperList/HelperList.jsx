@@ -164,7 +164,7 @@ const HelperList = ()=>{
         };
 
         try {
-            const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/user/helper/search${orderby === '평점순' ? '/orderbystars': ''}`, { params: requestParams });
+            const response = await axios.get(`http://localhost:5000/user/helper/search${orderby === '평점순' ? '/orderbystars': ''}`, { params: requestParams });
             setHelperlist(response.data)
         }catch(error){
             console.log('Error fetching data :', error);
