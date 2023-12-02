@@ -209,7 +209,7 @@ const HelperList = ()=>{
                     state: {
                         ...requestParams
                     }
-                  })
+                })
             }} key={idx} className='helper-list-searched-item'>
                         <img className='profile' src={helper.image} />
                         <div className='description'>
