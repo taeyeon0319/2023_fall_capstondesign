@@ -73,7 +73,7 @@ const HelperDetail = ()=>{
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/city`);
+                const response = await axios.get(`http://localhost:5000/city`);
                 const data = response.data;
                 setCityData(data);
                 const districtInfo = {}
@@ -95,7 +95,7 @@ const HelperDetail = ()=>{
 
         const fetchData2 = async ()=>{
             try {
-                const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/fields`);
+                const response = await axios.get(`http://localhost:5000/fields`);
                 setServices(response.data)
             }catch(error){
                 console.log('Error fetching data :', error);
@@ -203,7 +203,7 @@ const HelperDetail = ()=>{
     }
     
     useEffect(() => {
-        const response = axios.get(`${process.env.REACT_APP_SERVER_URL}/user/helper/${helper_id}`);
+        const response = axios.get(`http://localhost:5000/user/helper/${helper_id}`);
 
         response.then(res => {
             setHelperInfo(res.data[0])
