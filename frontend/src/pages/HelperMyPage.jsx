@@ -259,6 +259,7 @@ background:F9F8F7;
 `
 
 export const HelperMyPage = () => {
+    const navigate = useNavigate();
     const [render, setrender] = useState(0);
     const [totalPay, setTotalPay] = useState(0);
     const [accepted, setAccepted] = useState([]);
@@ -293,6 +294,9 @@ export const HelperMyPage = () => {
           console.error("API 호출 중 오류 발생:", error);
         }
     };
+    const onClickEdit = () => {
+        navigate("/HelperMyEdit");
+    }
 
     return(
         <Root>
@@ -304,7 +308,7 @@ export const HelperMyPage = () => {
                         <HelperMyText>{JSON.parse(localStorage.getItem("userInfo")).name}</HelperMyText>
                         <HelperMyText2>도우미님</HelperMyText2>
                         <div style={{height:"100%",display:"flex",justifyContent:"center",alignItems:"center"}}>
-                        <HelperMyBtn>내 정보 수정하기</HelperMyBtn>
+                        <HelperMyBtn onClick={onClickEdit}>내 정보 수정하기</HelperMyBtn>
                         </div>
                     </div>
                     <HelperMyText3>{JSON.parse(localStorage.getItem("userInfo")).region_state+' '+JSON.parse(localStorage.getItem("userInfo")).region_country}</HelperMyText3>
