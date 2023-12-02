@@ -24,6 +24,7 @@ reviewRouter.post("/user-review", async (req, res) => {
   const {
     user_id,
     helper_id,
+    request_id,
     title,
     content,
     rating,
@@ -34,10 +35,11 @@ reviewRouter.post("/user-review", async (req, res) => {
   } = req.body;
   try {
     const review = await client.query(
-      `INSERT INTO review (user_id, helper_id, title, contents, rating, time_good, kind, child_like, reliable) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *`,
+      `INSERT INTO review (user_id, helper_id, request_id, title, contents, rating, time_good, kind, child_like, reliable) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *`,
       [
         user_id,
         helper_id,
+        request_id,
         title,
         content,
         rating,
