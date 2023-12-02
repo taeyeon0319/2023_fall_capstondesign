@@ -32,7 +32,7 @@ const UserMyPage = ()=>{
     const navigate = useNavigate();
     const userInfoString = localStorage.getItem('userInfo')
     const loginedUserInfo = JSON.parse(userInfoString)
-    
+
     useEffect(()=>{
         // const user_id = sessionStorage.getItem('user_id')
         const userInfoString = localStorage.getItem('userInfo')
@@ -87,7 +87,7 @@ const UserMyPage = ()=>{
 
         return reviewlist.map((review, idx)=>{
             return (
-                        <div className="history-item">
+                        <div className="history-item" key={idx}>
                             <div style={{position: "absolute", top: 20, right: 10}}>
                                 <p style={{textAlign: 'right', fontWeight: 500, fontSize: 18, color: '#725F51'}}>도우미 비용</p>
                                 <p style={{textAlign: 'right', fontSize: 24, fontWeight: 700, color: '#54493F', lineHeight: 2}}>{review.totalpay}원</p>
@@ -117,7 +117,7 @@ const UserMyPage = ()=>{
 
         return requestIngList.map((request, idx)=>{
             return (
-                        <div className="history-item">
+                        <div className="history-item" key={idx}>
                             <div style={{position: "absolute", top: 20, right: 10}}>
                                 {/* <p style={{textAlign: 'right', fontWeight: 500, fontSize: 18, color: '#725F51'}}>도우미 비용</p>
                                 <p style={{textAlign: 'right', fontSize: 24, fontWeight: 700, color: '#54493F', lineHeight: 2}}>{1000}원</p> */}
