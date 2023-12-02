@@ -23,6 +23,7 @@ justify-content: space-between;
 `
 
 const JoinUInput = styled.input`
+padding:5px 10px;
 width: 48.54vw;
 height: 5.3vh;
 flex-shrink: 0;
@@ -143,6 +144,14 @@ export const JoinPageUser = () =>{
           ...prevData,
           [name]: value,
         }));
+    };
+
+    const handleChange2 = (e) =>{
+        const { name, value } = e.target;
+        setJoinData((prevData) => ({
+          ...prevData,
+          [name]: value,
+        }));
         if (document.getElementById("newPW").value!==""&&document.getElementById("newPW").value===document.getElementById("confNewPW").value){
             setCheckPW(1);
         }else{
@@ -184,9 +193,9 @@ export const JoinPageUser = () =>{
                         <JoinUBtn2 onClick={OnclickCheckId}>아이디 중복 확인하기</JoinUBtn2>
                     </div>
                     <JoinUText >비밀번호</JoinUText>
-                    <JoinUInput id="newPW" type="password" name="password" value={JoinData.password} onChange={handleChange}></JoinUInput>
+                    <JoinUInput id="newPW" type="password" name="password" value={JoinData.password} onChange={handleChange2}></JoinUInput>
                     <JoinUText >비밀번호 확인</JoinUText>
-                    <JoinUInput id="confNewPW" type="password" name="password_confirm" value={JoinData.password_confirm} onChange={handleChange}></JoinUInput>
+                    <JoinUInput id="confNewPW" type="password" name="password_confirm" value={JoinData.password_confirm} onChange={handleChange2}></JoinUInput>
                     <JoinUText3>{checkPW===-1?"":checkPW===0?"비밀번호가 다릅니다":"비밀번호가 일치합니다"}</JoinUText3>
                     <JoinUText>이메일</JoinUText>
                     <JoinUInput type="text" name="email" value={JoinData.email} onChange={handleChange}></JoinUInput>
