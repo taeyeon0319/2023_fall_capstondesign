@@ -1,0 +1,13 @@
+.profile-container {
+    background-color: #FFFFFF;
+    height: 186px;
+    width: 1200px;
+    position: relative;
+    border-radius: 5px;
+    box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.1);
+    margin: 2px;
+}
+.profile-container .helper-name {
+    font-weight: 700;
+    font-size: 24px;
+}

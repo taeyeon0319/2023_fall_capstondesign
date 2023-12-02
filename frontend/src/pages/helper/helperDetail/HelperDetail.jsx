@@ -6,6 +6,8 @@ import { Button, Modal, DatePicker, Space, TimePicker  } from 'antd';
 import Header2 from "../../../components/Header2";
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
+import { responsiveArray } from 'antd/es/_util/responsiveObserver';
+
 
 const HelperDetail = ()=>{
     const navigate = useNavigate();
@@ -20,8 +22,9 @@ const HelperDetail = ()=>{
     const helper_id = params.id;
 
     const [helperInfo, setHelperInfo] = useState({});
-
+    const [userInfo, setUserInfo] = useState({});
     const [secondStep, setSecondStep] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const [city, setCity] = useState(""); //시/도 : 서울
     const [district, setDistrict] = useState(""); //시/군/구 : 종로구
@@ -58,7 +61,14 @@ const HelperDetail = ()=>{
     }
     return result;
     };
-
+    useEffect(()=>{
+        const userInfoString = localStorage.getItem('userInfo')
+        const userInfo = JSON.parse(userInfoString)
+        axios.get(`${process.env.REACT_APP_SERVER_URL}/helper/users/${userInfo.id}`).then((res)=>{
+            setUserInfo(res.data[0])
+            //console.log(res.data[0])
+        })
+    },[])
     useEffect(()=>{
         if(location.state){
             setCity(location.state.city)
@@ -69,6 +79,8 @@ const HelperDetail = ()=>{
             setServiceEndTime(location.state.needtime_e)
         }
     }, [])
+
+    
 
     useEffect(() => {
         const fetchData = async () => {
@@ -197,9 +209,54 @@ const HelperDetail = ()=>{
         disabledSeconds: () => [55, 56],
     });
 
+    //도우미 신청 버튼 클릭하면 뜨는 Modal 창
+    // const Modal = () => {
+    //     // const [isModalOpen, setIsModalOpen] = useState(false);
+    //     const showModal = () => {
+    //         setIsModalOpen(true);
+    //         };
+    //         const handleOk = () => {
+    //         setIsModalOpen(false);
+    //         };
+    //         const handleCancel = () => {
+    //         setIsModalOpen(false);
+    //         };
+    //         return (
+    //         <>
+    //             <Button type="primary" onClick={showModal}>
+    //             Open Modal
+    //             </Button>
+    //             <Modal title="Basic Modal" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+    //             <p>Some contents...</p>
+    //             <p>Some contents...</p>
+    //             <p>Some contents...</p>
+    //             </Modal>
+    //         </>
+    //         );
+    //     };
+        
     const requestHelper = ()=>{
         console.log('reqest!')
-        // axios.post()
+        axios.post(`${process.env.REACT_APP_SERVER_URL}/helper/requests/add`,{
+            user_id : userInfo.id,
+            helper_id : helperInfo.name,
+            field : serviceType,
+            region_state : city,
+            region_country : district,
+            region_eupmyeondong : " ",
+            date : date,
+            start_time : serviceStartTime,
+            end_time : serviceEndTime,
+            comment :requestText,
+        }).then(response=>{
+            console.log('성공적으로 요청 완료', response.data);
+            navigate('/usermypage');
+            
+        })
+        .catch(error =>{
+            console.log('Requset Failed', error);
+            //요청 실패 시 alert창 
+        })
     }
     
     useEffect(() => {
@@ -211,8 +268,21 @@ const HelperDetail = ()=>{
         })
     }, [])
 
+        const handleOk = () => {
+            requestHelper();
+            
+        };
+        const handleCancel = () => {
+        setIsModalOpen(false);
+        };
+
     return (
         <div className="app">
+            <Modal title="요청 여부 확인" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+                <p>요청을 하시겠습니까?</p>
+                {/* <p>Some contents...</p>
+                <p>Some contents...</p> */}
+            </Modal>
 
             {/* <header className='header'> */}
                 {/* <div className="logo"> */}
@@ -353,11 +423,15 @@ const HelperDetail = ()=>{
             <div className='btn-container'>
                 {!secondStep && <button className='btn-1' onClick={()=>{navigate(-1)}}>취소</button>}
                 {secondStep && <button className='btn-1' onClick={()=>{setSecondStep(false)}}>이전</button>}
-                <button disabled={secondStep} className='btn-2' onClick={()=>{
+                <button  className='btn-2' onClick={()=>{
                     if(!secondStep){
                         setSecondStep(true);
+                        
                     } else {
-                        requestHelper();
+                        setIsModalOpen(true);
+                        
+                        // requestHelper();
+                        
                     }
                 }}>도우미 요청</button>
             </div>

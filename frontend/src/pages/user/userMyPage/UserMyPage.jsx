@@ -67,12 +67,12 @@ const UserMyPage = ()=>{
                                 <p style={{textAlign: 'right', fontSize: 24, fontWeight: 700, color: '#54493F', lineHeight: 2}}>{review.totalpay}원</p>
                             </div>
                             <div style={{position: "absolute", bottom: 10, right: 10}}>
-                                <button style = {{padding : "6px 29px", border: "1px solid #725F51", background: "none", borderRadius :"5px", color:"#725F51", marginRight:"13px"}}>도우미 요청</button>
-                                <button style = {{padding : "6px 29px", border: "1px solid #725F51", background: "#725F51", borderRadius :"5px", color:"#fff"}}>리뷰 남기기</button>
+                                <button onClick={()=>{navigate(`/usermypage/helperReview`)}} style = {{padding : "6px 29px", border: "1px solid #725F51", background: "none", borderRadius :"5px", color:"#725F51", marginRight:"13px"}}>자세히 보기</button>
+                                <button onClick={()=>{navigate(`/usermypage/writeReview`)}} style = {{padding : "6px 29px", border: "1px solid #725F51", background: "#725F51", borderRadius :"5px", color:"#fff"}}>리뷰 수정</button>
 
                             </div>
-                            <div style={{width: 106, height: 106, margin: 25, borderRadius: '50%', overflow: 'hidden', display: 'flex', justifyContent: 'center', float: "left" }}>
-                                <img style={{height: 106}} src={review.image}></img>
+                            <div style={{width: 106, himgeight: 106, margin: 25, borderRadius: '50%', overflow: 'hidden', display: 'flex', justifyContent: 'center', float: "left" }}>
+                                <img style={{height: 106, width:106}} src={review.helper.image} onClick={()=>{navigate(`/usermypage/helperReview`)}} ></img>
                             </div>
                             <div className="history-item-desc">
                                 <p className="history-item-title">{review.contents} - {review.updated_at}</p>
@@ -94,7 +94,7 @@ const UserMyPage = ()=>{
             <div className="user-mypage-container">
                 <div className="user-mypage-profile-change">
                     <div className="user-mypage-image">
-                        <img src={userInfo.image} height='146'></img>
+                        <img src={userInfo.image} height='146' width='145'></img>
                     </div>
                     <div className="user-name">{userInfo.name}<span style={{fontSize : 25}}>님</span>
                     <img src={edit_icon} onClick={()=>{navigate(`/usermypage/edit`)}} style={{height:30, width:30, marginLeft:20, cursor: 'pointer' }}></img>

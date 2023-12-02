@@ -20,7 +20,8 @@ import UserMyPageEdit from "./pages/user/userMyPage/UserMyPageEdit";
 import ChatPage from "./pages/ChatPage";
 
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-
+import UserMyPageReviewCheck from "./pages/user/userMyPageReviewList/UserMyPageReviewCheck";
+import UserMyPageWriteReview from "./pages/user/userMyPageWriteReview/userMyPageWriteReview"
 const router = createBrowserRouter([
   {
     path: "/",
@@ -59,6 +60,10 @@ const router = createBrowserRouter([
     element: <UserMyPage />,
   },
   {
+    path : "/usermypage/helperReview",
+    element : <UserMyPageReviewCheck />,
+  },
+  {
     path: "/helper",
     element: <HelperPage />,
   },
@@ -77,6 +82,10 @@ const router = createBrowserRouter([
   {
     path: "/usermypage/edit",
     element: <UserMyPageEdit />,
+  },
+  {
+    path: "/usermypage/writeReview",
+    element: <UserMyPageWriteReview />,
   },
   {
     path: "/Chat",
