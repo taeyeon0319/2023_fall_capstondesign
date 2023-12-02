@@ -170,6 +170,22 @@ signupRouter.get('/signupTableCheck', async (req, res) => {
   res.json(signupTable);
 });
 
+//현정 추가 중복 체크
+signupRouter.get('/checkId', async(req,res) => {
+  const uid = req.query.id;
+  try {
+    const signupTable = await db.manyOrNone('SELECT * FROM signup WHERE id=$1', [uid]);
+    if (signupTable.length > 0) {
+      res.send('false');
+    } else {
+      res.send('true');
+    }
+  } catch (error) {
+    console.error('Error checking ID:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
 
 // JWT를 확인하는 미들웨어
 function verifyToken(req, res, next) {
