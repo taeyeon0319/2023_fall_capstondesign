@@ -9,7 +9,7 @@ import reviewRouter from "./server/review.mjs";
 import chatRouter from "./server/chat.js";
 
 //variable
-const PORT = 5000;
+const PORT = 4000;
 const app = express();
 
 // middleware
@@ -59,5 +59,5 @@ app.get("/fields", async (req, res) => {
 
 // server start
 app.listen(PORT, () => {
-  console.log(`✅ Listening on http://localhost:5000/`);
+  console.log(`✅ Listening on http://localhost:4000/`);
 });
