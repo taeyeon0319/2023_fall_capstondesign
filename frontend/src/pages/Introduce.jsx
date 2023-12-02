@@ -2,6 +2,7 @@ import styled from "styled-components";
 import React, { useState } from "react";
 import Header2 from "../components/Header2";
 import Footer from "../components/Footer";
+import Main2 from "./LandingComponents/Main2";
 
 const Middle = styled.div`
   margin-top: 35px;
@@ -20,8 +21,8 @@ function Introduce() {
     return (
         <>
             <Header2 data={render} onDataChange={handleRenderChange}></Header2>
-            <Middle><h1>서비스 소개페이지(어떤 서비스를 제공하는지)</h1></Middle>
-            <Footer/>
+            <Middle><Main2 /></Middle>
+            <Footer />
         </>
     );
 }
