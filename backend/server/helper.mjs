@@ -154,7 +154,7 @@ helperRouter.get("/requests-user-ing/:id", async (req, res) => {
     const requestsWithUserData = await Promise.all(
       user.rows.map(async (user) => {
         const requests = await client.query(
-          `SELECT * FROM requests WHERE user_id = $1 AND status='요청'`,
+          `SELECT requests.*, helper_mypage.image FROM requests, helper_mypage WHERE user_id = $1 AND status='요청' AND requests.helper_id=helper_mypage.helper_id`,
           [userId]
         );
         return { ...user, requests: requests.rows };
