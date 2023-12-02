@@ -14,6 +14,9 @@ const UserMyPageReviewCheck = ()=>{
     const [helperInfo, setHelperInfo] = useState({});
     const [helperMonth, setHelperMonth] = useState({});
     const [helperReview, setHelperReview] = useState([]);
+
+    const [userAverageRate, setUserAverageRate] = useState(5);
+
     const helper_id = params.helper_id;
 
     const userInfoString = localStorage.getItem('userInfo')
@@ -59,10 +62,10 @@ const UserMyPageReviewCheck = ()=>{
             //console.log(res.data[0])
         })
         
-        // axios.get(`${process.env.REACT_APP_SERVER_URL}/helper/stars/${helper_id}/average`)
-        // .then(res => {
-        //     console.log(res)
-        // })
+        axios.get(`${process.env.REACT_APP_SERVER_URL}/review/helper-review/${helper_id}/average`)
+        .then(res => {
+            setUserAverageRate(Math.floor(res.data[0].avg*100)/100)
+        })
         
 
     }, [])
@@ -83,7 +86,7 @@ const UserMyPageReviewCheck = ()=>{
 
         response.then(res => {
             setHelperReview(res.data)
-            console.log(res.data)
+            // console.log(res.data)
         })
     }, [])
 
@@ -106,7 +109,7 @@ const UserMyPageReviewCheck = ()=>{
                         </div>
                         <div className='helper-review-container'>
                             <div className='review-title'>리뷰 평점</div>
-                            <div className='score'>4.92</div>
+                            <div className='score'>{userAverageRate}</div>
                             <div className='stars'>
                                 <Rate style={{fontSize: 28, color: '#725F31'}} disabled={true} allowHalf defaultValue={4.92} />
                             </div>
@@ -133,7 +136,7 @@ const UserMyPageReviewCheck = ()=>{
             </div>
             <div className='btn-container'>
                 <button className='button-1' onClick={()=>{navigate('/usermypage')}}>이전</button>
-                <button className='button-2' onClick={()=>{navigate('/usermypage/edit')}}>도움 신청</button>
+                <button className='button-2' disabled={true} onClick={()=>{navigate('/usermypage/edit')}}>도움 신청</button>
             </div>
             
         </div>
