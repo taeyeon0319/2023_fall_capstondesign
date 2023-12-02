@@ -72,7 +72,7 @@ const HelperList = ()=>{
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(`http://ec2-15-164-231-60.ap-northeast-2.compute.amazonaws.com:5000/city`);
+                const response = await axios.get(`http://localhost:5000/city`);
                 const data = response.data;
                 setCityData(data);
                 const districtInfo = {}
