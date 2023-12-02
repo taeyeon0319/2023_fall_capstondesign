@@ -7,22 +7,58 @@ import axios from "axios";
 
 const UserMyPageWriteReview = ()=>{
     const navigate = useNavigate();
+    const param = useParams()
     const [userInfo, setUserInfo] = useState({});
+    const [userAverageRate, setUserAverageRate] = useState(5);
+    const [reviewTag1, setReviewTag1] = useState(false);
+    const [reviewTag2, setReviewTag2] = useState(false);
+    const [reviewTag3, setReviewTag3] = useState(false);
+    const [reviewTag4, setReviewTag4] = useState(false);
+
+    const [comment, setComment] = useState("");
+
+
     const handlerenderChange = () =>{
         setrender(prevState => (prevState === 0 ? 1 : 0));
     };
     const [render, setrender] = useState(0);
 
     useEffect(()=>{
-        const userInfoString = localStorage.getItem('userInfo')
-        const userInfo = JSON.parse(userInfoString)
+        const helper_id = param.helper_id
         //console.log(userInfo.name)
-        axios.get(`${process.env.REACT_APP_SERVER_URL}/helper/users/${userInfo.id}`).then((res)=>{
+        axios.get(`${process.env.REACT_APP_SERVER_URL}/user/helper/${helper_id}`).then((res)=>{
+            console.log(res.data[0])
             setUserInfo(res.data[0])
             //console.log(res.data[0])
         })
 
+        axios.get(`${process.env.REACT_APP_SERVER_URL}/review/helper-review/${helper_id}/average`)
+        .then(res => {
+            setUserAverageRate(Math.floor(res.data[0].avg*100)/100)
+        })
+
     }, [])
+
+    const saveTheInfo=()=>{
+        const requestParams = {
+            // user_id : userInfo.id,
+            // helper_id : helperInfo.id,
+            // field : serviceType,
+            // region_state : city,
+            // region_country : district,
+            // region_eupmyeondong : " ",
+            // date : date,
+            // start_time : serviceStartTime,
+            // end_time : serviceEndTime,
+            // comment :requestText,
+            // gender: gender,
+        }
+
+        axios.post(`${process.env.REACT_APP_SERVER_URL}/user-review`, requestParams).then((res=>{
+            console.log('수정 성공')
+        }))
+        .catch(()=>console.log('수정 실패'))
+    }
 
     return (
         <div>
@@ -46,8 +82,8 @@ const UserMyPageWriteReview = ()=>{
                             </p>
                             <div className="" style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
                                 <div style={{display: 'block', marginTop: 50}}>
-                                    <Rate style={{fontSize: 50, color: '#725F31'}} disabled={true} allowHalf defaultValue={4.92} />
-                                    <h1 style={{textAlign: 'center', marginTop: 20}}>{'4.5'}점</h1>
+                                    <Rate style={{fontSize: 50, color: '#725F31'}} disabled={true} allowHalf defaultValue={userAverageRate} />
+                                    <h1 style={{textAlign: 'center', marginTop: 20}}>{userAverageRate}점</h1>
                                 </div>   
                             </div>
                         </div>
@@ -57,10 +93,10 @@ const UserMyPageWriteReview = ()=>{
                                 리뷰 태그
                             </p>
                             <div>
-                                <div className="temp-0-1"><span>⏱️</span> 시간 약속을 잘지켜요</div>
-                                <div className="temp-0-1"><span>🎉</span> 친절해요</div>
-                                <div className="temp-0-1"><span>🧸</span> 아이들이 좋아해요</div>
-                                <div className="temp-0-1"><span>👍</span> 믿음직해요</div>
+                                <div style={{border: reviewTag1 && '2px solid #555' }}  onClick={()=>setReviewTag1(!reviewTag1)} className="temp-0-1"><span>⏱️</span> 시간 약속을 잘지켜요</div>
+                                <div style={{border: reviewTag2 && '2px solid #555' }} onClick={()=>setReviewTag2(!reviewTag2)} className="temp-0-1"><span>🎉</span> 친절해요</div>
+                                <div style={{border: reviewTag3 && '2px solid #555' }} onClick={()=>setReviewTag3(!reviewTag3)} className="temp-0-1"><span>🧸</span> 아이들이 좋아해요</div>
+                                <div style={{border: reviewTag4 && '2px solid #555' }} onClick={()=>setReviewTag4(!reviewTag4)} className="temp-0-1"><span>👍</span> 믿음직해요</div>
                             </div>
                         </div>
                     </div>
@@ -73,13 +109,20 @@ const UserMyPageWriteReview = ()=>{
                             <select className="temp-0-1-select">
                                 <option>잠깐 아이 3시간 돌봐주실 분 구합니다!</option>
                             </select>
-                            <textarea disabled={true} className="textarea-temp-0-1" value={
-                                '김헬퍼 헬퍼님 덕분에 맘 놓고 장 보러 다녀왔어요~ 급하게 어머니가 방문한다고 해서 마음 졸였는데 헬퍼님이 아이들 돌봐주신 덕분에 소고기랑 이것저것 준비했네요. 헬퍼님이 너무 재미있게 놀아주셔서 아이들이 헬퍼님 또 언제 오냐고 자꾸 물어보네요 조만간 또 이용할게요 ^^*'}>
+                            <textarea onChange={(e)=>{
+                                setComment(e.target.value)
+                                // console.log(e.target.value)
+                            }} className="textarea-temp-0-1">
                             </textarea>
                             
                         </div>
                     </div>
+
                 </div>
+            </div>
+            <div style={{textAlign: 'center'}}>
+                <button onClick={()=>navigate(-1)} style={{lineHeight: 2, marginRight: 30, width: 200, border: '1px solid #EBEAEA', color: 'gray', borderRadius: 5, backgroundColor: '#fff', fontSize: 24, marginRight: 30}}>이전</button>
+                <button onClick={saveTheInfo} style={{lineHeight: 2,width: 200, color: '#fff', border: '1px solid #EBEAEA', borderRadius: 5, backgroundColor: '#725f51', fontSize: 24, marginRight: 5}}>수정하기</button>
             </div>
         </div>
 
