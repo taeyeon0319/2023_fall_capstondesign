@@ -211,10 +211,10 @@ helperRouter.get("/requests-helper/:helper_id/accepted", async (req, res) => {
   const helperId = req.params.helper_id;
   try {
     const requests = await client.query(
-      `SELECT * FROM requests
+      `SELECT region_country, region_state, image, requests.id as request_id, signup.name, signup.email, signup.mobile, requests.user_id, requests.helper_id, requests.field, requests.care_gender, requests.care_age, requests.comment, requests.start_time, requests.end_time, requests.totalpay, requests.timepay, requests.created_at, requests.quick_matching, requests.date, requests.address FROM requests
       LEFT JOIN signup on requests.user_id=signup.id 
       left join user_mypage on signup.id=user_mypage.user_id
-      WHERE requests.helper_id = $1  AND requests.status = '수락' and signup.type = 'user'  `,
+      WHERE requests.helper_id = $1  AND requests.status = '요청' and signup.type = 'user' `,
       [helperId]
     );
     res.json(requests.rows);

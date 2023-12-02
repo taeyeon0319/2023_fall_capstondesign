@@ -293,6 +293,7 @@ export const HelperMyPage = () => {
             "http://localhost:5000/helper/requests-helper/"+JSON.parse(localStorage.getItem("userInfo")).id+"/accepted"
           );
           setAccepted(response.data);
+          console.log(accepted);
         } catch (error) {
           console.error("API 호출 중 오류 발생:", error);
         }
@@ -301,7 +302,7 @@ export const HelperMyPage = () => {
         navigate("/HelperMyEdit");
     }
     const onClickReview = () => {
-        navigate("/HelperMyEdit");
+        console.log("리뷰 확인 페이지로이동");
     }
     return(
         <Root>
