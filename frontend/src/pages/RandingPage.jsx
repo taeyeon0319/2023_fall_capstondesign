@@ -7,11 +7,12 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header2 from "../components/Header2";
 import axios from 'axios';
+import Footer from "../components/Footer";
 
 const Root = styled.div`
 width: 100vw;
 height: 100vh;
-background: var(--Point-1, #F9F8F7);
+background: #FFF8F3;
 display: flex;
 flex-direction:column;
 `
@@ -393,6 +394,9 @@ export const RandingPage = () => {
         }
     };
 
+    const clickTeam = () =>{
+        navigate("/team")
+    }
     const handlerenderChange = () =>{
         setrender(prevState => (prevState === 0 ? 1 : 0));
     };
@@ -485,9 +489,10 @@ export const RandingPage = () => {
                     <RandBtn onClick={clickMain}>메인 화면</RandBtn>
                     <RandBtn>이용 가이드</RandBtn>
                     <RandBtn>서비스</RandBtn>
-                    <RandBtn>소개</RandBtn>
+                    <RandBtn onClick={clickTeam}>팀 소개</RandBtn>
                 </RandButtonBox>
             </RandBody>
+            <Footer />
             {/*
             <RandBox>
                 <RandLine></RandLine>

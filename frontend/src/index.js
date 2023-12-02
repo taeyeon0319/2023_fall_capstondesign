@@ -14,6 +14,7 @@ import HelperRequestPage from "./pages/HeplerRequest";
 import HelperMyPage from "./pages/HelperMyPage";
 import Header2 from "./components/Header2";
 import HelperTimetablePage from "./pages/HelperTimetable";
+import TeamMember from "./pages/TeamMember";
 
 import UserMyPageEdit from "./pages/user/userMyPage/UserMyPageEdit";
 
@@ -86,6 +87,10 @@ const router = createBrowserRouter([
     path: "/helperTimetable",
     element: <HelperTimetablePage />,
   },
+  {
+    path:"/team",
+    element: <TeamMember />,
+  }
 ]);
 
 sessionStorage.setItem("id", "yys");
