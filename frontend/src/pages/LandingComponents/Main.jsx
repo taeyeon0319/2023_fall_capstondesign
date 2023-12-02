@@ -7,6 +7,7 @@ const Middle = styled.div`
   margin-top: 35px;
   width: 100%;
   height: fit-content;
+  margin-bottom: 150px;
 `;
 
 const Team = styled.p`
