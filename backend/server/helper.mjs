@@ -137,6 +137,40 @@ helperRouter.get("/requests-user/:id", async (req, res) => {
   }
 });
 
+// 이용자의 요구사항 목록을 반환하는 엔드포인트 - 확인
+helperRouter.get("/requests-user-ing/:id", async (req, res) => {
+  const client = await pool.connect();
+  const userId = req.params.id;
+  try {
+    const user = await client.query(
+      `
+      SELECT signup.id as id, signup.name, signup.email, signup.mobile, user_mypage.region_state, user_mypage.region_country, user_mypage.image, user_mypage.age, user_mypage.gender
+      FROM signup
+      LEFT JOIN user_mypage ON signup.id = user_mypage.user_id
+      WHERE signup.type = 'user' AND user_mypage.user_id = $1;
+    `,
+      [userId]
+    );
+    const requestsWithUserData = await Promise.all(
+      user.rows.map(async (user) => {
+        const requests = await client.query(
+          `SELECT requests.*, helper_mypage.image FROM requests, helper_mypage WHERE user_id = $1 AND status='요청' AND requests.helper_id=helper_mypage.helper_id`,
+          [userId]
+        );
+        return { ...user, requests: requests.rows };
+      })
+    );
+
+    res.json(requestsWithUserData);
+    client.release();
+  } catch (err) {
+    console.error("Error fetching request data:", err);
+    res
+      .status(500)
+      .json({ error: "An error occurred while fetching the request data." });
+  }
+});
+
 // 도우미의 호출된 목록 반환하는 엔드포인트 - 확인
 helperRouter.get("/requests-helper/:id", async (req, res) => {
   const client = await pool.connect();

@@ -396,7 +396,16 @@ export const RandingPage = () => {
 
     const clickTeam = () =>{
         navigate("/team")
-    }
+    };
+
+    const clickIntro = () =>{
+        navigate("/service")
+    };
+
+    const clickGuide = () =>{
+        navigate("/guide")
+    };
+
     const handlerenderChange = () =>{
         setrender(prevState => (prevState === 0 ? 1 : 0));
     };
@@ -487,8 +496,8 @@ export const RandingPage = () => {
                     )}
                     </RandLoginBox>
                     <RandBtn onClick={clickMain}>메인 화면</RandBtn>
-                    <RandBtn>이용 가이드</RandBtn>
-                    <RandBtn>서비스</RandBtn>
+                    <RandBtn onClick={clickIntro}>서비스 소개</RandBtn>
+                    <RandBtn onClick={clickGuide}>이용 가이드</RandBtn>
                     <RandBtn onClick={clickTeam}>팀 소개</RandBtn>
                 </RandButtonBox>
             </RandBody>

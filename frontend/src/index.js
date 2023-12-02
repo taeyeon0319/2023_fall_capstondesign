@@ -16,13 +16,16 @@ import HeplerEditPage from "./pages/HelperMyModify";
 import Header2 from "./components/Header2";
 import HelperTimetablePage from "./pages/HelperTimetable";
 import TeamMember from "./pages/TeamMember";
+import Introduce from "./pages/Introduce";
+import Guide from "./pages/Guide";
 
 import UserMyPageEdit from "./pages/user/userMyPage/UserMyPageEdit";
 
 import ChatPage from "./pages/ChatPage";
 
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-
+import UserMyPageReviewCheck from "./pages/user/userMyPageReviewList/UserMyPageReviewCheck";
+import UserMyPageWriteReview from "./pages/user/userMyPageWriteReview/userMyPageWriteReview"
 const router = createBrowserRouter([
   {
     path: "/",
@@ -61,6 +64,10 @@ const router = createBrowserRouter([
     element: <UserMyPage />,
   },
   {
+    path : "/usermypage/helperReview/:helper_id",
+    element : <UserMyPageReviewCheck />,
+  },
+  {
     path: "/helper",
     element: <HelperPage />,
   },
@@ -81,6 +88,10 @@ const router = createBrowserRouter([
     element: <UserMyPageEdit />,
   },
   {
+    path: "/usermypage/writeReview/:helper_id",
+    element: <UserMyPageWriteReview />,
+  },
+  {
     path: "/Chat",
     element: <ChatPage />,
   },
@@ -95,7 +106,15 @@ const router = createBrowserRouter([
   {
     path:"/HelperMyEdit",
     element: <HeplerEditPage />,
-  }
+  },
+  {
+    path:"/service",
+    element: <Introduce />,
+  },
+  {
+    path:"/guide",
+    element: <Guide />,
+  },
 ]);
 
 sessionStorage.setItem("id", "yys");
