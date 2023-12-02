@@ -247,6 +247,8 @@ font-weight: 500;
 line-height: normal;
 `
 const HelperMyBtn = styled.div`
+width:7.29vw;
+height:2.94vh;
 margin:6px;
 padding:4px;
 border:1px solid #93796A;
@@ -256,6 +258,7 @@ align-items:center;
 justify-content:center;
 color:#93796A;
 background:F9F8F7;
+font-size:0.78vw;
 `
 
 export const HelperMyPage = () => {
@@ -290,6 +293,7 @@ export const HelperMyPage = () => {
             "http://localhost:5000/helper/requests-helper/"+JSON.parse(localStorage.getItem("userInfo")).id+"/accepted"
           );
           setAccepted(response.data);
+          console.log(accepted);
         } catch (error) {
           console.error("API 호출 중 오류 발생:", error);
         }
@@ -297,7 +301,9 @@ export const HelperMyPage = () => {
     const onClickEdit = () => {
         navigate("/HelperMyEdit");
     }
-
+    const onClickReview = () => {
+        console.log("리뷰 확인 페이지로이동");
+    }
     return(
         <Root>
             <Header2 data={render} onDataChange={handlerenderChange}></Header2>
@@ -334,7 +340,10 @@ export const HelperMyPage = () => {
                                         <UserPText6 style={{display:"flex"}}>분야 <p style={{marginLeft:"0.8vh",fontWeight:"700"}}>{item.field}</p></UserPText6>
                                     </div>
                                 </div>
-                                <UserPText8 style={{width:"20%"}}>{item.totalpay}</UserPText8>
+                                <div style={{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center"}}>
+                                    <UserPText8 style={{width:"20%",display:"flex",alignItems:"center",justifyContent:"center"}}>{item.totalpay}</UserPText8>
+                                    <HelperMyBtn onClick={onClickReview}>리뷰 확인하기</HelperMyBtn>
+                                </div>
                             </UserHelperList>
                         ))}
                     </div>
