@@ -32,6 +32,7 @@ const UserMyPage = ()=>{
     const navigate = useNavigate();
     const userInfoString = localStorage.getItem('userInfo')
     const loginedUserInfo = JSON.parse(userInfoString)
+    
     useEffect(()=>{
         // const user_id = sessionStorage.getItem('user_id')
         const userInfoString = localStorage.getItem('userInfo')

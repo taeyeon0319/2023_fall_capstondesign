@@ -217,9 +217,11 @@ const HelperList = ()=>{
                             <p className='region'>{helper.region_state} / {helper.region_country}</p>
                             <p className='time-range'>
                             <span class="materail-time material-symbols-outlined">schedule</span>
-                            <span>{helper.start_time}</span>
+
+                            <span style={{margin:"0px 0px 0px 5px"}}>{helper.start_time.substr(0,5)}</span>
                             &nbsp;~&nbsp;
-                            <span>{helper.end_time}</span>
+                            <span>{helper.end_time.substr(0,5)}</span>
+
                             </p>
                             <p className='career-list'>
 
@@ -273,7 +275,7 @@ const HelperList = ()=>{
                         </li>
                         
 
-                        <button ref={anonymousRef} className = "fast-match-button" onClick={(e)=>{
+                        <button ref={anonymousRef}  className = "fast-match-button" onClick={(e)=>{
                             //console.log(anonymousRef.current)
                             anonymousRef.current.classList.toggle('anonymous-click') 
                             setFastmatch(!fastmatch)

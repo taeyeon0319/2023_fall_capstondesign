@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
+import { Rate } from 'antd';
+import badgePng from './images/badge.png';
+import heartPng from './images/heart.png';
 import './UserMyPageReviewCheck.css';
 import Header2 from "../../../components/Header2";
 import axios from "axios";
@@ -16,6 +19,14 @@ const UserMyPageReviewCheck = ()=>{
     const userInfoString = localStorage.getItem('userInfo')
     const userInfo = JSON.parse(userInfoString)
 
+    const convertYYYYMMDD = function(dateObj){
+        const date = new Date(dateObj);
+        const year = date.getFullYear();
+        const month = date.getMonth() + 1;
+        const day = date.getDay();
+        return `${year}.${month}.${day}`
+    }
+
     const getReviewList = ()=>{
         return helperReview.map((review)=>{
             return (
@@ -28,7 +39,7 @@ const UserMyPageReviewCheck = ()=>{
                     </div>
                     <div className='right'>
                         <div className='item-name'>{review.user.name}</div>
-                        <div className='item-date'>{review.created_at}</div>
+                        <div className='item-date'>{convertYYYYMMDD(review.created_at)}</div>
                         <div className='item-content'>{review.contents}</div>
                     </div>
                 </div>
@@ -47,6 +58,13 @@ const UserMyPageReviewCheck = ()=>{
             setHelperInfo(res.data[0])
             //console.log(res.data[0])
         })
+        
+        // axios.get(`${process.env.REACT_APP_SERVER_URL}/helper/stars/${helper_id}/average`)
+        // .then(res => {
+        //     console.log(res)
+        // })
+        
+
     }, [])
 
     //도우미 해당월 도움 횟수 : 월 도움 횟수 : 15회
@@ -80,16 +98,18 @@ const UserMyPageReviewCheck = ()=>{
                 <div className= "helper-search-form1">
                     <div className='helper-review-profile'>
                         <img style={{height: 106, width:106}} className='profile' src={helperInfo.image}/>
-                        <div><span className='helper-name'>{helperInfo.name}</span><span className='literally-helper'>도우미</span></div>
-                        <div className='helper-address'>{helperInfo.region_state} {helperInfo.country} 충무로 1길 36</div>
+                        <div style={{position: 'relative', top: 20}}><span className='helper-name'>{helperInfo.name}</span><span className='literally-helper'>도우미</span></div>
+                        <div style={{position: 'relative', top: 20}} className='helper-address'>{helperInfo.region_state} {helperInfo.country} 충무로 1길 36</div>
                         <div className='certification-container'>
-                            <div className='helper-address-certification'>지역 인증 완료</div>
-                            <div className='helper-certification'>요양보호사 자격증 인증 완료</div>
+                            <div className='helper-address-certification'><img src={badgePng} style={{position: 'relative', top: '5px', marginLeft: 10, marginRight: 10}} />지역 인증 완료</div>
+                            <div className='helper-certification'><img src={heartPng} style={{position: 'relative', top: '5px', marginLeft: 10, marginRight: 10}} />요양보호사 자격증 인증 완료</div>
                         </div>
                         <div className='helper-review-container'>
                             <div className='review-title'>리뷰 평점</div>
-                            <div className='stars'>★★★★☆ </div>
                             <div className='score'>4.92</div>
+                            <div className='stars'>
+                                <Rate style={{fontSize: 28, color: '#725F31'}} disabled={true} allowHalf defaultValue={4.92} />
+                            </div>
                         </div>
                     </div>
                     <div className='helper-review-button'>
