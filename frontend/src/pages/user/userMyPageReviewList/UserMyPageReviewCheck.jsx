@@ -21,7 +21,11 @@ const UserMyPageReviewCheck = ()=>{
 
     const userInfoString = localStorage.getItem('userInfo')
     const userInfo = JSON.parse(userInfoString)
+    const [render, setRender] = useState(0);
 
+    const handleRenderChange = () => {
+        setRender(prevState => (prevState === 0 ? 1 : 0));
+    };
     const convertYYYYMMDD = function(dateObj){
         const date = new Date(dateObj);
         const year = date.getFullYear();
@@ -96,7 +100,7 @@ const UserMyPageReviewCheck = ()=>{
 
     return (
         <div className='app'>
-            <Header2></Header2>
+            <Header2 data={render} onDataChange={handleRenderChange}></Header2>
             <div className="helper-list-container">
                 <div className= "helper-search-form1">
                     <div className='helper-review-profile'>

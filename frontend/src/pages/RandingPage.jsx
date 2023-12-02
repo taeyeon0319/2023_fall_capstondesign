@@ -208,32 +208,43 @@ background: var(--white, #FFF);
 `
 const RandAfterLoginBox = styled.div`
 margin: 16px auto;
-width: 86%;
-height: 100px;
+width: 100%;
+height: 9.8vh;
 
 display: flex;
 align-items: center;
 justify-content: space-around;
 `
 const RandAfterLoginImg = styled.img`
-width:24%;
+width:3.6vw;
+height:3.6vw;
 border-radius:70%;
 `
 //height 작성 필요함.
 const RandAfterLoginText = styled.div`
 color: #000;
 font-family: Inter;
-font-size: 25px;
+font-size: 1.2vw;
 font-style: normal;
 font-weight: 800;
 line-height: normal;
 
 `
+const RandAfterLoginText2 = styled.div`
+color: #8F8F8F;
+font-family: Inter;
+font-size: 0.8vw;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+
+`
 const RandAfterLoginBtn = styled.div`
-padding:5px 10px;
+width:3.8vw;
+height:3vh;
 margin:3px;
 
-border-radius: 15px;
+border-radius: 5px;
 border: 1px solid #E7E6E6;
 background: #FFF8F3;
 box-shadow: 2px 2px 2px 0px rgba(0, 0, 0, 0.25);
@@ -241,10 +252,14 @@ box-shadow: 2px 2px 2px 0px rgba(0, 0, 0, 0.25);
 color: #000;
 text-align: center;
 font-family: Inter;
-font-size: 15px;
+font-size: 0.6vw;
 font-style: normal;
 font-weight: 800;
 line-height: normal;
+
+display:flex;
+align-items:center;
+justify-content:center;
 `
 const RandLoginBoxText = styled.div`
 width:14.16666vw;
@@ -312,7 +327,6 @@ export const RandingPage = () => {
     };
 
     const clickLoginbtn = async () =>{
-
         try {
             const response = await axios.post('http://localhost:5000/login', loginData);
             console.log('로그인 성공:', response.data);
@@ -320,23 +334,17 @@ export const RandingPage = () => {
             localStorage.setItem("userType", response.data.type);
             localStorage.setItem("userId", response.data.userId);
             try{
+                console.log(response.data.token);
                 const response2 = await axios.get('http://localhost:5000/mypage',{headers: {Authorization: response.data.token}});
                 console.log(response2.data.userData);
                 localStorage.setItem("userInfo",JSON.stringify(response2.data.userData));
+                localStorage.setItem("loginState", true);
+                localStorage.setItem("loginId", loginData.id);
+                setreRender(prevState => (prevState === 0 ? 1 : 0));
+                navigate('/');
             }catch (error) {
                 console.error('정보가져오기 실패:', error);
                 alert("정보 가져오기에 실패했습니다.");
-            }
-            localStorage.setItem("loginState", true);
-            localStorage.setItem("loginId", loginData.id);
-            setreRender(prevState => (prevState === 0 ? 1 : 0));
-
-            const userType = localStorage.getItem('userType')
-
-            if(userType === 'user'){
-                navigate("/user");
-            } else {
-                navigate("/")
             }
         } catch (error) {
             console.error('로그인 실패:', error.message);
@@ -470,7 +478,7 @@ export const RandingPage = () => {
                             <RandAfterLoginImg src={JSON.parse(localStorage.getItem("userInfo")).image}></RandAfterLoginImg>
                             <div style={{display:"flex", flexDirection:"column"}}>
                                 <RandAfterLoginText id="cypressname">{JSON.parse(localStorage.getItem("userInfo")).name}</RandAfterLoginText>
-                                <RandAfterLoginText style={{fontSize:"16px", fontWeight:"400", color:"#8F8F8F"}}>{JSON.parse(localStorage.getItem("userInfo")).region_state+' '+JSON.parse(localStorage.getItem("userInfo")).region_country}</RandAfterLoginText>
+                                <RandAfterLoginText2>{JSON.parse(localStorage.getItem("userInfo")).region_state+' '+JSON.parse(localStorage.getItem("userInfo")).region_country}</RandAfterLoginText2>
                                 <div style={{display:"flex"}}>
                                     <RandAfterLoginBtn onClick={onClickHandlerMy}>마이페이지</RandAfterLoginBtn>
                                     <RandAfterLoginBtn onClick={clickLogoutBtn}>로그아웃</RandAfterLoginBtn>
@@ -485,7 +493,7 @@ export const RandingPage = () => {
                             <RandAfterLoginImg src={helperImg}></RandAfterLoginImg>
                             <div style={{display:"flex", flexDirection:"column"}}>
                                 <RandAfterLoginText id="cypressname">{helper.name}</RandAfterLoginText>
-                                <RandAfterLoginText style={{fontSize:"16px", fontWeight:"400", color:"#8F8F8F"}}>{helper.address}</RandAfterLoginText>
+                                <RandAfterLoginText2>{helper.address}</RandAfterLoginText2>
                                 <div style={{display:"flex"}}>
                                     <RandAfterLoginBtn>마이페이지</RandAfterLoginBtn>
                                     <RandAfterLoginBtn onClick={clickLogoutBtn}>로그아웃</RandAfterLoginBtn>

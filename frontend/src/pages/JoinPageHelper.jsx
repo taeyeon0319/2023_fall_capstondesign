@@ -23,6 +23,7 @@ justify-content: space-between;
 `
 
 const JoinHInput = styled.input`
+padding:0px 0px 0px 10px;
 width: 48.54vw;
 height: 5.3vh;
 flex-shrink: 0;
@@ -81,10 +82,51 @@ flex-direction:column;
 align-items:center;
 justify-content:center;
 `
+const JoinHText2 = styled.div`
+color: var(--Point-6, #54493F);
 
+font-family: Noto Sans KR;
+font-size: 1.25vw;
+font-style: normal;
+font-weight: 600;
+line-height: normal;
+`
+const JoinHText3 = styled.div`
+color: var(--Gray-70, #707070);
+margin: 10px 0px 10px 5px;
+/* B16_Regular */
+font-family: Noto Sans KR;
+font-size: 0.6vw;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+`
+const JoinHBtn2 = styled.div`
+margin: 0px 0px 0px 20px;
+width: 9vw;
+height: 4.3vh;
+flex-shrink: 0;
+margin-top:5px;
+
+border-radius: 5px;
+border: 1px solid var(--Gray-40, #C2C1C1);
+background: var(--Point-4, #93796A);
+
+display:flex;
+align-items:center;
+justify-content:center;
+color: #FFF;
+
+font-family: Noto Sans KR;
+font-size: 0.7375vw;
+font-style: normal;
+font-weight: 700;
+line-height: normal;
+`
 export const JoinPageHelper = () =>{
 
     const navigate = useNavigate();
+    const [checkPW, setCheckPW] = useState(-1);
 
     const [JoinData, setJoinData] = useState({
         id: '',
@@ -102,6 +144,11 @@ export const JoinPageHelper = () =>{
           ...prevData,
           [name]: value,
         }));
+        if (document.getElementById("newPW").value!==""&&document.getElementById("newPW").value===document.getElementById("confNewPW").value){
+            setCheckPW(1);
+        }else{
+            setCheckPW(0);
+        }
     };
 
     const Join = async () =>{
@@ -119,19 +166,29 @@ export const JoinPageHelper = () =>{
     const OnclickHandler = () =>{
         navigate("/join");
     };
+
+    const OnclickCheckId = () =>{
+        console.log("id check api");
+    };
+
     return (
         <Root>
             <Header2></Header2>
             <JoinBtnBox>
                 <JoinHInputBox>
+                    <JoinHText2>도우미 회원가입</JoinHText2>
                     <JoinHText>이름</JoinHText>
                     <JoinHInput type="text" name="name" value={JoinData.name} onChange={handleChange}></JoinHInput>
                     <JoinHText>아이디</JoinHText>
-                    <JoinHInput type="text" name="id" value={JoinData.id} onChange={handleChange}></JoinHInput>
+                    <div style={{display:"flex", alignItems:"center",justifyContent:"center"}}>
+                        <JoinHInput type="text" name="id" value={JoinData.id} onChange={handleChange} style={{width:"10vw"}}></JoinHInput>
+                        <JoinHBtn2 onClick={OnclickCheckId}>아이디 중복 확인하기</JoinHBtn2>
+                    </div>
                     <JoinHText >비밀번호</JoinHText>
-                    <JoinHInput type="password" name="password" value={JoinData.password} onChange={handleChange}></JoinHInput>
+                    <JoinHInput id="newPW" type="password" name="password" value={JoinData.password} onChange={handleChange}></JoinHInput>
                     <JoinHText >비밀번호 확인</JoinHText>
-                    <JoinHInput type="password" name="password_confirm" value={JoinData.password_confirm} onChange={handleChange}></JoinHInput>
+                    <JoinHInput id="confNewPW" type="password" name="password_confirm" value={JoinData.password_confirm} onChange={handleChange}></JoinHInput>
+                    <JoinHText3>{checkPW===-1?"":checkPW===0?"비밀번호가 다릅니다":"비밀번호가 일치합니다"}</JoinHText3>
                     <JoinHText>이메일</JoinHText>
                     <JoinHInput type="text" name="email" value={JoinData.email} onChange={handleChange}></JoinHInput>
                     <JoinHText>전화번호</JoinHText>
@@ -140,7 +197,7 @@ export const JoinPageHelper = () =>{
             </JoinBtnBox>
             <div style={{display:"flex"}}>
                 <JoinHBtn onClick={ OnclickHandler }>뒤로가기</JoinHBtn>
-                <JoinHBtn style={{background: "var(--Gray-30, #EBEAEA)"}} onClick={ Join }>회원가입</JoinHBtn>
+                <JoinHBtn style={{background: "var(--Point-4, #93796A)",color:"#FFF"}} onClick={ Join }>회원가입</JoinHBtn>
             </div>
         </Root>
     );

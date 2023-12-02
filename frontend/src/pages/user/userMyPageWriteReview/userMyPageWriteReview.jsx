@@ -14,14 +14,13 @@ const UserMyPageWriteReview = ()=>{
     const [reviewTag2, setReviewTag2] = useState(false);
     const [reviewTag3, setReviewTag3] = useState(false);
     const [reviewTag4, setReviewTag4] = useState(false);
+    const [render, setRender] = useState(0);
 
     const [comment, setComment] = useState("");
 
-
-    const handlerenderChange = () =>{
-        setrender(prevState => (prevState === 0 ? 1 : 0));
+    const handleRenderChange = () => {
+        setRender(prevState => (prevState === 0 ? 1 : 0));
     };
-    const [render, setrender] = useState(0);
 
     useEffect(()=>{
         const helper_id = param.helper_id
@@ -62,7 +61,7 @@ const UserMyPageWriteReview = ()=>{
 
     return (
         <div>
-            <Header2 data={render} onDataChange={handlerenderChange}></Header2>
+            <Header2 data={render} onDataChange={handleRenderChange}></Header2>
             <div className="user-mypage-container">
                 <div className="user-mypage-profile-change">
                     <div className="user-mypage-image">

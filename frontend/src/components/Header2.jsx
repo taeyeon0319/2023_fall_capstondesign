@@ -82,6 +82,8 @@ export const Header = ({ data, onDataChange }) => {
                 <div style={{width:"2%"}}></div>
                 <HeadImg src={logoImg} onClick={OnClickHandler2}></HeadImg>
                 <div style={{width:"2%"}}></div>
+                <div style={{width:"12%"}}></div>
+                {/*
                 <HeadButtonSet>
                     <HeadButtonText>메뉴A</HeadButtonText>
                     <HeadButtonLine></HeadButtonLine>
@@ -89,6 +91,7 @@ export const Header = ({ data, onDataChange }) => {
                     <HeadButtonLine></HeadButtonLine>
                     <HeadButtonText>메뉴C</HeadButtonText>
                 </HeadButtonSet>
+                */}
                 <div style={{width:"55%"}}></div>
                 <HeadButtonSet2>
                     {(localStorage.getItem("loginState")==="false"||localStorage.getItem("loginState")===null)&&(<HeadButtonText style={{width:"100%",marginRight:"4.33%",display:"flex",alignItems:"center",justifyContent:"flex-end"}}>로그인이 필요합니다</HeadButtonText>)}
