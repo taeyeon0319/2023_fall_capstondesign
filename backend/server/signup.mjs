@@ -25,26 +25,54 @@ signupRouter.post('/signup', async (req, res) => {
       return res.status(400).json({ error: '비밀번호가 일치하지 않습니다.' });
     }
 
+    // 사용자 생성 전에 아이디 중복 체크
+    const checkIdQuery = `
+      SELECT id FROM signup WHERE id = $1;
+    `;
+    const checkIdValues = [id];
+    const existingUser = await db.oneOrNone(checkIdQuery, checkIdValues);
+
+    if (existingUser) {
+      return res.status(400).json({ error: '이미 존재하는 아이디입니다.' });
+    }
+
     // 사용자 생성
-    const query = `
+    const createUserQuery = `
       INSERT INTO signup (id, name, password, password_confirm, email, mobile, type)
       VALUES ($1, $2, $3, $4, $5, $6, $7)
       RETURNING *;
     `;
-    const values = [id, name, password, password_confirm, email, mobile, type];
+    const createUserValues = [id, name, password, password_confirm, email, mobile, type];
 
-    const user = await db.one(query, values);
+    const user = await db.one(createUserQuery, createUserValues);
 
     // JWT 생성
     const token = jwt.sign({ userId: user.id }, 'your-secret-key', { expiresIn: '1h' });
 
-    // JWT를 클라이언트에게 반환
+    // Helper 또는 User에 따라서 mypage 테이블에 데이터 삽입
+    if (type === 'helper') {
+      const helperQuery = `
+        INSERT INTO helper_mypage (helper_id)
+        VALUES ($1);
+      `;
+      const helperValues = [user.id];
+      await db.none(helperQuery, helperValues);
+    } else if (type === 'user') {
+      const userQuery = `
+        INSERT INTO user_mypage (user_id)
+        VALUES ($1);
+      `;
+      const userValues = [user.id];
+      await db.none(userQuery, userValues);
+    }
+
     res.json({ token });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: '내부 서버 오류' });
   }
 });
+
 
 
 
