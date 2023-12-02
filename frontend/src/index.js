@@ -12,6 +12,7 @@ import UserMyPage from "./pages/user/userMyPage/UserMyPage";
 import HelperPage from "./pages/HelperPage";
 import HelperRequestPage from "./pages/HeplerRequest";
 import HelperMyPage from "./pages/HelperMyPage";
+import HeplerEditPage from "./pages/HelperMyModify";
 import Header2 from "./components/Header2";
 import HelperTimetablePage from "./pages/HelperTimetable";
 import TeamMember from "./pages/TeamMember";
@@ -90,6 +91,10 @@ const router = createBrowserRouter([
   {
     path:"/team",
     element: <TeamMember />,
+  },
+  {
+    path:"/HelperMyEdit",
+    element: <HeplerEditPage />,
   }
 ]);
 
