@@ -327,7 +327,6 @@ export const RandingPage = () => {
     };
 
     const clickLoginbtn = async () =>{
-
         try {
             const response = await axios.post('http://localhost:5000/login', loginData);
             console.log('로그인 성공:', response.data);
@@ -335,23 +334,17 @@ export const RandingPage = () => {
             localStorage.setItem("userType", response.data.type);
             localStorage.setItem("userId", response.data.userId);
             try{
+                console.log(response.data.token);
                 const response2 = await axios.get('http://localhost:5000/mypage',{headers: {Authorization: response.data.token}});
                 console.log(response2.data.userData);
                 localStorage.setItem("userInfo",JSON.stringify(response2.data.userData));
+                localStorage.setItem("loginState", true);
+                localStorage.setItem("loginId", loginData.id);
+                setreRender(prevState => (prevState === 0 ? 1 : 0));
+                navigate('/');
             }catch (error) {
                 console.error('정보가져오기 실패:', error);
                 alert("정보 가져오기에 실패했습니다.");
-            }
-            localStorage.setItem("loginState", true);
-            localStorage.setItem("loginId", loginData.id);
-            setreRender(prevState => (prevState === 0 ? 1 : 0));
-
-            const userType = localStorage.getItem('userType')
-
-            if(userType === 'user'){
-                navigate("/");
-            } else {
-                navigate("/")
             }
         } catch (error) {
             console.error('로그인 실패:', error.message);
