@@ -63,7 +63,7 @@ const router = createBrowserRouter([
     element: <UserMyPage />,
   },
   {
-    path : "/usermypage/helperReview",
+    path : "/usermypage/helperReview/:helper_id",
     element : <UserMyPageReviewCheck />,
   },
   {
@@ -87,7 +87,7 @@ const router = createBrowserRouter([
     element: <UserMyPageEdit />,
   },
   {
-    path: "/usermypage/writeReview",
+    path: "/usermypage/writeReview/:helper_id",
     element: <UserMyPageWriteReview />,
   },
   {
