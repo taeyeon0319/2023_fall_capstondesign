@@ -125,7 +125,7 @@ const UserMyPage = ()=>{
                                 <button disabled={true} style = {{padding : "6px 29px", border: "1px solid #725F51", backgroundColor: "#725F51", borderRadius :"5px", color:"#fff", marginRight:"13px"}}>요청중</button>
                             </div>
                             <div style={{width: 106, height: 106, margin: 25, borderRadius: '50%', overflow: 'hidden', display: 'flex', justifyContent: 'center', float: "left" }}>
-                                <img style={{height: 106}} src={''}></img>
+                                <img style={{height: 106}} src={request.image}></img>
                             </div>
                             <div className="history-item-desc">
                                 <p className="history-item-title" style={{width: 850}}>{request.comment} - {convertYYYYMMDD(request.date)}</p>
