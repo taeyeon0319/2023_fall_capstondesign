@@ -53,29 +53,41 @@ const UserMyPage = ()=>{
             setUserInfo(res.data[0])
             //console.log(res.data[0])
         })
+
+        axios.get(`${process.env.REACT_APP_SERVER_URL}/helper/requests-helper/${userInfo.id}`).then(res=>{
+            console.log('helper request:::', res)
+        })
         
     }, [])
+
+    const convertYYYYMMDD = function(dateObj){
+        const date = new Date(dateObj);
+        const year = date.getFullYear();
+        const month = date.getMonth() + 1;
+        const day = date.getDay();
+        return `${year}-${month}-${day}`
+    }
 
     const historyItemList = ()=>{
 
 
         return reviewlist.map((review, idx)=>{
             return (
-                <div className="history-item" key={idx}>
+                        <div className="history-item">
                             <div style={{position: "absolute", top: 20, right: 10}}>
                                 <p style={{textAlign: 'right', fontWeight: 500, fontSize: 18, color: '#725F51'}}>도우미 비용</p>
                                 <p style={{textAlign: 'right', fontSize: 24, fontWeight: 700, color: '#54493F', lineHeight: 2}}>{review.totalpay}원</p>
                             </div>
                             <div style={{position: "absolute", bottom: 10, right: 10}}>
-                                <button onClick={()=>{navigate(`/usermypage/helperReview`)}} style = {{padding : "6px 29px", border: "1px solid #725F51", background: "none", borderRadius :"5px", color:"#725F51", marginRight:"13px"}}>자세히 보기</button>
-                                <button onClick={()=>{navigate(`/usermypage/writeReview`)}} style = {{padding : "6px 29px", border: "1px solid #725F51", background: "#725F51", borderRadius :"5px", color:"#fff"}}>리뷰 수정</button>
+                                <button style = {{padding : "6px 29px", border: "1px solid #725F51", background: "none", borderRadius :"5px", color:"#725F51", marginRight:"13px"}}>도우미 요청</button>
+                                <button style = {{padding : "6px 29px", border: "1px solid #725F51", background: "#725F51", borderRadius :"5px", color:"#fff"}}>리뷰 남기기</button>
 
                             </div>
-                            <div style={{width: 106, himgeight: 106, margin: 25, borderRadius: '50%', overflow: 'hidden', display: 'flex', justifyContent: 'center', float: "left" }}>
-                                <img style={{height: 106, width:106}} src={review.helper.image} onClick={()=>{navigate(`/usermypage/helperReview`)}} ></img>
+                            <div style={{width: 106, height: 106, margin: 25, borderRadius: '50%', overflow: 'hidden', display: 'flex', justifyContent: 'center', float: "left" }}>
+                                <img style={{height: 106}} src={review.helper.image}></img>
                             </div>
                             <div className="history-item-desc">
-                                <p className="history-item-title">{review.contents} - {review.updated_at}</p>
+                                <p className="history-item-title" style={{width: 850}}>{review.contents} - {convertYYYYMMDD(review.updated_at)}</p>
                                 <ul style={{float: 'left', paddingTop: 5}}>
                                     <li style={{lineHeight: 2,}}><span style={{display: 'inline-block', fontWeight: 500, fontSize: 18, width: 100}}>도우미</span> <span style={{fontWeight: 700, fontSize: 20}}>{review.helper.name}</span> <span>도우미님</span></li>
                                     <li style={{lineHeight: 1.5,}}><span style={{display: 'inline-block', fontWeight: 500, fontSize: 18, width: 100}}>요청시각</span> <span style={{fontWeight: 700, fontSize: 20}}>{review.start_time} ~ {review._time}</span> </li>
