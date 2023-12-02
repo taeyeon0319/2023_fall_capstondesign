@@ -284,6 +284,7 @@ const HelperList = ()=>{
                             <div><b>도우미 분야</b></div>
                             <div className="select-container-1">
                                 <select onChange={(e)=>{setServiceType(e.target.value)}} className="select-container-item" name="" id="">
+                                    <option value="" >분야선택</option>
                                     {getServices()}
                                     {/* <option value="" >분야선택</option>
                                     <option value="" >베이비시터</option>

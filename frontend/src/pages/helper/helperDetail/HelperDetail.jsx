@@ -77,6 +77,7 @@ const HelperDetail = ()=>{
             setDate(location.state.date)
             setServiceStartTime(location.state.needtime_s)
             setServiceEndTime(location.state.needtime_e)
+            setGender(location.state.gender)
         }
     }, [])
 
@@ -248,6 +249,7 @@ const HelperDetail = ()=>{
             start_time : serviceStartTime,
             end_time : serviceEndTime,
             comment :requestText,
+            gender: gender,
         }).then(response=>{
             console.log('성공적으로 요청 완료', response.data);
             navigate('/usermypage');
