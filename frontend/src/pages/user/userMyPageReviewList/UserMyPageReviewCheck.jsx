@@ -88,9 +88,9 @@ const UserMyPageReviewCheck = ()=>{
                         <div className='title'><span className='fl'>월 도움 횟수</span> </div>
                         <div className='review-button-container'>
                             <div className='btn-1'>시간 약속을 잘 지켜요<div className='review-button-percent'>66.7%</div></div>
-                            <div className='btn-1'>친절해요<div className='review-button-percent'>66.7%</div></div>
-                            <div className='btn-1'>아이들을 좋아해요<div className='review-button-percent'>66.7%</div></div>
-                            <div className='btn-1'>믿음직해요<div className='review-button-percent'>66.7%</div></div>
+                            <div className='btn-1'>친절해요<div className='review-button-percent'>60.0%</div></div>
+                            <div className='btn-1'>아이들을 좋아해요<div className='review-button-percent'>46.7%</div></div>
+                            <div className='btn-1'>믿음직해요<div className='review-button-percent'>40.0%</div></div>
 
                         </div>
                     </div>
