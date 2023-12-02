@@ -23,6 +23,7 @@ justify-content: space-between;
 `
 
 const JoinHInput = styled.input`
+padding:5px 10px;
 padding:0px 0px 0px 10px;
 width: 48.54vw;
 height: 5.3vh;
@@ -123,10 +124,26 @@ font-style: normal;
 font-weight: 700;
 line-height: normal;
 `
+const JoinHText4 = styled.p`
+width: 9vw;
+height: 4.3vh;
+color: var(--Gray-70, #707070);
+
+font-family: Noto Sans KR;
+font-size: 14px;
+font-style: normal;
+font-weight: 500;
+line-height: normal;
+
+display:flex;
+align-items:center;
+justify-content:center;
+`
 export const JoinPageHelper = () =>{
 
     const navigate = useNavigate();
     const [checkPW, setCheckPW] = useState(-1);
+    const [idOk, setIdOk] = useState(-1);
 
     const [JoinData, setJoinData] = useState({
         id: '',
@@ -139,6 +156,14 @@ export const JoinPageHelper = () =>{
     });
     
     const handleChange = (e) => {
+        const { name, value } = e.target;
+        setJoinData((prevData) => ({
+          ...prevData,
+          [name]: value,
+        }));
+    };
+
+    const handleChange2 = (e) =>{
         const { name, value } = e.target;
         setJoinData((prevData) => ({
           ...prevData,
@@ -158,8 +183,8 @@ export const JoinPageHelper = () =>{
             alert("환영합니다! 가입하신 아이디와 비밀번호로 로그인해주세요.");
             navigate("/");
         } catch (error) {
-            alert("회원가입 실패 : 모든 정보를 정확히 기입해주세요.");
-            console.error('회원가입 실패:', error.message);
+            alert('회원가입 실패: '+error.response.data.error);
+            console.error('회원가입 실패:', error.response.data.error);
         }
     };
 
@@ -167,8 +192,19 @@ export const JoinPageHelper = () =>{
         navigate("/join");
     };
 
-    const OnclickCheckId = () =>{
-        console.log("id check api");
+    const OnclickCheckId = async () =>{
+        try{
+            console.log('http://localhost:5000/checkId?id='+JoinData.id)
+            const response = await axios.get('http://localhost:5000/checkId?id='+JoinData.id);
+            console.log(response.data)
+            if (response.data===false){
+                setIdOk(1);
+            }else{
+                setIdOk(0);
+            }
+        } catch(error){
+            console.log(error);
+        }
     };
 
     return (
@@ -183,11 +219,12 @@ export const JoinPageHelper = () =>{
                     <div style={{display:"flex", alignItems:"center",justifyContent:"center"}}>
                         <JoinHInput type="text" name="id" value={JoinData.id} onChange={handleChange} style={{width:"10vw"}}></JoinHInput>
                         <JoinHBtn2 onClick={OnclickCheckId}>아이디 중복 확인하기</JoinHBtn2>
+                        <JoinHText4>{idOk===-1?"아이디 중복 확인을 진행해주세요":idOk===0?"사용가능한 아이디입니다":"사용할 수 없는 아이디입니다"}</JoinHText4>
                     </div>
                     <JoinHText >비밀번호</JoinHText>
-                    <JoinHInput id="newPW" type="password" name="password" value={JoinData.password} onChange={handleChange}></JoinHInput>
+                    <JoinHInput id="newPW" type="password" name="password" value={JoinData.password} onChange={handleChange2}></JoinHInput>
                     <JoinHText >비밀번호 확인</JoinHText>
-                    <JoinHInput id="confNewPW" type="password" name="password_confirm" value={JoinData.password_confirm} onChange={handleChange}></JoinHInput>
+                    <JoinHInput id="confNewPW" type="password" name="password_confirm" value={JoinData.password_confirm} onChange={handleChange2}></JoinHInput>
                     <JoinHText3>{checkPW===-1?"":checkPW===0?"비밀번호가 다릅니다":"비밀번호가 일치합니다"}</JoinHText3>
                     <JoinHText>이메일</JoinHText>
                     <JoinHInput type="text" name="email" value={JoinData.email} onChange={handleChange}></JoinHInput>

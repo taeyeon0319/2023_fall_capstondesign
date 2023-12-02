@@ -23,6 +23,7 @@ justify-content: space-between;
 `
 
 const JoinUInput = styled.input`
+padding:5px 10px;
 width: 48.54vw;
 height: 5.3vh;
 flex-shrink: 0;
@@ -42,6 +43,21 @@ font-size: 18px;
 font-style: normal;
 font-weight: 500;
 line-height: normal;
+`
+const JoinUText4 = styled.p`
+width: 9vw;
+height: 4.3vh;
+color: var(--Gray-70, #707070);
+
+font-family: Noto Sans KR;
+font-size: 14px;
+font-style: normal;
+font-weight: 500;
+line-height: normal;
+
+display:flex;
+align-items:center;
+justify-content:center;
 `
 const JoinUBtn = styled.div`
 width : 14.6875vw;
@@ -122,10 +138,12 @@ font-style: normal;
 font-weight: 700;
 line-height: normal;
 `
+
 export const JoinPageUser = () =>{
 
     const navigate = useNavigate();
     const [checkPW, setCheckPW] = useState(-1);
+    const [idOk, setIdOk] = useState(-1);
 
     const [JoinData, setJoinData] = useState({
         id: '',
@@ -136,8 +154,16 @@ export const JoinPageUser = () =>{
         mobile: '',
         type: 'user',
     });
-    
+
     const handleChange = (e) => {
+        const { name, value } = e.target;
+        setJoinData((prevData) => ({
+          ...prevData,
+          [name]: value,
+        }));
+    };
+
+    const handleChange2 = (e) =>{
         const { name, value } = e.target;
         setJoinData((prevData) => ({
           ...prevData,
@@ -166,8 +192,19 @@ export const JoinPageUser = () =>{
         navigate("/join");
     };
 
-    const OnclickCheckId = () =>{
-        console.log("id check api");
+    const OnclickCheckId = async () =>{
+        try{
+            console.log('http://localhost:5000/checkId?id='+JoinData.id)
+            const response = await axios.get('http://localhost:5000/checkId?id='+JoinData.id);
+            console.log(response.data)
+            if (response.data===false){
+                setIdOk(1);
+            }else{
+                setIdOk(0);
+            }
+        } catch(error){
+            console.log(error);
+        }
     };
 
     return (
@@ -182,11 +219,12 @@ export const JoinPageUser = () =>{
                     <div style={{display:"flex", alignItems:"center",justifyContent:"center"}}>
                         <JoinUInput type="text" name="id" value={JoinData.id} onChange={handleChange} style={{width:"10vw"}}></JoinUInput>
                         <JoinUBtn2 onClick={OnclickCheckId}>아이디 중복 확인하기</JoinUBtn2>
+                        <JoinUText4>{idOk===-1?"아이디 중복 확인을 진행해주세요":idOk===0?"사용가능한 아이디입니다":"사용할 수 없는 아이디입니다"}</JoinUText4>
                     </div>
                     <JoinUText >비밀번호</JoinUText>
-                    <JoinUInput type="password" name="password" value={JoinData.password} onChange={handleChange}></JoinUInput>
+                    <JoinUInput id="newPW" type="password" name="password" value={JoinData.password} onChange={handleChange2}></JoinUInput>
                     <JoinUText >비밀번호 확인</JoinUText>
-                    <JoinUInput type="password" name="password_confirm" value={JoinData.password_confirm} onChange={handleChange}></JoinUInput>
+                    <JoinUInput id="confNewPW" type="password" name="password_confirm" value={JoinData.password_confirm} onChange={handleChange2}></JoinUInput>
                     <JoinUText3>{checkPW===-1?"":checkPW===0?"비밀번호가 다릅니다":"비밀번호가 일치합니다"}</JoinUText3>
                     <JoinUText>이메일</JoinUText>
                     <JoinUInput type="text" name="email" value={JoinData.email} onChange={handleChange}></JoinUInput>
