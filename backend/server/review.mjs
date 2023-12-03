@@ -189,6 +189,33 @@ reviewRouter.get("/helper-review/:helper_id/average", async (req, res) => {
   }
 });
 
+//request_id로 특정 리뷰를 출력하는 엔드포인트 그 리뷰에 대한 도우미 정보도 필요함 도우미 정보도 같이 출력 signup에서 name 이랑 helpe_mypage에서 도우미 상세정보 같이 출력
+
+reviewRouter.get("/user-reviews/:request_id", async (req, res) => {
+  const client = await pool.connect();
+  const requestId = req.params.request_id;
+  try {
+    //helper_id로 도우미 정보 가져오기
+    const helperData = await client.query(
+      `SELECT signup.name, helper_mypage.region_state, helper_mypage.region_country, helper_mypage.field, helper_mypage.image, helper_mypage.age, helper_mypage.gender FROM signup right join helper_mypage on helper_mypage.helper_id = signup.id WHERE signup.id = (SELECT helper_id FROM review WHERE request_id = $1) and signup.type = 'helper'  `,
+      [requestId]
+    );
+    //request_id로 리뷰 정보 가져오기
+    const review = await client.query(
+      `SELECT * FROM review WHERE request_id = $1`,
+      [requestId]
+    );
+
+    res.json({ review: review.rows[0], helper: helperData.rows[0] });
+    client.release();
+  } catch (err) {
+    console.error("Error fetching user data:", err);
+    res
+      .status(500)
+      .json({ error: "An error occurred while fetching the user data." });
+  }
+});
+
 // 이용자가 특정리뷰를 수정하는 엔드포인트 ++ 확인완료
 reviewRouter.post("/user-review/modify/:review_id", async (req, res) => {
   const client = await pool.connect();
