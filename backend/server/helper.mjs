@@ -327,7 +327,7 @@ helperRouter.get("/helpertimetable/:helper_id", async (req, res) => {
 helperRouter.post("/saveTimetable", async (req, res) => {
   const client = await pool.connect();
   const helper_id = req.body.helper_id;
-  const available_day = req.body.day;
+  let available_day = req.body.day;
   const startTime = req.body.startTime;
   const endTime = req.body.endTime;
   //값이 없을시 에러처리
@@ -335,13 +335,28 @@ helperRouter.post("/saveTimetable", async (req, res) => {
     res.status(400).json({ error: "Incorrect request body" });
     return;
   }
+  //db는 요일이 MON, TUE, WED, THU, FRI, SAT, SUN로 되어있음
+  //그런데 프론트에서 받아오는 요일은 monday, tuesday, wednesday, thursday, friday, saturday, sunday로 되어있음
+  //그래서 요일을 db에 맞게 바꿔줌
+  if (available_day == "monday") {
+    available_day = "MON";
+  } else if (available_day == "tuesday") {
+    available_day = "TUE";
+  } else if (available_day == "wednesday") {
+    available_day = "WED";
+  } else if (available_day == "thursday") {
+    available_day = "THU";
+  } else if (available_day == "friday") {
+    available_day = "FRI";
+  } else if (available_day == "saturday") {
+    available_day = "SAT";
+  } else if (available_day == "sunday") {
+    available_day = "SUN";
+  }
 
   try {
     // helper_time의 행 수 +1 한 값으로 id 설정
-    const id = await client.query(
-      "SELECT COUNT(*) FROM helper_time WHERE helper_id = $1",
-      [helper_id]
-    );
+    const id = await client.query("SELECT COUNT(*) FROM helper_time");
     //id에 +1 한 값으로 helper_time에 정보 넣기
     await client.query(
       `INSERT INTO helper_time(id,helper_id, day, start_time,end_time) VALUES( $1, $2, $3, $4,$5)`,
@@ -368,7 +383,7 @@ helperRouter.get("/requestsCheck", async (req, res) => {
 helperRouter.post("/updateTimetable", async (req, res) => {
   const client = await pool.connect();
   const helper_id = req.body.helper_id;
-  const available_day = req.body.day;
+  let available_day = req.body.day;
   const startTime = req.body.startTime;
   const endTime = req.body.endTime;
 
@@ -405,7 +420,7 @@ helperRouter.post("/updateTimetable", async (req, res) => {
 helperRouter.post("/deleteTimetable", async (req, res) => {
   const client = await pool.connect();
   const helper_id = req.body.helper_id;
-  const available_day = req.body.day;
+  let available_day = req.body.day;
   const startTime = req.body.startTime;
   //const endTime = req.body.endTime;
 
@@ -415,19 +430,19 @@ helperRouter.post("/deleteTimetable", async (req, res) => {
 
   try {
     if (available_day == "monday") {
-      available_day = "MON";
+      available_day = `MON`;
     } else if (available_day == "tuesday") {
-      available_day = "TUE";
+      available_day = `TUE`;
     } else if (available_day == "wednesday") {
-      available_day = "WED";
+      available_day = `WED`;
     } else if (available_day == "thursday") {
-      available_day = "THU";
+      available_day = `THU`;
     } else if (available_day == "friday") {
-      available_day = "FRI";
+      available_day = `FRI`;
     } else if (available_day == "saturday") {
-      available_day = "SAT";
+      available_day = `SAT`;
     } else if (available_day == "sunday") {
-      available_day = "SUN";
+      available_day = `SUN`;
     }
     await client.query(
       "DELETE FROM helper_time WHERE helper_id = $1 AND day = $2 AND start_time = $3",
@@ -445,12 +460,19 @@ helperRouter.post("/deleteTimetable", async (req, res) => {
 //마이페이 도우미 변경하는 엔드포인트
 helperRouter.post("/changeHelper", async (req, res) => {
   const client = await pool.connect();
-  const { helper_id, region_country, region_state, name, password } = req.body;
+  const {
+    helper_id,
+    region_country,
+    region_state,
+    name,
+    password,
+    password_confirm,
+  } = req.body;
   try {
     // helper_mypage랑 signup 테이블 동시에 업데이트
     await client.query(
-      `UPDATE signup SET name = $1, password = $2 WHERE id = $3`,
-      [name, password, helper_id]
+      `UPDATE signup SET name = $1, password = $2, password_confirm WHERE id = $3`,
+      [name, password, password_confirm, helper_id]
     );
     await client.query(
       //이름, 패스워드, region_state, region_country

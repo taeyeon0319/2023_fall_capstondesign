@@ -266,7 +266,7 @@ const HelperDetail = ()=>{
 
         response.then(res => {
             setHelperInfo(res.data[0])
-            // console.log(res.data[0])
+            console.log(res.data[0].start_time)
         })
     }, [])
 

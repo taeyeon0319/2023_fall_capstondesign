@@ -97,8 +97,7 @@ const Timetable = () => {
 
     // 클라이언트에서 서버로 해당 시간과 요일을 전송
     // 서버에서는 해당 시간과 요일을 가진 데이터를 찾아서 삭제
-    // css 이용해서 색 변경하는 코드
-    // 칠해져있지 않은 데이터 드래그시, 칠해져있는 데이터 드래그시 구분
+    // css값 가져와서 색이 칠해져있는지 아닌지 알수 없나?
 
     try {
       //흰부분 클릭시 서버에 전송 및 색 변경
@@ -165,17 +164,73 @@ const Timetable = () => {
   const getBackgroundColor = (day, time) => {
     for (let i = 0; i < responseData.length; i++) {
       const item = responseData[i];
+      //오늘 연원일 생성하는 로직
+      //item에서 요일 불러와서 해당 시간대 색칠
+      if (item.day === "monday") {
+        //월요일 날짜 이용해서 시간비교해서 색칠 로직
+        const startTime = new Date(`2023-12-04 ${item.start_time}`);
+        const endTime = new Date(`2023-12-04 ${item.end_time}`);
+        const cellTime = new Date(`2023-12-04 ${time}`);
 
-      if (
-        item.day === day &&
-        item.start_time <= time &&
-        item.end_time >= time
-      ) {
-        return "#93796A";
+        if (item.day == day && cellTime >= startTime && cellTime <= endTime) {
+          return "#93796A";
+        }
+      } else if (item.day === "tuesday") {
+        //화요일 날짜 이용해서 시간비교해서 색칠 로직
+        const startTime = new Date(`2023-12-05 ${item.start_time}`);
+        const endTime = new Date(`2023-12-05 ${item.end_time}`);
+        const cellTime = new Date(`2023-12-05 ${time}`);
+
+        if (item.day == day && cellTime >= startTime && cellTime <= endTime) {
+          return "#93796A";
+        }
+      } else if (item.day === "wednesday") {
+        //수요일 날짜 이용해서 시간비교해서 색칠 로직
+        const startTime = new Date(`2023-12-06 ${item.start_time}`);
+        const endTime = new Date(`2023-12-06 ${item.end_time}`);
+        const cellTime = new Date(`2023-12-06 ${time}`);
+
+        if (item.day == day && cellTime >= startTime && cellTime <= endTime) {
+          return "#93796A";
+        }
+      } else if (item.day === "thursday") {
+        //목요일 날짜 이용해서 시간비교해서 색칠 로직
+        const startTime = new Date(`2023-12-07 ${item.start_time}`);
+        const endTime = new Date(`2023-12-07 ${item.end_time}`);
+        const cellTime = new Date(`2023-12-07 ${time}`);
+
+        if (item.day == day && cellTime >= startTime && cellTime <= endTime) {
+          return "#93796A";
+        }
+      } else if (item.day === "friday") {
+        //금요일 날짜 이용해서 시간비교해서 색칠 로직
+        const startTime = new Date(`2023-12-08 ${item.start_time}`);
+        const endTime = new Date(`2023-12-08 ${item.end_time}`);
+        const cellTime = new Date(`2023-12-08 ${time}`);
+
+        if (item.day == day && cellTime >= startTime && cellTime <= endTime) {
+          return "#93796A";
+        }
+      } else if (item.day === "saturday") {
+        //토요일 날짜 이용해서 시간비교해서 색칠 로직
+        const startTime = new Date(`2023-12-09 ${item.start_time}`);
+        const endTime = new Date(`2023-12-09 ${item.end_time}`);
+        const cellTime = new Date(`2023-12-09 ${time}`);
+
+        if (item.day == day && cellTime >= startTime && cellTime <= endTime) {
+          return "#93796A";
+        }
+      } else if (item.day === "sunday") {
+        //일요일 날짜 이용해서 시간비교해서 색칠 로직
+        const startTime = new Date(`2023-12-10 ${item.start_time}`);
+        const endTime = new Date(`2023-12-10 ${item.end_time}`);
+        const cellTime = new Date(`2023-12-10 ${time}`);
+
+        if (item.day == day && cellTime >= startTime && cellTime <= endTime) {
+          return "#93796A";
+        }
       }
     }
-    // 색칠할 데이터가 없을 경우 기본 배경색 반환
-    return "";
   };
   const times = [];
   for (let i = 0; i < timeSlots.length; i++) {

@@ -47,7 +47,7 @@
 .textarea-temp-0-1 {
     width: 96%;
     margin: 2%;
-    height: 500px;
+    height: 610px;
     border: 1px solid #ddd;
     resize: none;
     border-radius: 5px;
@@ -61,8 +61,8 @@
 }
 
 .temp-0-1-select {
-    width: 96%;
-    margin: 2%;
+    width: 40%;
+    margin: 2% 0 0 0;
     border: 1px solid #ddd;
     border-radius: 5px;
     padding: 5px 8px;

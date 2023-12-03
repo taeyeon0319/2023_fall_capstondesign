@@ -14,6 +14,8 @@ const UserMyPageReviewCheck = ()=>{
     const [helperInfo, setHelperInfo] = useState({});
     const [helperMonth, setHelperMonth] = useState({});
     const [helperReview, setHelperReview] = useState([]);
+    const [percent, setPercent] = useState([0, 0, 0, 0]);
+    
 
     const [userAverageRate, setUserAverageRate] = useState(5);
 
@@ -70,8 +72,20 @@ const UserMyPageReviewCheck = ()=>{
         .then(res => {
             setUserAverageRate(Math.floor(res.data[0].avg*100)/100)
         })
-        
+        // /helper-review/:helper_id/percent
 
+        axios.get(`${process.env.REACT_APP_SERVER_URL}/review/helper-review/${helper_id}/percent`)
+        .then(res => {
+
+            const {child_like_percent, kind_percent, reliable_percent, time_good_percent} = res.data;
+            setPercent([
+                Math.floor(child_like_percent*100)/100,
+                Math.floor(kind_percent*100)/100,
+                    Math.floor(reliable_percent*100)/100,
+                        Math.floor(time_good_percent*100)/100,
+                ]);
+            console.log('percent::',percent);
+        })
     }, [])
 
     //도우미 해당월 도움 횟수 : 월 도움 횟수 : 15회
@@ -115,17 +129,17 @@ const UserMyPageReviewCheck = ()=>{
                             <div className='review-title'>리뷰 평점</div>
                             <div className='score'>{userAverageRate}</div>
                             <div className='stars'>
-                                <Rate style={{fontSize: 28, color: '#725F31'}} disabled={true} allowHalf defaultValue={4.92} />
+                                <Rate style={{fontSize: 28, color: '#725F31'}} disabled={true} allowHalf value={userAverageRate} />
                             </div>
                         </div>
                     </div>
                     <div className='helper-review-button'>
                         <div className='title'><span className='fl'>월 도움 횟수</span> </div>
                         <div className='review-button-container'>
-                            <div className='btn-1'>시간 약속을 잘 지켜요<div className='review-button-percent'>66.7%</div></div>
-                            <div className='btn-1'>친절해요<div className='review-button-percent'>60.0%</div></div>
-                            <div className='btn-1'>아이들을 좋아해요<div className='review-button-percent'>46.7%</div></div>
-                            <div className='btn-1'>믿음직해요<div className='review-button-percent'>40.0%</div></div>
+                            <div className='btn-1'>시간 약속을 잘 지켜요<div className='review-button-percent'>{percent[0]}%</div></div>
+                            <div className='btn-1'>친절해요<div className='review-button-percent'>{percent[1]}%</div></div>
+                            <div className='btn-1'>아이들을 좋아해요<div className='review-button-percent'>{percent[2]}%</div></div>
+                            <div className='btn-1'>믿음직해요<div className='review-button-percent'>{percent[3]}%</div></div>
 
                         </div>
                     </div>
