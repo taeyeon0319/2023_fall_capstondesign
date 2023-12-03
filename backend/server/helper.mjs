@@ -481,7 +481,7 @@ helperRouter.patch("/changeHelper/:id", async (req, res) => {
       return;
     }
 
-    if (!name || !password || !password_confirm) {
+    if (name || password || password_confirm) {
       const updatedSignupFields = {
         name: name,
         password: password,
@@ -501,7 +501,7 @@ helperRouter.patch("/changeHelper/:id", async (req, res) => {
       );
     }
 
-    if (!region_state || !region_country) {
+    if (region_state || region_country) {
       const updatedMypageFields = {
         region_state: region_state,
         region_country: region_country,
