@@ -45,7 +45,8 @@ font-weight: 500;
 line-height: normal;
 `
 const JoinUText4 = styled.p`
-width: 9vw;
+margin:0px 0px 0px 10px;
+width: 12vw;
 height: 4.3vh;
 color: var(--Gray-70, #707070);
 
@@ -57,7 +58,7 @@ line-height: normal;
 
 display:flex;
 align-items:center;
-justify-content:center;
+justify-content:flex-start;
 `
 const JoinUBtn = styled.div`
 width : 14.6875vw;
@@ -155,6 +156,15 @@ export const JoinPageUser = () =>{
         type: 'user',
     });
 
+    const isJoinDataValid = () => {
+        for (const key in JoinData) {
+            if (JoinData.hasOwnProperty(key) && JoinData[key] === '') {
+                return false;
+            }
+        }
+        return true;
+    };
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setJoinData((prevData) => ({
@@ -177,14 +187,19 @@ export const JoinPageUser = () =>{
     };
 
     const Join = async () =>{
-        try {
-            const response = await axios.post('http://localhost:5000/signup', JoinData);
-            console.log('회원가입 성공:', response.data);
-            alert("환영합니다! 가입하신 아이디와 비밀번호로 로그인해주세요.");
-            navigate("/");
-        } catch (error) {
+        const isValid = isJoinDataValid();
+        if(isValid){
+            try {
+                const response = await axios.post('http://localhost:5000/signup', JoinData);
+                console.log('회원가입 성공:', response.data);
+                alert("환영합니다! 가입하신 아이디와 비밀번호로 로그인해주세요.");
+                navigate("/");
+            } catch (error) {
+                alert("회원가입 실패 : "+error.response.data.error);
+                console.error('회원가입 실패:', error.response.data.error);
+            }
+        } else{
             alert("회원가입 실패 : 모든 정보를 정확히 기입해주세요.");
-            console.error('회원가입 실패:', error.message);
         }
     };
 
