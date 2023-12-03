@@ -458,33 +458,77 @@ helperRouter.post("/deleteTimetable", async (req, res) => {
 });
 
 //마이페이 도우미 변경하는 엔드포인트
-helperRouter.post("/changeHelper", async (req, res) => {
+helperRouter.patch("/changeHelper/:id", async (req, res) => {
   const client = await pool.connect();
-  const {
-    helper_id,
-    region_country,
-    region_state,
-    name,
-    password,
-    password_confirm,
-  } = req.body;
+  const helper_id = req.params.id;
+  const { region_country, region_state, name, password, password_confirm } =
+    req.body;
+
   try {
-    // helper_mypage랑 signup 테이블 동시에 업데이트
-    await client.query(
-      `UPDATE signup SET name = $1, password = $2, password_confirm WHERE id = $3`,
-      [name, password, password_confirm, helper_id]
-    );
-    await client.query(
-      //이름, 패스워드, region_state, region_country
-      `UPDATE helper_mypage SET region_state=$2 region_country = $3  WHERE helper_id = $1`,
-      [helper_id, region_state, region_country]
-    );
-    client.release();
+    // helper_mypage와 signup 테이블 동시에 업데이트
+
+    // 변경할 필드만 업데이트
+    if (password !== password_confirm) {
+      res.status(400).json({ error: "Password does not match" });
+      return;
+    }
+    if (password.length < 8) {
+      res.status(400).json({ error: "Password must be at least 6 characters" });
+      return;
+    }
+    if (password.length > 16) {
+      res.status(400).json({ error: "Password must be at most 20 characters" });
+      return;
+    }
+
+    if (!name || !password || !password_confirm) {
+      const updatedSignupFields = {
+        name: name,
+        password: password,
+        password_confirm: password_confirm,
+      };
+      // 변경된 필드만 업데이트 (signup 테이블)
+      const signupUpdateQuery = Object.entries(updatedSignupFields)
+        .filter(([key, value]) => value !== undefined)
+        .map(([key, value], index) => `${key} = $${index + 1}`)
+        .join(", ");
+
+      await client.query(
+        `UPDATE signup SET ${signupUpdateQuery} WHERE id = $${
+          Object.keys(updatedFields).length + 1
+        }`,
+        [...Object.values(updatedFields), helper_id]
+      );
+    }
+
+    if (!region_state || !region_country) {
+      const updatedMypageFields = {
+        region_state: region_state,
+        region_country: region_country,
+      };
+
+      // 변경된 필드만 업데이트 (helper_mypage 테이블)
+      const helperMypageUpdateQuery = Object.entries(updatedMypageFields)
+        .filter(([key, value]) => value !== undefined)
+        .map(([key, value], index) => `${key} = $${index + 1}`)
+        .join(", ");
+
+      await client.query(
+        `UPDATE helper_mypage SET ${helperMypageUpdateQuery} WHERE helper_id = $${
+          Object.keys(updatedFields).length + 1
+        }`,
+        [helper_id, ...Object.values(updatedFields)]
+      );
+    }
+
+    res.json({ message: "회원정보가 수정되었습니다." });
   } catch (err) {
     console.error("Error updating request status:", err);
     res.status(500).json({
       error: "An error occurred while updating the request status.",
     });
+  } finally {
+    client.release();
   }
 });
 
