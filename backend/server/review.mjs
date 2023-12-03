@@ -217,7 +217,7 @@ reviewRouter.get("/user-reviews/:request_id", async (req, res) => {
 });
 
 // 이용자가 특정리뷰를 수정하는 엔드포인트 ++ 확인완료
-reviewRouter.post("/user-review/modify/:review_id", async (req, res) => {
+reviewRouter.patch("/user-review/modify/:review_id", async (req, res) => {
   const client = await pool.connect();
   const reviewId = parseInt(req.params.review_id);
   const { title, content, rating } = req.body;
@@ -231,12 +231,22 @@ reviewRouter.post("/user-review/modify/:review_id", async (req, res) => {
   const timestamp =
     year + "-" + month + "-" + date + " " + hour + ":" + minute + ":" + second;
   try {
-    const review = await client.query(
-      `UPDATE review SET title = $1, contents = $2, rating = $3, updated_at =$4 WHERE id = $5 returning * `,
-      [title, content, rating, timestamp, reviewId]
-    );
-    res.json(review.rows);
-    client.release();
+    //변경된 필드만 수정하도록
+    if (title || content || rating) {
+      const updatedFields = [
+        title ? `title = '${title}'` : null,
+        content ? `content = '${content}'` : null,
+        rating ? `rating = '${rating}'` : null,
+      ].filter((elem) => elem !== null);
+      const review = await client.query(
+        `UPDATE review SET ${updatedFields.join(
+          ", "
+        )}, updated_at = '${timestamp}' WHERE id = $1 RETURNING *`,
+        [reviewId]
+      );
+      res.json(review.rows);
+      client.release();
+    }
   } catch (err) {
     console.error("Error updating request status:", err);
     res.status(500).json({
