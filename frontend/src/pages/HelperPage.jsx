@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import userImg from "../img/profile.png";
 import { useState } from "react";
 import axios from "axios";
+import api from "../api";
 //추가 기능: select 표현 될 수 있도록, 처음에 클릭해주세요X 제일 상단 값 표시되도록. 만약 데이터가 없으면 요청이 없다고 표시되도록.
 
 const Root = styled.div`
