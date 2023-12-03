@@ -1,9 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
+import api from "../api";
 import { Table, Button, Select } from "antd";
-import axios from "axios";
 import "./Timetable.css";
 const { Option } = Select;
-import api from "../api";
 
 const customTableStyle = {
   width: "70%",
