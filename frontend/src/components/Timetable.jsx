@@ -333,7 +333,11 @@ const Timetable = () => {
       <div className="time-setting">
         <li className="filter-list-item">
           <div className="select-container">
-            <Select id="day" defaultValue="Day" onChange={handleChangeDay}>
+            <Select
+              id="day"
+              defaultValue="   Day   "
+              onChange={handleChangeDay}
+            >
               {daysOfWeek.map((day) => (
                 <Option key={day} value={day.toLowerCase()}>
                   {day}
