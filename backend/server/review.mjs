@@ -252,6 +252,10 @@ reviewRouter.patch("/user-review/modify/:review_id", async (req, res) => {
         title ? `title = '${title}'` : null,
         content ? `content = '${content}'` : null,
         rating ? `rating = '${rating}'` : null,
+        child_like ? `child_like = '${child_like}'` : null,
+        kind ? `kind = '${kind}'` : null,
+        reliable ? `reliable = '${reliable}'` : null,
+        time_good ? `time_good = '${time_good}'` : null,
       ].filter((elem) => elem !== null);
       const review = await client.query(
         `UPDATE review SET ${updatedFields.join(
