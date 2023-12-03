@@ -317,7 +317,7 @@ export const HelperMyPage = () => {
                         <HelperMyBtn onClick={onClickEdit}>내 정보 수정하기</HelperMyBtn>
                         </div>
                     </div>
-                    <HelperMyText3>{JSON.parse(localStorage.getItem("userInfo")).region_state+' '+JSON.parse(localStorage.getItem("userInfo")).region_country}</HelperMyText3>
+                    {JSON.parse(localStorage.getItem("userInfo")).region_state===null?(<HelperMyText3>지역을 등록해주세요</HelperMyText3>):(<HelperMyText3>{JSON.parse(localStorage.getItem("userInfo")).region_state+' '+JSON.parse(localStorage.getItem("userInfo")).region_country}</HelperMyText3>)}
                     <HelperMyText3>{JSON.parse(localStorage.getItem("userInfo")).mobile}</HelperMyText3>
                 </div>
                 <div style={{width:"25vw"}}></div>
