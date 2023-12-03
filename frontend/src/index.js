@@ -88,7 +88,7 @@ const router = createBrowserRouter([
     element: <UserMyPageEdit />,
   },
   {
-    path: "/usermypage/writeReview/:helper_id",
+    path: "/usermypage/writeReview/:request_id",
     element: <UserMyPageWriteReview />,
   },
   {

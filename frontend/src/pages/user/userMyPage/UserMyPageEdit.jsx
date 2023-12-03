@@ -8,7 +8,7 @@ import { Select } from 'antd';
 import Header2 from "../../../components/Header2";
 import edit_icon from "../../user/userMyPage/edit-icon.png";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const UserMyPageEdit = ()=>{
     const userInfoString = localStorage.getItem('userInfo')
@@ -21,19 +21,40 @@ const UserMyPageEdit = ()=>{
     const [newpassword, setNewpassword] = useState('');
     const [passwordcheck, setPasswordcheck] = useState('');
 
+    const navigate = useNavigate();
+
 
     const [city, setCity] = useState(`${userInfo.region_state}`);
     const [country, setCountry] = useState(`${userInfo.region_country}`);
     const [passwordVisible, setPasswordVisible] = React.useState(false);
 
+    
     const updateUserInfo = ()=>{
-        const params = {
-
+        if(name === '' || password === '' || newpassword === ''){
+            alert('필수값을 입력해주세요')
+            return;
         }
 
-        axios.put(`${process.env.REACT_APP_SERVER_URL}/user/changeUser/${userInfo.id}`, params).then((res)=>{
+        if(password != userInfo.password){
+            alert('비밀번호가 잘못되었습니다.')
+            return;
+        }
+
+        if(newpassword !== passwordcheck){
+            alert('새 비밀번호를 확인해주세요.')
+            return;
+        }
+
+        const params = {
+            name: name,
+            password: password,
+            region_state: '서울특별시',
+            region_country: '중구',
+        }
+
+        axios.patch(`${process.env.REACT_APP_SERVER_URL}/user/changeUser/${userInfo.id}`, params).then((res)=>{
             console.log(res)
-            
+            navigate('/usermypage')
             //console.log(res.data[0])
         })
     }
@@ -50,7 +71,7 @@ const UserMyPageEdit = ()=>{
                         </li>
                         <li>
                             <label htmlFor="nickname">닉네임</label>
-                            <input className="w40" type="text" name="nickname" id="nickname" value={nickname} onChange={(e)=>{setNickName(e.target.value)}}/>
+                            <input disabled className="w40" type="text" name="nickname" id="nickname" value={nickname} onChange={(e)=>{setNickName(e.target.value)}}/>
                         </li>
                         <hr />
                         <Space direction="vertical">

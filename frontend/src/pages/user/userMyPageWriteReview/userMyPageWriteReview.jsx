@@ -15,20 +15,33 @@ const UserMyPageWriteReview = ()=>{
     const [reviewTag3, setReviewTag3] = useState(false);
     const [reviewTag4, setReviewTag4] = useState(false);
     const [render, setRender] = useState(0);
-
+    const [title, setTitle] = useState("");
     const [comment, setComment] = useState("");
-
+    const request_id = param.request_id
+    const [review_id, set_review_id] = useState(null); 
+    const [helper_id, set_helper_id] = useState(null); 
+    
     const handleRenderChange = () => {
         setRender(prevState => (prevState === 0 ? 1 : 0));
     };
-
+    
     useEffect(()=>{
-        const helper_id = param.helper_id
+        const request_id2 = param.request_id
         //console.log(userInfo.name)
-        axios.get(`${process.env.REACT_APP_SERVER_URL}/user/helper/${helper_id}`).then((res)=>{
-            console.log(res.data[0])
-            setUserInfo(res.data[0])
+        axios.get(`${process.env.REACT_APP_SERVER_URL}/review/user-reviews/${request_id}`).then((res)=>{
+            console.log(res)
+            setUserInfo(res.data.helper)
             //console.log(res.data[0])
+
+            setReviewTag1(res.data.review.time_good)
+            setReviewTag2(res.data.review.kind)
+            setReviewTag3(res.data.review.child_like)
+            setReviewTag4(res.data.review.reliable)
+            setComment(res.data.review.contents)
+            setUserAverageRate(res.data.review.rating)
+            setTitle(res.data.review.title)
+            set_review_id(res.data.review.id)
+            set_helper_id(res.data.review.helper_id)
         })
 
         // axios.get(`${process.env.REACT_APP_SERVER_URL}/review/helper-review/${helper_id}/average`)
@@ -37,11 +50,21 @@ const UserMyPageWriteReview = ()=>{
         // })
 
     }, [])
+        
 
     const saveTheInfo=()=>{
+        const myInfo = JSON.parse(localStorage.getItem('userInfo'))
+        console.log(userInfo)
         const requestParams = {
-            // user_id : userInfo.id,
-            // helper_id : helperInfo.id,
+            user_id : myInfo.id,
+            helper_id : helper_id,
+            title : title,
+            rating : userAverageRate,
+            request_id :request_id,
+            time_good:reviewTag1,
+            kind:reviewTag2,
+            child_like:reviewTag3,
+            reliable:reviewTag4,
             // field : serviceType,
             // region_state : city,
             // region_country : district,
@@ -49,14 +72,16 @@ const UserMyPageWriteReview = ()=>{
             // date : date,
             // start_time : serviceStartTime,
             // end_time : serviceEndTime,
-            // comment :requestText,
+            content :comment,
             // gender: gender,
         }
 
-        axios.post(`${process.env.REACT_APP_SERVER_URL}/user-review`, requestParams).then((res=>{
+        axios.patch(`${process.env.REACT_APP_SERVER_URL}/review/user-review/modify/${review_id}`, requestParams).then((res=>{
             console.log('수정 성공')
+            navigate('/usermypage')
         }))
         .catch(()=>console.log('수정 실패'))
+        alert('실패했습니다.')
     }
 
     return (
@@ -71,11 +96,6 @@ const UserMyPageWriteReview = ()=>{
                     
                     <div className="user-address">{userInfo.region_country} {userInfo.region_state}</div>
                 </div>
-                <p>
-                    <select className="temp-0-1-select" disalbed={true}>
-                        <option>잠깐 아이 3시간 돌봐주실 분 구합니다!</option>
-                    </select>
-                </p>
 
                 <div style={{width: 1200, display: 'flex', justifyContent: 'space-between'}}> 
                     
@@ -112,7 +132,12 @@ const UserMyPageWriteReview = ()=>{
                             리뷰 상세
                         </p>
                         <div>
-                            <textarea onChange={(e)=>{
+                        <select className="temp-0-1-select" disabled>
+                            <option>{title}</option>
+                        </select>
+                            <textarea
+                            value={comment}
+                            onChange={(e)=>{
                                 setComment(e.target.value)
                                 // console.log(e.target.value)
                             }} className="textarea-temp-0-1">
@@ -125,7 +150,7 @@ const UserMyPageWriteReview = ()=>{
             </div>
             <div style={{textAlign: 'center'}}>
                 <button onClick={()=>navigate(-1)} style={{lineHeight: 2, marginRight: 30, width: 200, border: '1px solid #EBEAEA', color: 'gray', borderRadius: 5, backgroundColor: '#fff', fontSize: 24, marginRight: 30}}>이전</button>
-                <button onClick={saveTheInfo} style={{lineHeight: 2,width: 200, color: '#fff', border: '1px solid #EBEAEA', borderRadius: 5, backgroundColor: '#725f51', fontSize: 24, marginRight: 5}}>수정하기</button>
+                <button onClick={()=>saveTheInfo()} style={{lineHeight: 2,width: 200, color: '#fff', border: '1px solid #EBEAEA', borderRadius: 5, backgroundColor: '#725f51', fontSize: 24, marginRight: 5}}>수정하기</button>
             </div>
         </div>
 
