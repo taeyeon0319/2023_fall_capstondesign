@@ -302,7 +302,7 @@ export const HelperMyPage = () => {
         navigate("/HelperMyEdit");
     }
     const onClickReview = () => {
-        console.log("리뷰 확인 페이지로이동");
+        navigate("/usermypage/helperReview/"+JSON.parse(localStorage.getItem("userInfo")).id);
     }
     return(
         <Root>
@@ -315,12 +315,13 @@ export const HelperMyPage = () => {
                         <HelperMyText2>도우미님</HelperMyText2>
                         <div style={{height:"100%",display:"flex",justifyContent:"center",alignItems:"center"}}>
                         <HelperMyBtn onClick={onClickEdit}>내 정보 수정하기</HelperMyBtn>
+                        <HelperMyBtn onClick={onClickReview}>리뷰 확인하기</HelperMyBtn>
                         </div>
                     </div>
-                    <HelperMyText3>{JSON.parse(localStorage.getItem("userInfo")).region_state+' '+JSON.parse(localStorage.getItem("userInfo")).region_country}</HelperMyText3>
+                    {JSON.parse(localStorage.getItem("userInfo")).region_state===null?(<HelperMyText3>지역을 등록해주세요</HelperMyText3>):(<HelperMyText3>{JSON.parse(localStorage.getItem("userInfo")).region_state+' '+JSON.parse(localStorage.getItem("userInfo")).region_country}</HelperMyText3>)}
                     <HelperMyText3>{JSON.parse(localStorage.getItem("userInfo")).mobile}</HelperMyText3>
                 </div>
-                <div style={{width:"25vw"}}></div>
+                <div style={{width:"15vw"}}></div>
                 <div style={{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center"}}>
                     <UserPText4>이번달 총 수익</UserPText4>
                     <UserPText>{totalPay}</UserPText>
@@ -340,10 +341,7 @@ export const HelperMyPage = () => {
                                         <UserPText6 style={{display:"flex"}}>분야 <p style={{marginLeft:"0.8vh",fontWeight:"700"}}>{item.field}</p></UserPText6>
                                     </div>
                                 </div>
-                                <div style={{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center"}}>
-                                    <UserPText8 style={{width:"20%",display:"flex",alignItems:"center",justifyContent:"center"}}>{item.totalpay}</UserPText8>
-                                    <HelperMyBtn onClick={onClickReview}>리뷰 확인하기</HelperMyBtn>
-                                </div>
+                                <UserPText8 style={{width:"20%",display:"flex",alignItems:"center",justifyContent:"center"}}>{item.totalpay}</UserPText8>
                             </UserHelperList>
                         ))}
                     </div>

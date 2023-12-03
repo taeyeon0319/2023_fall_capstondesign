@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import React from 'react';
 import logoImg from '../img/임시로고.png'
-import userImg from '../img/profile.png'
 import helperImg from '../img/woman.png'
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -336,6 +335,9 @@ export const RandingPage = () => {
             try{
                 console.log(response.data.token);
                 const response2 = await axios.get('http://localhost:5000/mypage',{headers: {Authorization: response.data.token}});
+                if (response2.data.userData.image===null){
+                    response2.data.userData.image="https://ifh.cc/g/GrZGw4.png"
+                }
                 console.log(response2.data.userData);
                 localStorage.setItem("userInfo",JSON.stringify(response2.data.userData));
                 localStorage.setItem("loginState", true);
@@ -485,7 +487,7 @@ export const RandingPage = () => {
                             <RandAfterLoginImg src={JSON.parse(localStorage.getItem("userInfo")).image}></RandAfterLoginImg>
                             <div style={{display:"flex", flexDirection:"column"}}>
                                 <RandAfterLoginText id="cypressname">{JSON.parse(localStorage.getItem("userInfo")).name}</RandAfterLoginText>
-                                <RandAfterLoginText2>{JSON.parse(localStorage.getItem("userInfo")).region_state+' '+JSON.parse(localStorage.getItem("userInfo")).region_country}</RandAfterLoginText2>
+                                {JSON.parse(localStorage.getItem("userInfo")).region_state===null?(<RandAfterLoginText2>지역을 등록해주세요</RandAfterLoginText2>):(<RandAfterLoginText2>{JSON.parse(localStorage.getItem("userInfo")).region_state+' '+JSON.parse(localStorage.getItem("userInfo")).region_country}</RandAfterLoginText2>)}
                                 <div style={{display:"flex"}}>
                                     <RandAfterLoginBtn onClick={onClickHandlerMy}>마이페이지</RandAfterLoginBtn>
                                     <RandAfterLoginBtn onClick={clickLogoutBtn}>로그아웃</RandAfterLoginBtn>
