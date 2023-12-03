@@ -12,7 +12,8 @@
 }
 
 .mypage-edit-form {
-    width: 70%;
+    width: 100%;
+    margin: 0 auto;
     float: left;
     height: 80%;
     display: flex;
@@ -22,7 +23,8 @@
 }
 
 .edit-form{
-    width: 80%;
+    width: 1400px;
+    margin: 0 auto;
     height : 750px;
     box-shadow: 0 0 8px rgba(0,0,0,.1);
     border-radius: 5px;
