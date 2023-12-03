@@ -156,6 +156,7 @@ export const HelperRequestPage = () => {
 
   const fetchData3 = async () => {
     if(window.confirm('빠른매칭 하시겠습니까?')){
+      setspeedMatch(1);
       try{
         const response = await axios.put(`http://localhost:5000/helper/response-request`, {status: "수락", id:String(Data[0].request_id)});
         alert("빠른 매칭 성공! 아래 연락처로 연락하세요.");
@@ -171,7 +172,6 @@ export const HelperRequestPage = () => {
   };
 
   const onClickHandler = () =>{
-    setspeedMatch(1);
     fetchData3();
   };
 
