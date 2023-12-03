@@ -185,15 +185,16 @@ export const HelperPage = () => {
   const [render, setrender] = useState(0);
   const [responseData, setresponseData] = useState([]);
   const [displayData, setdisplayData] = useState([]);
-  
+
   useEffect(() => {
     fetchData();
   }, [render]);
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:5000/helper/requests-helper/"+JSON.parse(localStorage.getItem("userInfo")).id
+      const response = await api.get(
+        "/helper/requests-helper/" +
+          JSON.parse(localStorage.getItem("userInfo")).id
       );
       console.log(response.data);
       setresponseData(response.data);
@@ -204,9 +205,12 @@ export const HelperPage = () => {
   };
 
   const fetchData2 = async () => {
-    try{
+    try {
       console.log(String(displayData.request_id));
-      const response = await axios.put(`http://localhost:5000/helper/response-request`, {status: "거절", id:String(displayData.request_id)});
+      const response = await api.put(`/helper/response-request`, {
+        status: "거절",
+        id: String(displayData.request_id),
+      });
     } catch (error) {
       console.error("API 호출 중 오류 발생:", error);
     }
@@ -218,11 +222,11 @@ export const HelperPage = () => {
   };
 
   const RejBtnHandler = () => {
-    if(window.confirm('요청을 거절하시겠습니까?')){
+    if (window.confirm("요청을 거절하시겠습니까?")) {
       fetchData2();
       alert("요청이 거절되었습니다.");
       setdisplayData([]);
-      setrender(prevState => (prevState === 0 ? 1 : 0));
+      setrender((prevState) => (prevState === 0 ? 1 : 0));
     }
   };
 
@@ -230,8 +234,8 @@ export const HelperPage = () => {
     setdisplayData(responseData[index]);
   };
 
-  const handlerenderChange = () =>{
-    setrender(prevState => (prevState === 0 ? 1 : 0));
+  const handlerenderChange = () => {
+    setrender((prevState) => (prevState === 0 ? 1 : 0));
   };
 
   return (
@@ -260,7 +264,7 @@ export const HelperPage = () => {
                   </div>
                   <HelperReqText3>{item.region_county}</HelperReqText3>
                   <HelperReqText3>
-                    {item.start_time.substr(0,5)}~{item.end_time.substr(0,5)}
+                    {item.start_time.substr(0, 5)}~{item.end_time.substr(0, 5)}
                   </HelperReqText3>
                 </div>
               </HelperReqList>
@@ -281,14 +285,19 @@ export const HelperPage = () => {
                   }}
                 >
                   <UserInfoText>지역</UserInfoText>
-                  <UserInfoIpt>{displayData.region_state+' '+displayData.region_country}</UserInfoIpt>
+                  <UserInfoIpt>
+                    {displayData.region_state +
+                      " " +
+                      displayData.region_country}
+                  </UserInfoIpt>
                   <UserInfoText>도우미 분야</UserInfoText>
                   <UserInfoIpt>{displayData.field}</UserInfoIpt>
                   <UserInfoText>날짜</UserInfoText>
                   <UserInfoIpt>{displayData.date.substr(0, 10)}</UserInfoIpt>
                   <UserInfoText>도우미 시간대</UserInfoText>
                   <UserInfoIpt>
-                    {displayData.start_time.substr(0,5)}~{displayData.end_time.substr(0,5)}
+                    {displayData.start_time.substr(0, 5)}~
+                    {displayData.end_time.substr(0, 5)}
                   </UserInfoIpt>
                   <UserInfoText>도우미 성별</UserInfoText>
                   <UserInfoIpt>
