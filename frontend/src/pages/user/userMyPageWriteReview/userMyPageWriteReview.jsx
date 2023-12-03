@@ -31,10 +31,10 @@ const UserMyPageWriteReview = ()=>{
             //console.log(res.data[0])
         })
 
-        axios.get(`${process.env.REACT_APP_SERVER_URL}/review/helper-review/${helper_id}/average`)
-        .then(res => {
-            setUserAverageRate(Math.floor(res.data[0].avg*100)/100)
-        })
+        // axios.get(`${process.env.REACT_APP_SERVER_URL}/review/helper-review/${helper_id}/average`)
+        // .then(res => {
+        //     setUserAverageRate(Math.floor(res.data[0].avg*10)/10)
+        // })
 
     }, [])
 
@@ -71,6 +71,11 @@ const UserMyPageWriteReview = ()=>{
                     
                     <div className="user-address">{userInfo.region_country} {userInfo.region_state}</div>
                 </div>
+                <p>
+                    <select className="temp-0-1-select" disalbed={true}>
+                        <option>잠깐 아이 3시간 돌봐주실 분 구합니다!</option>
+                    </select>
+                </p>
 
                 <div style={{width: 1200, display: 'flex', justifyContent: 'space-between'}}> 
                     
@@ -81,7 +86,9 @@ const UserMyPageWriteReview = ()=>{
                             </p>
                             <div className="" style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
                                 <div style={{display: 'block', marginTop: 50}}>
-                                    <Rate style={{fontSize: 50, color: '#725F31'}} disabled={true} allowHalf defaultValue={userAverageRate} />
+                                    <Rate onChange={(value)=>{
+                                        setUserAverageRate(value)
+                                    }} style={{fontSize: 50, color: '#725F31'}} allowHalf value={userAverageRate} />
                                     <h1 style={{textAlign: 'center', marginTop: 20}}>{userAverageRate}점</h1>
                                 </div>   
                             </div>
@@ -105,9 +112,6 @@ const UserMyPageWriteReview = ()=>{
                             리뷰 상세
                         </p>
                         <div>
-                            <select className="temp-0-1-select">
-                                <option>잠깐 아이 3시간 돌봐주실 분 구합니다!</option>
-                            </select>
                             <textarea onChange={(e)=>{
                                 setComment(e.target.value)
                                 // console.log(e.target.value)
