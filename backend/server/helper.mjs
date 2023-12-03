@@ -17,7 +17,7 @@ const pool = new pg.Pool({
 });
 
 helperRouter.get("/", (req, res) => {
-  res.json("success도우미 - 수정 버전");
+  res.json("success도우미");
 });
 
 // 이용자 목록을 반환하는 엔드포인트
