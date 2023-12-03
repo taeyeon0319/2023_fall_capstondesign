@@ -48,34 +48,34 @@ const UserMyPageWriteReview = ()=>{
     }, [])
         
 
-    // const saveTheInfo=()=>{
-    //     const myInfo = JSON.parse(localStorage.getItem('userInfo'))
-    //     const requestParams = {
-    //         user_id : myInfo.id,
-    //         helper_id : userInfo.id,
-    //         title : title,
-    //         rating : userAverageRate,
-    //         request_id :request_id,
-    //         time_good:reviewTag1,
-    //         kind:reviewTag2,
-    //         child_like:reviewTag3,
-    //         reliable:reviewTag4,
-    //         // field : serviceType,
-    //         // region_state : city,
-    //         // region_country : district,
-    //         // region_eupmyeondong : " ",
-    //         // date : date,
-    //         // start_time : serviceStartTime,
-    //         // end_time : serviceEndTime,
-    //         content :comment,
-    //         // gender: gender,
-    //     }
+    const saveTheInfo=()=>{
+        const myInfo = JSON.parse(localStorage.getItem('userInfo'))
+        const requestParams = {
+            user_id : myInfo.id,
+            helper_id : userInfo.id,
+            title : title,
+            rating : userAverageRate,
+            request_id :request_id,
+            time_good:reviewTag1,
+            kind:reviewTag2,
+            child_like:reviewTag3,
+            reliable:reviewTag4,
+            // field : serviceType,
+            // region_state : city,
+            // region_country : district,
+            // region_eupmyeondong : " ",
+            // date : date,
+            // start_time : serviceStartTime,
+            // end_time : serviceEndTime,
+            content :comment,
+            // gender: gender,
+        }
 
-    //     axios.post(`${process.env.REACT_APP_SERVER_URL}/review/user-review`, requestParams).then((res=>{
-    //         console.log('수정 성공')
-    //     }))
-    //     .catch(()=>console.log('수정 실패'))
-    // }
+        axios.post(`${process.env.REACT_APP_SERVER_URL}/review/user-review`, requestParams).then((res=>{
+            console.log('수정 성공')
+        }))
+        .catch(()=>console.log('수정 실패'))
+    }
 
     return (
         <div>
@@ -143,7 +143,7 @@ const UserMyPageWriteReview = ()=>{
             </div>
             <div style={{textAlign: 'center'}}>
                 <button onClick={()=>navigate(-1)} style={{lineHeight: 2, marginRight: 30, width: 200, border: '1px solid #EBEAEA', color: 'gray', borderRadius: 5, backgroundColor: '#fff', fontSize: 24, marginRight: 30}}>이전</button>
-                <button style={{lineHeight: 2,width: 200, color: '#fff', border: '1px solid #EBEAEA', borderRadius: 5, backgroundColor: '#725f51', fontSize: 24, marginRight: 5}}>수정하기</button>
+                <button onClick={()=>saveTheInfo()} style={{lineHeight: 2,width: 200, color: '#fff', border: '1px solid #EBEAEA', borderRadius: 5, backgroundColor: '#725f51', fontSize: 24, marginRight: 5}}>수정하기</button>
             </div>
         </div>
 
