@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import userImg from "../img/profile.png";
 import userImg2 from "../img/profile3.png";
 import { useState } from "react";
+import api from "../api";
 
 const Root = styled.div`
   width: 100vw;
@@ -111,7 +112,7 @@ const HelperReqText3 = styled.div`
 
 const UserInfoBtn = styled.div`
   margin: 1.48148vh 0vh;
-  width:14vw;
+  width: 14vw;
   height: 4.07407vh;
   flex-shrink: 0;
 
@@ -144,8 +145,9 @@ export const HelperRequestPage = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:5000/helper/requests-helper/"+JSON.parse(localStorage.getItem("userInfo")).id
+      const response = await api.get(
+        "/helper/requests-helper/" +
+          JSON.parse(localStorage.getItem("userInfo")).id
       );
       setData(response.data.filter((item) => item.user_id === state));
       console.log(Data);
@@ -155,10 +157,13 @@ export const HelperRequestPage = () => {
   };
 
   const fetchData3 = async () => {
-    if(window.confirm('빠른매칭 하시겠습니까?')){
+    if (window.confirm("빠른매칭 하시겠습니까?")) {
       setspeedMatch(1);
-      try{
-        const response = await axios.put(`http://localhost:5000/helper/response-request`, {status: "수락", id:String(Data[0].request_id)});
+      try {
+        const response = await api.put(`/helper/response-request`, {
+          status: "수락",
+          id: String(Data[0].request_id),
+        });
         alert("빠른 매칭 성공! 아래 연락처로 연락하세요.");
       } catch (error) {
         console.error("API 호출 중 오류 발생:", error);
@@ -167,15 +172,15 @@ export const HelperRequestPage = () => {
     }
   };
 
-  const handlerenderChange = () =>{
-    setrender(prevState => (prevState === 0 ? 1 : 0));
+  const handlerenderChange = () => {
+    setrender((prevState) => (prevState === 0 ? 1 : 0));
   };
 
-  const onClickHandler = () =>{
+  const onClickHandler = () => {
     fetchData3();
   };
 
-  const onClickHandler2 = () =>{
+  const onClickHandler2 = () => {
     navigate("/chat");
   };
 
@@ -243,16 +248,26 @@ export const HelperRequestPage = () => {
                   <HelperReqText>
                     더욱 자세한 주소는 직접 전달받아야 합니다.
                   </HelperReqText>
-                  <div style={{display:"flex",justifyContent:"space-between"}}>
-                  {speedMatch===0&&<>
-                    <UserInfoBtn onClick={onClickHandler}>빠른매칭</UserInfoBtn>
-                    <UserInfoBtn onClick={onClickHandler2}>채팅으로</UserInfoBtn>
-                  </>}
+                  <div
+                    style={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    {speedMatch === 0 && (
+                      <>
+                        <UserInfoBtn onClick={onClickHandler}>
+                          빠른매칭
+                        </UserInfoBtn>
+                        <UserInfoBtn onClick={onClickHandler2}>
+                          채팅으로
+                        </UserInfoBtn>
+                      </>
+                    )}
                   </div>
-                  {speedMatch===1&&<>
-                  <UserInfoText>연락처</UserInfoText>
-                  <UserInfoIpt>{Data[0].mobile}</UserInfoIpt>
-                  </>}
+                  {speedMatch === 1 && (
+                    <>
+                      <UserInfoText>연락처</UserInfoText>
+                      <UserInfoIpt>{Data[0].mobile}</UserInfoIpt>
+                    </>
+                  )}
                 </div>
               )}
             </HelperRect>
