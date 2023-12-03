@@ -18,6 +18,8 @@ const UserMyPageWriteReview = ()=>{
     const [title, setTitle] = useState("");
     const [comment, setComment] = useState("");
     const request_id = param.request_id
+    const [review_id, set_review_id] = useState(null); 
+    const [helper_id, set_helper_id] = useState(null); 
     
     const handleRenderChange = () => {
         setRender(prevState => (prevState === 0 ? 1 : 0));
@@ -38,6 +40,8 @@ const UserMyPageWriteReview = ()=>{
             setComment(res.data.review.contents)
             setUserAverageRate(res.data.review.rating)
             setTitle(res.data.review.title)
+            set_review_id(res.data.review.id)
+            set_helper_id(res.data.review.helper_id)
         })
 
         // axios.get(`${process.env.REACT_APP_SERVER_URL}/review/helper-review/${helper_id}/average`)
@@ -50,9 +54,10 @@ const UserMyPageWriteReview = ()=>{
 
     const saveTheInfo=()=>{
         const myInfo = JSON.parse(localStorage.getItem('userInfo'))
+        console.log(userInfo)
         const requestParams = {
             user_id : myInfo.id,
-            helper_id : userInfo.id,
+            helper_id : helper_id,
             title : title,
             rating : userAverageRate,
             request_id :request_id,
@@ -71,10 +76,12 @@ const UserMyPageWriteReview = ()=>{
             // gender: gender,
         }
 
-        axios.post(`${process.env.REACT_APP_SERVER_URL}/review/user-review`, requestParams).then((res=>{
+        axios.patch(`${process.env.REACT_APP_SERVER_URL}/review/user-review/modify/${review_id}`, requestParams).then((res=>{
             console.log('수정 성공')
+            navigate('/usermypage')
         }))
         .catch(()=>console.log('수정 실패'))
+        alert('실패했습니다.')
     }
 
     return (
