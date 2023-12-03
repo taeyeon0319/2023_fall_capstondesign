@@ -42,7 +42,7 @@ const UserMyPage = ()=>{
             try {
                 const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/review/user-review/${userInfo.id}`);
                 const data = response.data;
-                console.log(data)
+                console.log('review-data:::', data)
                 setReviewlist(data);
             } catch (error) {
                 console.log('Error fetching data:', error);
@@ -94,7 +94,7 @@ const UserMyPage = ()=>{
                             </div>
                             <div style={{position: "absolute", bottom: 10, right: 10}}>
                                 <button onClick={()=>navigate(`/usermypage/helperReview/${review.helper.id}`)} style = {{padding : "6px 29px", border: "1px solid #725F51", background: "none", borderRadius :"5px", color:"#725F51", marginRight:"13px"}}>자세히 보기</button>
-                                <button onClick={()=>navigate(`/usermypage/writeReview/${review.helper.id}`)} style = {{padding : "6px 29px", border: "1px solid #725F51", background: "#725F51", borderRadius :"5px", color:"#fff"}}>리뷰 수정</button>
+                                <button onClick={()=>navigate(`/usermypage/writeReview/${review.request_id}`)} style = {{padding : "6px 29px", border: "1px solid #725F51", background: "#725F51", borderRadius :"5px", color:"#fff"}}>리뷰 수정</button>
 
                             </div>
                             <div style={{width: 106, height: 106, margin: 25, borderRadius: '50%', overflow: 'hidden', display: 'flex', justifyContent: 'center', float: "left" }}>
