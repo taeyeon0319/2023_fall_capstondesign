@@ -4,7 +4,7 @@ import db from "../db.mjs";
 const userRouter = express.Router();
 
 userRouter.get("/", (req, res) => {
-  res.json("success회원 - 개발자 김태연");
+  res.json("success회원");
 });
 
 // /all : 모든 도우미 정보 get
@@ -112,6 +112,7 @@ userRouter.get("/helper/search", async (req, res) => {
             helper_mypage.stars,
             helper_mypage.certification,
             helper_mypage.quick_matching, 
+            helper_mypage.wage, 
             helper_time.day,
             helper_time.start_time,
             helper_time.end_time
@@ -195,6 +196,7 @@ userRouter.get("/helper/search/orderbystars", async (req, res) => {
             helper_mypage.stars,
             helper_mypage.certification,
             helper_mypage.quick_matching, 
+            helper_mypage.wage,
             helper_time.day,
             helper_time.start_time,
             helper_time.end_time
@@ -212,6 +214,91 @@ userRouter.get("/helper/search/orderbystars", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
+// /helper/search/orderbywage? : 시급순
+userRouter.get("/helper/search/orderbywage", async (req, res) => {
+  try {
+    const {
+      region,
+      field,
+      gender,
+      age,
+      career,
+      certification,
+      quick_matching,
+      date,
+      needtime_s,
+      needtime_e,
+    } = req.query;
+    const conditions = [];
+
+    if (region) conditions.push(`helper_mypage.region_country = '${region}'`);
+    if (field) conditions.push(`helper_mypage.field = '${field}'`);
+    if (gender) conditions.push(`helper_mypage.gender = '${gender}'`);
+    if (age) {
+      const minAge = age;
+      const maxAge = parseInt(age) + 9; // 10년 단위로 범위 설정
+      conditions.push(
+        `helper_mypage.age >= '${minAge}' AND helper_mypage.age <= '${maxAge}'`
+      );
+    }
+    if (career) conditions.push(`helper_mypage.career = '${career}'`);
+    if (certification)
+      conditions.push(`helper_mypage.certification = '${certification}'`);
+    if (quick_matching)
+      conditions.push(`helper_mypage.quick_matching = '${quick_matching}'`);
+    let targetDay = "";
+    if (date) {
+      const targetDate = new Date(date);
+      const daysOfWeek = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+      targetDay = daysOfWeek[targetDate.getDay()];
+      conditions.push(`helper_time.day = '${targetDay}'`);
+    }
+
+    if (needtime_s && needtime_e) {
+      conditions.push(`helper_time.start_time <= '${needtime_s}'`);
+      conditions.push(`helper_time.end_time >= '${needtime_e}'`);
+    }
+
+    let whereClause =
+      conditions.length > 0 ? "WHERE " + conditions.join(" AND ") : "WHERE 1=1";
+
+    const query = `
+            SELECT
+            signup.id as id,
+            signup.name,
+            signup.email,
+            signup.mobile,
+            helper_mypage.region_state,
+            helper_mypage.region_country,
+            helper_mypage.field,
+            helper_mypage.image,
+            helper_mypage.age,
+            helper_mypage.gender,
+            helper_mypage.introduction,
+            helper_mypage.career,
+            helper_mypage.stars,
+            helper_mypage.certification,
+            helper_mypage.quick_matching, 
+            helper_mypage.wage,
+            helper_time.day,
+            helper_time.start_time,
+            helper_time.end_time
+            FROM signup
+            LEFT JOIN helper_mypage ON signup.id = helper_mypage.helper_id
+            LEFT JOIN helper_time ON signup.id = helper_time.helper_id
+            ${whereClause} AND helper_time.helper_id IS NOT NULL
+            ORDER BY helper_mypage.wage;
+        `;
+
+    const data = await db.any(query);
+    res.json(data);
+  } catch (error) {
+    console.error("Error: ", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 
 // /helper:id : 도우미 상세정보 출력 api(가상 테이블 데이터 출력) == OK
 userRouter.get("/helper/:id", async (req, res) => {
