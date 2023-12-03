@@ -256,29 +256,81 @@ userRouter.get("/helper/:id", async (req, res) => {
 
 // user 회원정보 수정
 // 이름, 비밀번호, 비밀번호 확인, region_state, region_country 바꿀 수 있도록
-userRouter.put("/changeUser/:id", async (req, res) => {
-  const userId = req.params.id;
-  const { name, password, password_confirm, region_state, region_country } =
+userRouter.patch("/changeUser/:id", async (req, res) => {
+  const user_id = req.params.id;
+  const { region_country, region_state, name, password, password_confirm } =
     req.body;
 
   try {
-    // 회원정보 수정
-    await db.none(
-      `
-            UPDATE signup
-            SET name = $1, password = $2, password_confirm= $6 region_state = $3, region_country = $4
-            WHERE id = $5;
-        `,
-      [name, password, region_state, region_country, userId, password_confirm]
-    );
+    //수정한 데이터가 없을시
+    if (
+      !region_country &&
+      !region_state &&
+      !name &&
+      !password &&
+      !password_confirm
+    ) {
+      res.status(400).json({
+        error: "수정할 데이터가 없습니다.",
+      });
+      return;
+    }
+    // 비밀번호와 비밀번호 확인이 일치하는지 확인
+    if (password !== password_confirm) {
+      res.status(400).json({
+        error: "비밀번호와 비밀번호 확인이 일치하지 않습니다.",
+      });
+      return;
+    }
 
-    res.json({ message: "회원정보가 수정되었습니다." });
-  } catch (error) {
-    console.error("Error: ", error);
-    res.status(500).json({ error: "Internal Server Error" });
+    //signup 테이블 요소중 변경된것이 있다면 실행
+    if (name || password || password_confirm) {
+      const updatedSignupFields = {
+        name: name,
+        password: password,
+        password_confirm: password_confirm,
+      };
+
+      // 변경된 필드만 업데이트 (signup 테이블)
+      const signupUpdateQuery = Object.entries(updatedSignupFields)
+        .filter(([key, value]) => value !== undefined)
+        .map(([key, value], index) => `${key} = $${index + 1}`)
+        .join(", ");
+
+      await db.none(
+        `UPDATE signup SET ${signupUpdateQuery} WHERE id = $${
+          Object.keys(updatedSignupFields).length + 1
+        }`,
+        [...Object.values(updatedSignupFields), user_id]
+      );
+    }
+    // user_mypage 테이블 요소중 변경된것이 있다면 실행
+    if (region_country || region_state) {
+      const updatedMypageFields = {
+        region_country: region_country,
+        region_state: region_state,
+      };
+      const mypageUpdateQuery = Object.entries(updatedMypageFields)
+        .filter(([key, value]) => value !== undefined)
+        .map(([key, value], index) => `${key} = $${index + 1}`)
+        .join(", ");
+
+      await db.none(
+        `UPDATE user_mypage SET ${mypageUpdateQuery} WHERE user_id = $${
+          Object.keys(updatedMypageFields).length + 1
+        }`,
+        [user_id, ...Object.values(updatedMypageFields)]
+      );
+    }
+
+    res.json({ message: "사용자 정보가 수정되었습니다." });
+  } catch (err) {
+    console.error("Error updating user information:", err);
+    res.status(500).json({
+      error: "An error occurred while updating user information.",
+    });
   }
 });
-
 // /request : 도우미 요청 api(post)
 // post하면 해당 user테이블의 ()속성들이랑 helper테입르의 ()속성들이 저장됨.
 
