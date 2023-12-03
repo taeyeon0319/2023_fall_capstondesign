@@ -458,16 +458,11 @@ helperRouter.post("/deleteTimetable", async (req, res) => {
 });
 
 //마이페이 도우미 변경하는 엔드포인트
-helperRouter.post("/changeHelper", async (req, res) => {
+helperRouter.put("/changeHelper/:id", async (req, res) => {
   const client = await pool.connect();
-  const {
-    helper_id,
-    region_country,
-    region_state,
-    name,
-    password,
-    password_confirm,
-  } = req.body;
+  const helper_id = req.params.id;
+  const { region_country, region_state, name, password, password_confirm } =
+    req.body;
   try {
     // helper_mypage랑 signup 테이블 동시에 업데이트
     await client.query(
@@ -479,6 +474,7 @@ helperRouter.post("/changeHelper", async (req, res) => {
       `UPDATE helper_mypage SET region_state=$2 region_country = $3  WHERE helper_id = $1`,
       [helper_id, region_state, region_country]
     );
+    res.json({ message: "회원정보가 수정되었습니다." });
     client.release();
   } catch (err) {
     console.error("Error updating request status:", err);
