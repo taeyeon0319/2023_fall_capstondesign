@@ -17,9 +17,9 @@ jobs:
         with:
           node-version: 18
       - name: "backend로 들어가"
-        run: cd backend/
-      - name: "Node설치"
-        run: npm install
+        run: cd backend
+      - name: "backend에 어떤 파일들이 있지?"
+        run: ls
       - name : "NPM 실행"
         run: node index.mjs
       
