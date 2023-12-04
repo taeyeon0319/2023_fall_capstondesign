@@ -22,6 +22,7 @@ jobs:
       - name: "백엔드 실행해"
         run: |
           cd backend
+          npm i express
           node index.mjs
       
       # 프론트엔드
