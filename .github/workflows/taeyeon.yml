@@ -27,4 +27,6 @@ jobs:
       - name: "프론트엔드 실행해"
         run: |
           cd frontend
+          npm install react-scripts
           npm run build
+
