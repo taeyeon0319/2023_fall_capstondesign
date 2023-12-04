@@ -18,11 +18,19 @@ jobs:
             uses: actions/setup-node@v4
             with:
               node-version: 18
-          - name: npm start
+          - name: cd frontend
             run: |
               ls
               pwd
               cd frontend
               pwd
-              npm install
-              npm start
+          - name: cd backend
+            run: |
+              ls
+              pwd
+              cd backend
+              pwd
+          - name: start chat.js
+            run: |
+              cd backend
+              node chat.js
