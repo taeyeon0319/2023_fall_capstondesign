@@ -11,20 +11,22 @@ jobs:
   taeyeon_kim:
     runs-on: ubuntu-latest
     steps: 
-      - run: echo "현재 레포지토리: ${{ github.repository }}. 웹프로그래밍 실습 CI/CD를 진행합니다."
+      - run: echo "${{ github.repository }}"
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4 
         with:
           node-version: 18
       - name: "backend로 들어가"
         run: cd backend
-      - name: "Node설치"
-        run: npm install
-      - name : "NPM 실행"
-        run: node index.mjs
+      - name: "뭐가 있냐"
+        run: ls
+      - name : "백엔드 안에는?"
+        run: |
+           cd backend
+           ls
       
       # 프론트엔드
-      - run: npm run build 
+      #- run: npm run build 
       # 위에처럼만 하면 index.js 기타 파일들이 github컨테이너에 저장된 상태
       # 빌드한 프론트엔드가 운영하는 서버에 저장되게 해야함
       # 1. S3 에 배포하고 있다. => github container에 aws cli올려서
