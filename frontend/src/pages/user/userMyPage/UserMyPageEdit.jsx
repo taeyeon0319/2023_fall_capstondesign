@@ -47,9 +47,10 @@ const UserMyPageEdit = ()=>{
 
         const params = {
             name: name,
-            password: password,
+            password: newpassword,
             region_state: '서울특별시',
             region_country: '중구',
+            password_confirm: passwordcheck,
         }
 
         axios.patch(`${process.env.REACT_APP_SERVER_URL}/user/changeUser/${userInfo.id}`, params).then((res)=>{
