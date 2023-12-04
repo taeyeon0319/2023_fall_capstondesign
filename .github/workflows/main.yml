@@ -19,8 +19,8 @@ jobs:
             with:
               node-version: 18
           - name: npm start
-            run: cd frontend
-            run: ls
-            run: pwd
-            run: npm install
-            run: npm start
+            run: |
+              ls
+              pwd
+              npm install
+              npm start
