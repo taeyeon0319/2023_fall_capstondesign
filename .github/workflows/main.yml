@@ -10,7 +10,7 @@ on:
 jobs:
     Git-ADD:
         runs-on: ubuntu-latest
-        name: "Help_py with CI/CD"
+        name: "Help_py with CI/CD 현정"
         steps:
           - run: echo "CI/CD실습 프로젝트에 적용하기!"
           - run: 
