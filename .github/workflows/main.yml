@@ -34,5 +34,4 @@ jobs:
             run: |
               cd backend
               npm i
-              node chat.js
-              ^C
+              echo "node chat.js를 실행하면 실행됩니다."
