@@ -18,6 +18,7 @@ import HelperTimetablePage from "./pages/HelperTimetable";
 import TeamMember from "./pages/TeamMember";
 import Introduce from "./pages/Introduce";
 import Guide from "./pages/Guide";
+import ChatTest from "./pages/ChatTestPage";
 
 import UserMyPageEdit from "./pages/user/userMyPage/UserMyPageEdit";
 
@@ -26,6 +27,8 @@ import ChatPage from "./pages/ChatPage";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import UserMyPageReviewCheck from "./pages/user/userMyPageReviewList/UserMyPageReviewCheck";
 import UserMyPageWriteReview from "./pages/user/userMyPageWriteReview/userMyPageWriteReview"
+
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -115,6 +118,10 @@ const router = createBrowserRouter([
     path:"/guide",
     element: <Guide />,
   },
+  {
+    path:"/chattest/:userName/:roomName",
+    element:<ChatTest />
+  }
 ]);
 
 sessionStorage.setItem("id", "yys");

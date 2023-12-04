@@ -7,6 +7,9 @@ import sendImg from '../img/send.png';
 import arrowSendImg from '../img/arrowSend.png';
 import arrowReplyImg from '../img/arrowReply.png';
 import { useState } from "react";
+import socketIOClient from "socket.io-client";
+import ChatLog from "../components/ChatLog/ChatLog";
+import Loading from "./Loading";
 
 const dummyDataReqList = [
     {
@@ -479,11 +482,18 @@ font-weight: 500;
 line-height: normal;
 `
 export const ChatPage = () => {
+    const [render, setrender] = useState(0);
+
     const [selectedReq, setSelectedReq] = useState('');
     const [selectedHelper, setSelectedHelper] = useState(null);
     const [chatId, setChatId] = useState('');
     const [selectedChatList, setSelectedChatList] = useState([{chatId:"",chatList:[{type:"Notification",data:"채팅 내역이 없습니다.",time:""}]}]);
     
+    //채팅 관련 State
+    const [currentSocket, setCurrentSocket] = useState();
+    const [chatMessage, setChatMessage] = useState("");
+    const [msgList, setMsgList] = useState([]);
+
     useEffect(() => {
         setSelectedChatList(dummyDataChat.filter((data) => data.chatId === chatId).length > 0
         ? dummyDataChat.filter((data) => data.chatId === chatId)
@@ -491,6 +501,19 @@ export const ChatPage = () => {
         console.log(selectedChatList);
     }, [chatId]);
 
+    useEffect(() => {
+        setCurrentSocket(socketIOClient("localhost:5001"));
+    }, []);
+
+    if (currentSocket) {
+        currentSocket.on("connect", () => {
+            currentSocket.emit("join", {
+                roomName : "r1", //룸이름 수정필요.
+                userName : JSON.parse(localStorage.getItem("userInfo")).name
+            });
+        });
+    }
+    
     const handleHelperClick = (index,name) => {
         setSelectedHelper(index === selectedHelper ? null : index);
         setChatId(name);
@@ -500,10 +523,38 @@ export const ChatPage = () => {
     const handleSelectChange = (event) => {
         setSelectedReq(event.target.value);
     };
+    const handleChatChange = (e) => {
+        setChatMessage(e.target.value);
+        console.log(chatMessage);
+    };
+    const handleBtnClick = () => {
+        if (chatMessage!==null){
+            currentSocket.emit("onSend", {
+                userName: JSON.parse(localStorage.getItem("userInfo")).name,
+                msg: chatMessage,
+                timeStamp: new Date().toLocaleTimeString(),
+                type:JSON.parse(localStorage.getItem("userInfo")).type
+            });
+            console.log(document.getElementById('IptBtn'));
+            setChatMessage(null);
+            document.getElementById('IptBtn').value = null;
+        }
+    };
+    const handleBtnClick2 = () => {
+        currentSocket.emit("onSend", {
+            userName: JSON.parse(localStorage.getItem("userInfo")).name,
+            msg: '테스트응답',
+            timeStamp: new Date().toLocaleTimeString(),
+            type: JSON.parse(localStorage.getItem("userInfo")).type==='user'?'helper':'user'
+        });
+    };
+    const handlerenderChange = () => {
+        setrender((prevState) => (prevState === 0 ? 1 : 0));
+    };
     
     return(
         <Root>
-            <Header2></Header2>
+            <Header2 data={render} onDataChange={handlerenderChange}></Header2>
             <ChatRectBox>
             <div style={{ height: "81.855vh", margin: "auto" }}>
                 <ChatRectTitle>채팅방 목록</ChatRectTitle>
@@ -540,7 +591,7 @@ export const ChatPage = () => {
                     </div>
                 </ChatRectTitle2>
                 <ChatRect style={{height:"71.855vh", boxShadow:"0px 0px 0px 0px"}}>
-                    {<div style={{width:"100%", height:"67.155vh", overflow:"auto",display:"flex",flexDirection:"column",alignItems:"center",padding:"0px 10px"}}>
+                    {/*{<div style={{width:"100%", height:"67.155vh", overflow:"auto",display:"flex",flexDirection:"column",alignItems:"center",padding:"0px 10px"}}>
                         {selectedChatList[0].chatList.map((chat,index)=>(
                             (chat.type==="Date")&&(<ChatDate>{chat.data}</ChatDate>)||(chat.type==="Send")&&(
                                 <div style={{width:"100%",display:"flex",alignItems:"flex-end",justifyContent:"flex-end",margin:"6px 0px 0px 0px"}}>
@@ -554,8 +605,16 @@ export const ChatPage = () => {
                                     <ChatTime>{chat.time}</ChatTime>
                                 </div>)||(chat.type==="Notification")&&(<ChatNotification>{chat.data}</ChatNotification>)
                             ))}
-                    </div>}
-                    <ChatSendBtn>아이가 3살인데 주의할만한 사항이 있을까요? <img src={sendImg}></img></ChatSendBtn>
+                    </div>}*/}
+                    <div>
+                    {currentSocket ? (
+                        <><ChatLog socket={currentSocket}></ChatLog></>
+                    ) : (
+                        <Loading></Loading>
+                    )}
+                    </div>
+                    <ChatSendBtn><input id="IptBtn" onChange={handleChatChange}></input><button onClick={handleBtnClick}><img src={sendImg}></img></button></ChatSendBtn>
+                    <button onClick={handleBtnClick2}><img src={sendImg}></img></button>
                 </ChatRect>
             </div>
             </ChatRectBox>
