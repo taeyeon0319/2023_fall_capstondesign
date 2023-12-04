@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
+import api from "../api";
 import { Table, Button, Select } from "antd";
-import axios from "axios";
 import "./Timetable.css";
 const { Option } = Select;
 
@@ -45,8 +45,8 @@ const Timetable = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:5000/helper/helpertimetable/${
+      const response = await api.get(
+        `/helper/helpertimetable/${
           JSON.parse(localStorage.getItem("userInfo")).id
         }`
       );
@@ -102,7 +102,7 @@ const Timetable = () => {
     try {
       //흰부분 클릭시 서버에 전송 및 색 변경
       if (!target[day]) {
-        await axios.post("http://localhost:5000/helper/saveTimetable", {
+        await api.post("/helper/saveTimetable", {
           helper_id: JSON.parse(localStorage.getItem("userInfo")).id,
           day,
           startTime,
@@ -110,7 +110,7 @@ const Timetable = () => {
         });
       } else {
         // 클릭 시 흰색으로 변경된 경우
-        await axios.post("http://localhost:5000/helper/deleteTimetable", {
+        await api.post("/helper/deleteTimetable", {
           helper_id: JSON.parse(localStorage.getItem("userInfo")).id,
           day,
           startTime: time,
@@ -300,7 +300,7 @@ const Timetable = () => {
     try {
       console.log(inputData);
       console.log(inputData.day);
-      await axios.post("http://localhost:5000/helper/saveTimetable", {
+      await api.post("/helper/saveTimetable", {
         helper_id: JSON.parse(localStorage.getItem("userInfo")).id,
         day: inputData.day,
         startTime: inputData.startTime,
@@ -333,7 +333,11 @@ const Timetable = () => {
       <div className="time-setting">
         <li className="filter-list-item">
           <div className="select-container">
-            <Select id="day" defaultValue="Day" onChange={handleChangeDay}>
+            <Select
+              id="day"
+              defaultValue="   Day   "
+              onChange={handleChangeDay}
+            >
               {daysOfWeek.map((day) => (
                 <Option key={day} value={day.toLowerCase()}>
                   {day}

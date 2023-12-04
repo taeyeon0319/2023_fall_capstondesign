@@ -220,7 +220,14 @@ reviewRouter.get("/user-reviews/:request_id", async (req, res) => {
 reviewRouter.patch("/user-review/modify/:review_id", async (req, res) => {
   const client = await pool.connect();
   const reviewId = parseInt(req.params.review_id);
-  const { title, content, rating } = req.body;
+  const title = req.body.title;
+  const content = req.body.content;
+  const rating = req.body.rating;
+  const child_like = req.body.child_like;
+  const kind = req.body.kind;
+  const reliable = req.body.reliable;
+  const time_good = req.body.time_good;
+
   const now = new Date();
   const year = now.getFullYear();
   const month = now.getMonth() + 1;
@@ -232,11 +239,23 @@ reviewRouter.patch("/user-review/modify/:review_id", async (req, res) => {
     year + "-" + month + "-" + date + " " + hour + ":" + minute + ":" + second;
   try {
     //변경된 필드만 수정하도록
-    if (title || content || rating) {
+    if (
+      title ||
+      content ||
+      rating ||
+      child_like ||
+      kind ||
+      reliable ||
+      time_good
+    ) {
       const updatedFields = [
         title ? `title = '${title}'` : null,
         content ? `content = '${content}'` : null,
         rating ? `rating = '${rating}'` : null,
+        child_like ? `child_like = '${child_like}'` : null,
+        kind ? `kind = '${kind}'` : null,
+        reliable ? `reliable = '${reliable}'` : null,
+        time_good ? `time_good = '${time_good}'` : null,
       ].filter((elem) => elem !== null);
       const review = await client.query(
         `UPDATE review SET ${updatedFields.join(
