@@ -25,8 +25,7 @@ jobs:
       - name: "Change Directory to Backend and Run Commands"
         run: |
           cd backend
-          npm install
-          node index.mjs
+          ls
       
       # 프론트엔드
       - run: npm run build 
