@@ -16,16 +16,20 @@ jobs:
       - uses: actions/setup-node@v4 
         with:
           node-version: 18
-      - name: "backend로 들어가"
-        run: cd backend
-      - name: "뭐가 있냐"
+      - name: "현재 뭐가있지?"
         run: ls
       - name : "백엔드 안에는?"
         run: |
            cd backend
-           npm i express
            ls
-           node index.mjs
+        # npm i express
+        # node index.mjs
+      - name : "프론트엔드 안에는?"
+        run: |
+           cd frontend
+           ls
+        # npm i express
+        # node index.mjs
      
 
 
