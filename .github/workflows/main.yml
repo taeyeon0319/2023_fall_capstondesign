@@ -33,4 +33,5 @@ jobs:
           - name: start chat.js
             run: |
               cd backend
+              npm i
               node chat.js
