@@ -9,7 +9,7 @@ on:
 
 jobs:
   taeyeon_kim:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps: 
       - run: echo "${{ github.repository }}"
       - uses: actions/checkout@v4
@@ -22,11 +22,11 @@ jobs:
       - name: "백엔드 실행해"
         run: |
           cd backend
-          npm i express
-          node index.mjs
       
       # 프론트엔드
       - name: "프론트엔드 실행해"
         run: |
           cd frontend
+          npm install react-scripts
           npm run build
+
