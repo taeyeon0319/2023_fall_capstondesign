@@ -17,7 +17,7 @@ jobs:
         with:
           node-version: 18
       - name: "backend로 들어가"
-        run: cd backend
+        run: cd backend/
       - name: "Node설치"
         run: npm install
       - name : "NPM 실행"
