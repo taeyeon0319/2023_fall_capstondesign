@@ -10,9 +10,6 @@ on:
 jobs:
     Git-ADD:
         runs-on: ubuntu-latest
-        name: "변경사항 저장하기"
+        name: "Help_py with CI/CD"
         steps:
-            - run: git add .
-            - run: git commit -m "자동 저장"
-            - run: git pull origin main
-            - run: git push origin hjyeeoonng
+            - run: echo "CI/CD실습 프로젝트에 적용하기!"
