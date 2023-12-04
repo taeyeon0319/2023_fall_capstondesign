@@ -1,3 +1,5 @@
+
+40 lines (35 loc) · 1.31 KB
 name: "김태연 - 웹프로그래밍 실습 CI/CD"
 
 on: 
@@ -9,7 +11,7 @@ on:
 
 jobs:
   taeyeon_kim:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps: 
       - run: echo "${{ github.repository }}"
       - uses: actions/checkout@v4
@@ -18,15 +20,12 @@ jobs:
           node-version: 18
       - name: "backend로 들어가"
         run: cd backend
+      - name: "뭐가 있냐"
+        run: ls
+      - name : "백엔드 안에는?"
+        run: |
+           cd backend
+           ls
+     
 
-      - name: "백엔드 실행해"
-        run: |
-          cd backend
-      
-      # 프론트엔드
-      - name: "프론트엔드 실행해"
-        run: |
-          cd frontend
-          npm install react-scripts
-          npm run build
 
