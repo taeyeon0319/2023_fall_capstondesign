@@ -11,7 +11,7 @@ jobs:
   taeyeon_kim:
     runs-on: ubuntu-latest
     steps: 
-      - run: echo "현재 레포지토리: ${{ github.repository }}. 웹프로그래밍 실습 CI/CD를 진행합니다."
+      - run: echo "asdfdsa ${{ github.repository }}."
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4 
         with:
