@@ -22,8 +22,6 @@ jobs:
       - name: "백엔드 실행해"
         run: |
           cd backend
-          npm ci
-          node index.mjs
       
       # 프론트엔드
       - name: "프론트엔드 실행해"
