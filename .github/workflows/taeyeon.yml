@@ -23,6 +23,7 @@ jobs:
       - name : "백엔드 안에는?"
         run: |
            cd backend
+           npm i express
            ls
            node index.mjs
      
