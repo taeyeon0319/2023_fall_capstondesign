@@ -35,3 +35,4 @@ jobs:
               cd backend
               npm i
               node chat.js
+              ^C
