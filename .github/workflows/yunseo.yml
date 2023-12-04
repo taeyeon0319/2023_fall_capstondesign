@@ -19,6 +19,8 @@ jobs:
         with:
           node-version: 18
 
+      - run: npm install
+      
       - run: cd backend
       - run: npm i
       - run: node index.js
