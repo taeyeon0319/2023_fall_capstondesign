@@ -12,12 +12,12 @@ jobs:
         runs-on: ubuntu-latest
         name: "Help_py with CI/CD"
         steps:
-            - run: echo "CI/CD실습 프로젝트에 적용하기!"
-            - run: 
+          - run: echo "CI/CD실습 프로젝트에 적용하기!"
+          - run: 
         name: Checkout Repository
         steps:
-            - uses: actions/checkout@v2
+          - uses: actions/checkout@v2
         name: Install Dependencies
-            - run: npm install
+          - run: npm install
         name: Run npm start
-            - run: npm start
+          - run: npm start
