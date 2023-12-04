@@ -18,10 +18,15 @@ jobs:
           node-version: 18
       - name: "backend로 들어가"
         run: cd backend
-      - name: "backend에 어떤 파일들이 있지?"
-        run: ls
-      - name : "NPM 실행"
-        run: node index.mjs
+      #- name: "backend에 어떤 파일들이 있지?"
+      #  run: ls
+      #- name : "NPM 실행"
+      #  run: node index.mjs
+      - name: "Change Directory to Backend and Run Commands"
+        run: |
+          cd backend
+          npm install
+          node index.mjs
       
       # 프론트엔드
       - run: npm run build 
