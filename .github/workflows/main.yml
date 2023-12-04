@@ -22,5 +22,7 @@ jobs:
             run: |
               ls
               pwd
+              cd frontend
+              pwd
               npm install
               npm start
