@@ -18,7 +18,8 @@ jobs:
             uses: actions/setup-node@v4
             with:
               node-version: 18
-          - run: cd frontend
+          - name: npm start
+            run: cd frontend
             run: ls
             run: pwd
             run: npm install
