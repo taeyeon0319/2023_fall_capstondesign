@@ -265,7 +265,10 @@ export const HelperPage = () => {
                   </div>
                   <HelperReqText3>{item.region_county}</HelperReqText3>
                   <HelperReqText3>
-                    {item.start_time.substr(0, 5)}~{item.end_time.substr(0, 5)}
+                    {"시간  "+item.start_time.substr(0, 5)}~{item.end_time.substr(0, 5)}
+                  </HelperReqText3>
+                  <HelperReqText3>
+                    {"날짜  "+item.date.substr(0, 10)}
                   </HelperReqText3>
                 </div>
               </HelperReqList>
