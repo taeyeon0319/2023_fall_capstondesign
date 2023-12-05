@@ -239,6 +239,10 @@ export const HelperPage = () => {
     setrender((prevState) => (prevState === 0 ? 1 : 0));
   };
 
+  const onClickHandler = (uid) => {
+    navigate('/usermypage');
+  };
+
   return (
     <Root>
       <Header2 data={render} onDataChange={handlerenderChange}></Header2>
@@ -250,7 +254,7 @@ export const HelperPage = () => {
           <HelperRect>
             {responseData.map((item, index) => (
               <HelperReqList onClick={() => UserListClickHandler(index)}>
-                <UserHelperListImg src={item.image}></UserHelperListImg>
+                <UserHelperListImg onClick={onClickHandler} src={item.image}></UserHelperListImg>
                 <div
                   style={{
                     display: "flex",
