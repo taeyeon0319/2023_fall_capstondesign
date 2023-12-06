@@ -312,7 +312,7 @@ const HMyInput = styled.input`
 
   /* H24_Bold */
   font-family: Noto Sans KR;
-  font-size: 1.25vw;
+  font-size: 1vw;
   font-style: normal;
   font-weight: 700;
   line-height: normal;
@@ -334,7 +334,7 @@ const HMyDiv = styled.div`
 
   /* H24_Bold */
   font-family: Noto Sans KR;
-  font-size: 1.25vw;
+  font-size: 1vw;
   font-style: normal;
   font-weight: 700;
   line-height: normal;
@@ -425,7 +425,7 @@ const HMySelect = styled.select`
 
   /* H24_Bold */
   font-family: Noto Sans KR;
-  font-size: 1.25vw;
+  font-size: 1vw;
   font-style: normal;
   font-weight: 700;
   line-height: normal;
@@ -441,6 +441,7 @@ export const HelperMyPage = () => {
   const [canChangePW, setcanChangePW] = useState(0);
   const [checkPW, setCheckPW] = useState(-1);
   const [cities, setCities] = useState([]);
+  const [selectedRegionState, setSelectedRegionState] = useState('');
 
   useEffect(() => {
     const fetchCities = async () => {
@@ -465,6 +466,7 @@ export const HelperMyPage = () => {
 
   const clickNameChange = () => {
     if (window.confirm(nameChange + `(으)로 이름을 변경하시겠습니까?`)) {
+      
       console.log("변경하는 API");
     }
   };
@@ -496,6 +498,12 @@ export const HelperMyPage = () => {
   const clickChangeArea = () => {
     console.log("변경하는API");
   };
+
+  const handleRegionStateChange = (e) => {
+    const selectedState = e.target.value;
+    setSelectedRegionState(selectedState);
+  };
+
   return (
     <Root>
       <Header2 data={render} onDataChange={handlerenderChange}></Header2>
@@ -563,20 +571,22 @@ export const HelperMyPage = () => {
             <HMyInputBox style={{ display: "flex" }}>
               <HMyTag>현재 활동지역</HMyTag>
               <HMyDiv>
-                {JSON.parse(localStorage.getItem("userInfo")).region_state +
+                {JSON.parse(localStorage.getItem("userInfo")).region_state===null?("활동 지역이 설정되지 않았습니다."):(JSON.parse(localStorage.getItem("userInfo")).region_state +
                   " " +
-                  JSON.parse(localStorage.getItem("userInfo")).region_country}
+                  JSON.parse(localStorage.getItem("userInfo")).region_country)}
               </HMyDiv>
             </HMyInputBox>
             <HMyInputBox style={{ display: "flex" }}>
               <HMyTag>새 활동지역</HMyTag>
-              <HMySelect>
-                {cities.map((city) => (
-                  <option>{city.region_state}</option>
-                ))}
+              <HMySelect onChange={handleRegionStateChange}>
+              <option value="">선택해주세요</option>
+              {[...new Set(cities.map((city) => city.region_state))].map((region_state) => (
+                <option key={region_state}>{region_state}</option>
+              ))}
               </HMySelect>
               <HMySelect>
-                {cities.map((city) => (
+                <option value="">선택해주세요</option>
+                {cities.filter((city) => city.region_state === selectedRegionState).map((city) => (
                   <option>{city.region_country}</option>
                 ))}
               </HMySelect>
