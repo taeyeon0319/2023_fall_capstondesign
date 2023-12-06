@@ -305,6 +305,7 @@ const HMyInput = styled.input`
   border-radius: 0px 5px 5px 0px;
   border-top: 1px solid var(--Gray-30, #ebeaea);
   border-right: 1px solid var(--Gray-30, #ebeaea);
+  border-left: 1px solid var(--Gray-30, #ebeaea);
   border-bottom: 1px solid var(--Gray-30, #ebeaea);
   background: var(--Gray-10, #f6f6f6);
 
@@ -312,7 +313,7 @@ const HMyInput = styled.input`
 
   /* H24_Bold */
   font-family: Noto Sans KR;
-  font-size: 1.25vw;
+  font-size: 1vw;
   font-style: normal;
   font-weight: 700;
   line-height: normal;
@@ -334,7 +335,7 @@ const HMyDiv = styled.div`
 
   /* H24_Bold */
   font-family: Noto Sans KR;
-  font-size: 1.25vw;
+  font-size: 1vw;
   font-style: normal;
   font-weight: 700;
   line-height: normal;
@@ -425,7 +426,7 @@ const HMySelect = styled.select`
 
   /* H24_Bold */
   font-family: Noto Sans KR;
-  font-size: 1.25vw;
+  font-size: 1vw;
   font-style: normal;
   font-weight: 700;
   line-height: normal;
@@ -441,6 +442,10 @@ export const HelperMyPage = () => {
   const [canChangePW, setcanChangePW] = useState(0);
   const [checkPW, setCheckPW] = useState(-1);
   const [cities, setCities] = useState([]);
+  const [selectedRegionState, setSelectedRegionState] = useState('');
+  const [selectedCountryState, setSelectedCountryState] = useState('');
+  const [nPW, setNPW] = useState('');
+  const [confNPW, setConfNPW] = useState('');
 
   useEffect(() => {
     const fetchCities = async () => {
@@ -463,9 +468,25 @@ export const HelperMyPage = () => {
     setNameChange(e.target.value);
   };
 
-  const clickNameChange = () => {
+  const clickNameChange = async () => {
     if (window.confirm(nameChange + `(으)로 이름을 변경하시겠습니까?`)) {
-      console.log("변경하는 API");
+      try {
+        const response = await api.patch(`/helper/changeHelper/`+JSON.parse(localStorage.getItem("userInfo")).id, {
+          name:nameChange,
+          region_state:JSON.parse(localStorage.getItem("userInfo")).region_state,
+          region_country:JSON.parse(localStorage.getItem("userInfo")).region_country,
+          password:JSON.parse(localStorage.getItem("userInfo")).password,
+          password_confirm:JSON.parse(localStorage.getItem("userInfo")).password_confirm
+        });
+        const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+        userInfo.name = nameChange;
+        localStorage.setItem('userInfo', JSON.stringify(userInfo));
+        setrender((prevState) => (prevState === 0 ? 1 : 0));
+        alert("이름이 성공적으로 변경되었습니다!");
+        document.getElementById('newName').value=null;
+      } catch (error) {
+        console.error("이름 변경 실패!");
+      }
     }
   };
   const clickNowPW = () => {
@@ -475,8 +496,9 @@ export const HelperMyPage = () => {
       JSON.parse(localStorage.getItem("userInfo")).password ===
       document.getElementById("nowPW").value
     ) {
-      console.log("변경하는 API");
       setcanChangePW(1);
+    }else{
+      alert('비밀번호가 틀렸습니다.');
     }
   };
   const checkNewPW = () => {
@@ -490,12 +512,62 @@ export const HelperMyPage = () => {
       setCheckPW(0);
     }
   };
-  const clickChangePW = () => {
-    console.log("변경하는API");
+  const clickChangePW = async () => {
+    if (checkPW===1){
+      try {
+        const response = await api.patch(`/helper/changeHelper/`+JSON.parse(localStorage.getItem("userInfo")).id, {
+          name:JSON.parse(localStorage.getItem("userInfo")).name,
+          region_state:JSON.parse(localStorage.getItem("userInfo")).region_state,
+          region_country:JSON.parse(localStorage.getItem("userInfo")).region_country,
+          password:document.getElementById("newPW").value,
+          password_confirm:document.getElementById("confNewPW").value
+        });
+        const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+        userInfo.password = document.getElementById("newPW").value;
+        userInfo.password_confirm = document.getElementById("confNewPW").value;
+        localStorage.setItem('userInfo', JSON.stringify(userInfo));
+        alert("비밀번호가 성공적으로 변경되었습니다!");
+        document.getElementById('newPW').value=null;
+        document.getElementById('confNewPW').value=null;
+        document.getElementById('nowPW').value=null;
+        setrender((prevState) => (prevState === 0 ? 1 : 0));
+        setcanChangePW(0);
+      } catch (error) {
+        console.error("비밀번호 변경 실패!");
+      }
+    }else{
+      alert('비밀번호를 다시 확인해주세요')
+    }
   };
-  const clickChangeArea = () => {
-    console.log("변경하는API");
+  const clickChangeArea = async () => {
+    try {
+      const response = await api.patch(`/helper/changeHelper/`+JSON.parse(localStorage.getItem("userInfo")).id, {
+        name:JSON.parse(localStorage.getItem("userInfo")).name,
+        region_state:selectedRegionState,
+        region_country:selectedCountryState,
+        password:JSON.parse(localStorage.getItem("userInfo")).password,
+        password_confirm:JSON.parse(localStorage.getItem("userInfo")).password_confirm
+      });
+      const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+      userInfo.region_state = selectedRegionState;
+      userInfo.region_country = selectedCountryState;
+      localStorage.setItem('userInfo', JSON.stringify(userInfo));
+      setrender((prevState) => (prevState === 0 ? 1 : 0));
+      alert("지역이 성공적으로 변경되었습니다!");
+    } catch (error) {
+      console.error("지역 변경 실패!");
+    }
   };
+
+  const handleRegionStateChange = (e) => {
+    const selectedState = e.target.value;
+    setSelectedRegionState(selectedState);
+  };
+  const handleRegionCountryChange = (e) => {
+    const selectedState = e.target.value;
+    setSelectedCountryState(selectedState);
+  };
+
   return (
     <Root>
       <Header2 data={render} onDataChange={handlerenderChange}></Header2>
@@ -511,7 +583,7 @@ export const HelperMyPage = () => {
             </HMyInputBox>
             <HMyInputBox style={{ display: "flex" }}>
               <HMyTag>새 이름</HMyTag>
-              <HMyInput onChange={handlerNameChange}></HMyInput>
+              <HMyInput id="newName" onChange={handlerNameChange}></HMyInput>
               <HMyChangeBtn onClick={clickNameChange}>확인</HMyChangeBtn>
             </HMyInputBox>
             <HMyLine></HMyLine>
@@ -563,20 +635,22 @@ export const HelperMyPage = () => {
             <HMyInputBox style={{ display: "flex" }}>
               <HMyTag>현재 활동지역</HMyTag>
               <HMyDiv>
-                {JSON.parse(localStorage.getItem("userInfo")).region_state +
+                {JSON.parse(localStorage.getItem("userInfo")).region_state===null?("활동 지역이 설정되지 않았습니다."):(JSON.parse(localStorage.getItem("userInfo")).region_state +
                   " " +
-                  JSON.parse(localStorage.getItem("userInfo")).region_country}
+                  JSON.parse(localStorage.getItem("userInfo")).region_country)}
               </HMyDiv>
             </HMyInputBox>
             <HMyInputBox style={{ display: "flex" }}>
               <HMyTag>새 활동지역</HMyTag>
-              <HMySelect>
-                {cities.map((city) => (
-                  <option>{city.region_state}</option>
+              <HMySelect onChange={handleRegionStateChange}>
+                <option value="">선택해주세요</option>
+                {[...new Set(cities.map((city) => city.region_state))].map((region_state) => (
+                  <option key={region_state}>{region_state}</option>
                 ))}
               </HMySelect>
-              <HMySelect>
-                {cities.map((city) => (
+              <HMySelect onChange={handleRegionCountryChange}>
+                <option value="">선택해주세요</option>
+                {cities.filter((city) => city.region_state === selectedRegionState).map((city) => (
                   <option>{city.region_country}</option>
                 ))}
               </HMySelect>

@@ -347,7 +347,7 @@ export const RandingPage = () => {
         setreRender((prevState) => (prevState === 0 ? 1 : 0));
 
         if (response.data.type === "user") {
-          navigate("/user");
+          navigate("/");
         } else {
           navigate("/");
         }
