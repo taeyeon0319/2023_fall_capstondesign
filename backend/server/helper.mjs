@@ -468,17 +468,24 @@ helperRouter.patch("/changeHelper/:id", async (req, res) => {
     // helper_mypage와 signup 테이블 동시에 업데이트
 
     // 변경할 필드만 업데이트
-    if (password !== password_confirm) {
-      res.status(400).json({ error: "Password does not match" });
-      return;
-    }
-    if (password.length < 8) {
-      res.status(400).json({ error: "Password must be at least 6 characters" });
-      return;
-    }
-    if (password.length > 16) {
-      res.status(400).json({ error: "Password must be at most 20 characters" });
-      return;
+    if (password) {
+      if (password !== password_confirm) {
+        res.status(400).json({ error: "Password does not match" });
+        return;
+      }
+
+      if (password.length < 8) {
+        res
+          .status(400)
+          .json({ error: "Password must be at least 6 characters" });
+        return;
+      }
+      if (password.length > 16) {
+        res
+          .status(400)
+          .json({ error: "Password must be at most 20 characters" });
+        return;
+      }
     }
 
     if (name || password || password_confirm) {
@@ -495,9 +502,9 @@ helperRouter.patch("/changeHelper/:id", async (req, res) => {
 
       await client.query(
         `UPDATE signup SET ${signupUpdateQuery} WHERE id = $${
-          Object.keys(updatedFields).length + 1
+          Object.keys(updatedSignupFields).length + 1
         }`,
-        [...Object.values(updatedFields), helper_id]
+        [...Object.values(updatedSignupFields), helper_id]
       );
     }
 
@@ -515,9 +522,9 @@ helperRouter.patch("/changeHelper/:id", async (req, res) => {
 
       await client.query(
         `UPDATE helper_mypage SET ${helperMypageUpdateQuery} WHERE helper_id = $${
-          Object.keys(updatedFields).length + 1
+          Object.keys(updatedMypageFields).length + 1
         }`,
-        [helper_id, ...Object.values(updatedFields)]
+        [helper_id, ...Object.values(updatedMypageFields)]
       );
     }
 
