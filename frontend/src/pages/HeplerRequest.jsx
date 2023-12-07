@@ -200,7 +200,7 @@ export const HelperRequestPage = () => {
                 }}
               >
                 <UserInfoText>지역</UserInfoText>
-                <UserInfoIpt>{Data[0].region_country}</UserInfoIpt>
+                <UserInfoIpt>{Data[0].region_state+" "+Data[0].region_country}</UserInfoIpt>
                 <UserInfoText>도우미 분야</UserInfoText>
                 <UserInfoIpt>{Data[0].field}</UserInfoIpt>
                 <UserInfoText>날짜</UserInfoText>
@@ -244,7 +244,7 @@ export const HelperRequestPage = () => {
                   <UserInfoText>이름</UserInfoText>
                   <UserInfoIpt>{Data[0].name}</UserInfoIpt>
                   <UserInfoText>주소</UserInfoText>
-                  <UserInfoIpt>{Data[0].region_country}</UserInfoIpt>
+                  <UserInfoIpt>{Data[0].region_state+" "+Data[0].region_country}</UserInfoIpt>
                   <HelperReqText>
                     더욱 자세한 주소는 직접 전달받아야 합니다.
                   </HelperReqText>
