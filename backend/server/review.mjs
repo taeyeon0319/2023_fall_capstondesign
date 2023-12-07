@@ -250,7 +250,11 @@ reviewRouter.patch("/user-review/modify/:review_id", async (req, res) => {
     ) {
       const updatedFields = [
         title ? `title = '${title}'` : null,
+<<<<<<< HEAD
         contents ? `contents = '${contents}'` : null,
+=======
+        // content ? `content = '${content}'` : null,
+>>>>>>> 3b0e521def636a66b08ebf23a624b289ee790b44
         rating ? `rating = '${rating}'` : null,
         child_like ? `child_like = '${child_like}'` : null,
         kind ? `kind = '${kind}'` : null,

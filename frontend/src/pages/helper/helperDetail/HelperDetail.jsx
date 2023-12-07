@@ -3,7 +3,7 @@ import { useNavigate, useParams, useLocation } from "react-router-dom";
 import "./HelperDetail.css";
 import axios from "axios";
 import api from "../../../api";
-import { Button, Modal, DatePicker, Space, TimePicker } from "antd";
+import { Button, Modal, DatePicker, Space, TimePicker, Tag, Divider, Tooltip } from "antd";
 import Header2 from "../../../components/Header2";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
@@ -45,6 +45,8 @@ const HelperDetail = () => {
   const [helperlist, setHelperlist] = useState([]);
 
   const [cityData, setCityData] = useState([]);
+
+  const [daysTimes, setDaysTimes] = useState([])
 
   //DatePicker 오늘 이후의 시간만 선택 가능한 component
   dayjs.extend(customParseFormat);
@@ -213,6 +215,16 @@ const HelperDetail = () => {
     disabledSeconds: () => [55, 56],
   });
 
+  const DateTags = ()=>{
+    const colors = ['108ee9','87d068', '2db7f5', 'f50', '87d068' , '108ee9', '87d068']
+      return (daysTimes.map((day, idx)=>{
+        return (<Tooltip placement="top" title={`${day.start} ~ ${day.end}`}>
+          <Tag color={`#${colors[idx]}`}>{day.day}</Tag>
+        </Tooltip>
+        )
+      }))
+  }
+
   //도우미 신청 버튼 클릭하면 뜨는 Modal 창
   // const Modal = () => {
   //     // const [isModalOpen, setIsModalOpen] = useState(false);
@@ -265,12 +277,25 @@ const HelperDetail = () => {
       });
   };
 
+
+
   useEffect(() => {
     const response = api.get(`/user/helper/${helper_id}`);
 
     response.then((res) => {
       setHelperInfo(res.data[0]);
-      console.log(res.data[0].start_time);
+
+      const days = res.data[0].day.split(', ')
+      const starts = res.data[0].start_time.split(', ')
+      const ends = res.data[0].end_time.split(', ')
+
+      setDaysTimes(days.map((day, idx)=>{
+        return {
+          day: days[idx],
+          start: starts[idx],
+          end: ends[idx],
+        }
+      }))
     });
   }, []);
 
@@ -314,12 +339,19 @@ const HelperDetail = () => {
                 {helperInfo.region_state} / {helperInfo.region_country}
               </p>
               <p className="time-range">
-                <span className="materail-time material-symbols-outlined">
-                  schedule
-                </span>
-                <span>{helperInfo.start_time}</span>
+                <Space size={[0, 8]} wrap>
+
+                  {DateTags()}
+                {/* <Tooltip placement="topLeft" title={'MONDAY'}>
+                  <Tag color="#f50">#f50</Tag>
+                </Tooltip>
+                  <Tag color="#2db7f5">#2db7f5</Tag>
+                  <Tag color="#87d068">#87d068</Tag>
+                  <Tag color="#108ee9">#108ee9</Tag> */}
+                </Space>
+                {/* <span>{helperInfo.start_time}</span>
                 &nbsp;~&nbsp;
-                <span>{helperInfo.end_time}</span>
+                <span>{helperInfo.end_time}</span> */}
               </p>
               <p className="career-list">
                 <span className="career">베이비시터</span>
@@ -478,7 +510,7 @@ const HelperDetail = () => {
                       placeholder="00:00"
                       defaultValue={dayjs(`${date} ${serviceEndTime}:00`)}
                       onChange={(time, timeString) =>
-                        setServiceStartTime(timeString)
+                        setServiceEndTime(timeString)
                       }
                       format={"HH:mm"}
                     />
