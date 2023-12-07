@@ -4,12 +4,13 @@ import styled from "styled-components";
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import axios from "axios";
+import LeftMenu from "../components/LeftMenu";
 
 const HelperTimetablePage = () => {
   return (
     <>
       <Header2></Header2>
+      <LeftMenu></LeftMenu>
 
       <Timetable />
     </>

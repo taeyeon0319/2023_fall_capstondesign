@@ -221,7 +221,7 @@ reviewRouter.patch("/user-review/modify/:review_id", async (req, res) => {
   const client = await pool.connect();
   const reviewId = parseInt(req.params.review_id);
   const title = req.body.title;
-  const content = req.body.content;
+  const contents = req.body.contents;
   const rating = req.body.rating;
   const child_like = req.body.child_like;
   const kind = req.body.kind;
@@ -241,7 +241,7 @@ reviewRouter.patch("/user-review/modify/:review_id", async (req, res) => {
     //변경된 필드만 수정하도록
     if (
       title ||
-      content ||
+      contents ||
       rating ||
       child_like ||
       kind ||
@@ -250,7 +250,11 @@ reviewRouter.patch("/user-review/modify/:review_id", async (req, res) => {
     ) {
       const updatedFields = [
         title ? `title = '${title}'` : null,
+<<<<<<< HEAD
+        contents ? `contents = '${contents}'` : null,
+=======
         // content ? `content = '${content}'` : null,
+>>>>>>> 3b0e521def636a66b08ebf23a624b289ee790b44
         rating ? `rating = '${rating}'` : null,
         child_like ? `child_like = '${child_like}'` : null,
         kind ? `kind = '${kind}'` : null,
