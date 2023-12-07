@@ -55,7 +55,7 @@ const UserMyPage = ()=>{
 
         axios.get(`${process.env.REACT_APP_SERVER_URL}/helper/users/${userInfo.id}`).then((res)=>{
             setUserInfo(res.data[0])
-            //console.log(res.data[0])
+            console.log(res.data[0])
         })
 
         axios.get(`${process.env.REACT_APP_SERVER_URL}/helper/requests-helper/${userInfo.id}`).then(res=>{
@@ -123,6 +123,16 @@ const UserMyPage = ()=>{
                                 <p style={{textAlign: 'right', fontSize: 24, fontWeight: 700, color: '#54493F', lineHeight: 2}}>{1000}원</p> */}
                             </div>
                             <div style={{position: "absolute", bottom: 10, right: 10}}>
+                                <button onClick={()=>{
+                                    // navigate(`/user-review/delete/${request.helper.id}`)
+                                    axios.delete(`${process.env.REACT_APP_SERVER_URL}/review/user-review/delete/${request.id}`).then(()=>{
+                                        const arr = requestIngList.slice()
+                                        arr.splice(idx, 1)
+                                        setRequestIngList(arr)
+                                        alert('취소되었습니다.')
+                                    })
+                            
+                            }} style = {{padding : "6px 29px", border: "1px solid #725F51", background: "none", borderRadius :"5px", color:"#725F51", marginRight:"13px"}}>취소</button>
                                 <button disabled={true} style = {{padding : "6px 29px", border: "1px solid #725F51", backgroundColor: "#725F51", borderRadius :"5px", color:"#fff", marginRight:"13px"}}>요청중</button>
                             </div>
                             <div style={{width: 106, height: 106, margin: 25, borderRadius: '50%', overflow: 'hidden', display: 'flex', justifyContent: 'center', float: "left" }}>

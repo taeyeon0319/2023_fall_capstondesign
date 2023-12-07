@@ -157,7 +157,7 @@ const UserMyPageEdit = ()=>{
             </div>
 
             <div className="btn-container">
-                <button style={{lineHeight: 2, width: 200, border: '1px solid #EBEAEA', color: 'gray', borderRadius: 5, backgroundColor: '#fff', fontSize: 24, marginRight: 5}}>취소</button>
+                <button onClick={navigate(-1)} style={{lineHeight: 2, width: 200, border: '1px solid #EBEAEA', color: 'gray', borderRadius: 5, backgroundColor: '#fff', fontSize: 24, marginRight: 5}}>취소</button>
                 <button onClick={updateUserInfo} style={{lineHeight: 2,width: 200, color: '#fff', border: '1px solid #EBEAEA', borderRadius: 5, backgroundColor: '#725f51', fontSize: 24, marginRight: 5}}>회원 정보 수정</button>
             </div>
         </div>

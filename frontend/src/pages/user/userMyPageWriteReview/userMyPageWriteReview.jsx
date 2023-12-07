@@ -29,7 +29,7 @@ const UserMyPageWriteReview = ()=>{
         const request_id2 = param.request_id
         //console.log(userInfo.name)
         axios.get(`${process.env.REACT_APP_SERVER_URL}/review/user-reviews/${request_id}`).then((res)=>{
-            console.log(res)
+            console.log('res:::',res.data.helper)
             setUserInfo(res.data.helper)
             //console.log(res.data[0])
 
@@ -54,7 +54,7 @@ const UserMyPageWriteReview = ()=>{
 
     const saveTheInfo=()=>{
         const myInfo = JSON.parse(localStorage.getItem('userInfo'))
-        console.log(userInfo)
+        //console.log('userInfo :::',myInfo)
         const requestParams = {
             user_id : myInfo.id,
             helper_id : helper_id,
@@ -80,8 +80,10 @@ const UserMyPageWriteReview = ()=>{
             console.log('수정 성공')
             navigate('/usermypage')
         }))
-        .catch(()=>console.log('수정 실패'))
-        alert('실패했습니다.')
+        .catch(()=>{
+            alert('실패했습니다.')
+            console.log('수정 실패')
+        })
     }
 
     return (
