@@ -316,65 +316,67 @@ const Timetable = () => {
 
   return (
     <>
-      <div
-        style={customTableStyle}
-        ref={timetableRef}
-        onMouseLeave={() => handleCellMouseUp()}
-      >
-        <Table
-          style={{ margin: 0 }}
-          columns={columns}
-          dataSource={data}
-          scroll={{ x: "100%", y: 400 }}
-          pagination={false}
-        />
-      </div>
+      <div id="wrapper">
+        <div
+          style={customTableStyle}
+          ref={timetableRef}
+          onMouseLeave={() => handleCellMouseUp()}
+        >
+          <Table
+            style={{ margin: 0 }}
+            columns={columns}
+            dataSource={data}
+            scroll={{ x: "100%", y: 400 }}
+            pagination={false}
+          />
+        </div>
 
-      <div className="time-setting">
-        <li className="filter-list-item">
-          <div className="select-container">
-            <Select
-              id="day"
-              defaultValue="   Day   "
-              onChange={handleChangeDay}
-            >
-              {daysOfWeek.map((day) => (
-                <Option key={day} value={day.toLowerCase()}>
-                  {day}
-                </Option>
-              ))}
-            </Select>
-            &nbsp;&nbsp;&nbsp;&nbsp;
-            <Select
-              id="start-time"
-              defaultValue="start time"
-              onChange={handleChangeStartTime}
-            >
-              {times.map((time) => (
-                <Option key={time} value={time}>
-                  {time}
-                </Option>
-              ))}
-            </Select>
-            &nbsp;&nbsp;&nbsp;&nbsp;
-            <Select
-              id="end-time"
-              defaultValue="end time"
-              onChange={handleChangeEndTime}
-            >
-              {times.map((time) => (
-                <Option key={time} value={time}>
-                  {time}
-                </Option>
-              ))}
-            </Select>
+        <div className="time-setting">
+          <li className="filter-list-item">
+            <div className="select-container">
+              <Select
+                id="day"
+                defaultValue="   Day   "
+                onChange={handleChangeDay}
+              >
+                {daysOfWeek.map((day) => (
+                  <Option key={day} value={day.toLowerCase()}>
+                    {day}
+                  </Option>
+                ))}
+              </Select>
+              &nbsp;&nbsp;&nbsp;&nbsp;
+              <Select
+                id="start-time"
+                defaultValue="start time"
+                onChange={handleChangeStartTime}
+              >
+                {times.map((time) => (
+                  <Option key={time} value={time}>
+                    {time}
+                  </Option>
+                ))}
+              </Select>
+              &nbsp;&nbsp;&nbsp;&nbsp;
+              <Select
+                id="end-time"
+                defaultValue="end time"
+                onChange={handleChangeEndTime}
+              >
+                {times.map((time) => (
+                  <Option key={time} value={time}>
+                    {time}
+                  </Option>
+                ))}
+              </Select>
+            </div>
+          </li>
+
+          <div>
+            <Button id="add-btn" onClick={handleAddTimetable}>
+              Add
+            </Button>
           </div>
-        </li>
-
-        <div>
-          <Button id="add-btn" onClick={handleAddTimetable}>
-            Add
-          </Button>
         </div>
       </div>
 
