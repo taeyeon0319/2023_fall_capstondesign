@@ -6,8 +6,8 @@ import userImg from "../img/profile.png";
 import userImg2 from "../img/profile3.png";
 import grayImg from "../img/gray.png";
 import { useState } from "react";
-import axios from "axios";
 import api from "../api";
+import LeftMenu from "../components/LeftMenu";
 
 const dummyData = {
   data: [
@@ -315,6 +315,8 @@ export const HelperMyPage = () => {
   return (
     <Root>
       <Header2 data={render} onDataChange={handlerenderChange}></Header2>
+      <LeftMenu></LeftMenu>
+
       <HelperMyProfileBox>
         <HelperMyImg
           src={JSON.parse(localStorage.getItem("userInfo")).image}

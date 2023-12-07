@@ -8,6 +8,7 @@ import grayImg from "../img/gray.png";
 import { useState } from "react";
 import axios from "axios";
 import api from "../api";
+import LeftMenu from "../components/LeftMenu";
 
 const dummyData = {
   data: [
@@ -442,10 +443,10 @@ export const HelperMyPage = () => {
   const [canChangePW, setcanChangePW] = useState(0);
   const [checkPW, setCheckPW] = useState(-1);
   const [cities, setCities] = useState([]);
-  const [selectedRegionState, setSelectedRegionState] = useState('');
-  const [selectedCountryState, setSelectedCountryState] = useState('');
-  const [nPW, setNPW] = useState('');
-  const [confNPW, setConfNPW] = useState('');
+  const [selectedRegionState, setSelectedRegionState] = useState("");
+  const [selectedCountryState, setSelectedCountryState] = useState("");
+  const [nPW, setNPW] = useState("");
+  const [confNPW, setConfNPW] = useState("");
 
   useEffect(() => {
     const fetchCities = async () => {
@@ -471,19 +472,26 @@ export const HelperMyPage = () => {
   const clickNameChange = async () => {
     if (window.confirm(nameChange + `(으)로 이름을 변경하시겠습니까?`)) {
       try {
-        const response = await api.patch(`/helper/changeHelper/`+JSON.parse(localStorage.getItem("userInfo")).id, {
-          name:nameChange,
-          region_state:JSON.parse(localStorage.getItem("userInfo")).region_state,
-          region_country:JSON.parse(localStorage.getItem("userInfo")).region_country,
-          password:JSON.parse(localStorage.getItem("userInfo")).password,
-          password_confirm:JSON.parse(localStorage.getItem("userInfo")).password_confirm
-        });
-        const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+        const response = await api.patch(
+          `/helper/changeHelper/` +
+            JSON.parse(localStorage.getItem("userInfo")).id,
+          {
+            name: nameChange,
+            region_state: JSON.parse(localStorage.getItem("userInfo"))
+              .region_state,
+            region_country: JSON.parse(localStorage.getItem("userInfo"))
+              .region_country,
+            password: JSON.parse(localStorage.getItem("userInfo")).password,
+            password_confirm: JSON.parse(localStorage.getItem("userInfo"))
+              .password_confirm,
+          }
+        );
+        const userInfo = JSON.parse(localStorage.getItem("userInfo"));
         userInfo.name = nameChange;
-        localStorage.setItem('userInfo', JSON.stringify(userInfo));
+        localStorage.setItem("userInfo", JSON.stringify(userInfo));
         setrender((prevState) => (prevState === 0 ? 1 : 0));
         alert("이름이 성공적으로 변경되었습니다!");
-        document.getElementById('newName').value=null;
+        document.getElementById("newName").value = null;
       } catch (error) {
         console.error("이름 변경 실패!");
       }
@@ -497,8 +505,8 @@ export const HelperMyPage = () => {
       document.getElementById("nowPW").value
     ) {
       setcanChangePW(1);
-    }else{
-      alert('비밀번호가 틀렸습니다.');
+    } else {
+      alert("비밀번호가 틀렸습니다.");
     }
   };
   const checkNewPW = () => {
@@ -513,45 +521,56 @@ export const HelperMyPage = () => {
     }
   };
   const clickChangePW = async () => {
-    if (checkPW===1){
+    if (checkPW === 1) {
       try {
-        const response = await api.patch(`/helper/changeHelper/`+JSON.parse(localStorage.getItem("userInfo")).id, {
-          name:JSON.parse(localStorage.getItem("userInfo")).name,
-          region_state:JSON.parse(localStorage.getItem("userInfo")).region_state,
-          region_country:JSON.parse(localStorage.getItem("userInfo")).region_country,
-          password:document.getElementById("newPW").value,
-          password_confirm:document.getElementById("confNewPW").value
-        });
-        const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+        const response = await api.patch(
+          `/helper/changeHelper/` +
+            JSON.parse(localStorage.getItem("userInfo")).id,
+          {
+            name: JSON.parse(localStorage.getItem("userInfo")).name,
+            region_state: JSON.parse(localStorage.getItem("userInfo"))
+              .region_state,
+            region_country: JSON.parse(localStorage.getItem("userInfo"))
+              .region_country,
+            password: document.getElementById("newPW").value,
+            password_confirm: document.getElementById("confNewPW").value,
+          }
+        );
+        const userInfo = JSON.parse(localStorage.getItem("userInfo"));
         userInfo.password = document.getElementById("newPW").value;
         userInfo.password_confirm = document.getElementById("confNewPW").value;
-        localStorage.setItem('userInfo', JSON.stringify(userInfo));
+        localStorage.setItem("userInfo", JSON.stringify(userInfo));
         alert("비밀번호가 성공적으로 변경되었습니다!");
-        document.getElementById('newPW').value=null;
-        document.getElementById('confNewPW').value=null;
-        document.getElementById('nowPW').value=null;
+        document.getElementById("newPW").value = null;
+        document.getElementById("confNewPW").value = null;
+        document.getElementById("nowPW").value = null;
         setrender((prevState) => (prevState === 0 ? 1 : 0));
         setcanChangePW(0);
       } catch (error) {
         console.error("비밀번호 변경 실패!");
       }
-    }else{
-      alert('비밀번호를 다시 확인해주세요')
+    } else {
+      alert("비밀번호를 다시 확인해주세요");
     }
   };
   const clickChangeArea = async () => {
     try {
-      const response = await api.patch(`/helper/changeHelper/`+JSON.parse(localStorage.getItem("userInfo")).id, {
-        name:JSON.parse(localStorage.getItem("userInfo")).name,
-        region_state:selectedRegionState,
-        region_country:selectedCountryState,
-        password:JSON.parse(localStorage.getItem("userInfo")).password,
-        password_confirm:JSON.parse(localStorage.getItem("userInfo")).password_confirm
-      });
-      const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+      const response = await api.patch(
+        `/helper/changeHelper/` +
+          JSON.parse(localStorage.getItem("userInfo")).id,
+        {
+          name: JSON.parse(localStorage.getItem("userInfo")).name,
+          region_state: selectedRegionState,
+          region_country: selectedCountryState,
+          password: JSON.parse(localStorage.getItem("userInfo")).password,
+          password_confirm: JSON.parse(localStorage.getItem("userInfo"))
+            .password_confirm,
+        }
+      );
+      const userInfo = JSON.parse(localStorage.getItem("userInfo"));
       userInfo.region_state = selectedRegionState;
       userInfo.region_country = selectedCountryState;
-      localStorage.setItem('userInfo', JSON.stringify(userInfo));
+      localStorage.setItem("userInfo", JSON.stringify(userInfo));
       setrender((prevState) => (prevState === 0 ? 1 : 0));
       alert("지역이 성공적으로 변경되었습니다!");
     } catch (error) {
@@ -571,6 +590,7 @@ export const HelperMyPage = () => {
   return (
     <Root>
       <Header2 data={render} onDataChange={handlerenderChange}></Header2>
+      <LeftMenu></LeftMenu>
       <HMyBody>
         <HMyEditBox>
           <div>
@@ -635,24 +655,31 @@ export const HelperMyPage = () => {
             <HMyInputBox style={{ display: "flex" }}>
               <HMyTag>현재 활동지역</HMyTag>
               <HMyDiv>
-                {JSON.parse(localStorage.getItem("userInfo")).region_state===null?("활동 지역이 설정되지 않았습니다."):(JSON.parse(localStorage.getItem("userInfo")).region_state +
-                  " " +
-                  JSON.parse(localStorage.getItem("userInfo")).region_country)}
+                {JSON.parse(localStorage.getItem("userInfo")).region_state ===
+                null
+                  ? "활동 지역이 설정되지 않았습니다."
+                  : JSON.parse(localStorage.getItem("userInfo")).region_state +
+                    " " +
+                    JSON.parse(localStorage.getItem("userInfo")).region_country}
               </HMyDiv>
             </HMyInputBox>
             <HMyInputBox style={{ display: "flex" }}>
               <HMyTag>새 활동지역</HMyTag>
               <HMySelect onChange={handleRegionStateChange}>
                 <option value="">선택해주세요</option>
-                {[...new Set(cities.map((city) => city.region_state))].map((region_state) => (
-                  <option key={region_state}>{region_state}</option>
-                ))}
+                {[...new Set(cities.map((city) => city.region_state))].map(
+                  (region_state) => (
+                    <option key={region_state}>{region_state}</option>
+                  )
+                )}
               </HMySelect>
               <HMySelect onChange={handleRegionCountryChange}>
                 <option value="">선택해주세요</option>
-                {cities.filter((city) => city.region_state === selectedRegionState).map((city) => (
-                  <option>{city.region_country}</option>
-                ))}
+                {cities
+                  .filter((city) => city.region_state === selectedRegionState)
+                  .map((city) => (
+                    <option>{city.region_country}</option>
+                  ))}
               </HMySelect>
               <HMyChangeBtn onClick={clickChangeArea}>
                 활동지역 변경하기

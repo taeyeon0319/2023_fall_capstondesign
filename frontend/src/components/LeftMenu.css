@@ -1,8 +1,11 @@
 .left-menu {
   position: fixed;
+
+  left: 0;
+
   width: 200px;
   height: 100%;
-  background-color: #f0f0f0;
+  background-color: #ffffff;
   padding: 10px;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
 }
@@ -12,6 +15,11 @@
   padding: 10px;
   margin-bottom: 5px;
   transition: background-color 0.3s;
+  background-color: #bc9c7d;
+  text-decoration: none;
+  color: #ecf0f1; /* Light text color */
+  display: flex;
+  flex-direction: column;
 }
 
 .menu-item:hover {
@@ -19,6 +27,6 @@
 }
 
 .active {
-  background-color: #b3b3b3;
+  background-color: #4a2f16;
   color: #fff;
 }
