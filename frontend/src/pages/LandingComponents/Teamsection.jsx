@@ -42,13 +42,13 @@ function TeamSection() {
 
         <Member
           name="이윤서"
-          birth="2001.00.00"
+          birth="2001.03.29"
           major="통계학과"
           num="2020110483"
           github="https://github.com/lys3269"
-          keyword1="OOO"
-          keyword2="OOO"
-          keyword3="OOO"
+          keyword1="ISFP"
+          keyword2="백엔드"
+          keyword3="크로스핏"
           img="https://avatars.githubusercontent.com/u/112849440?v=4"
         />
 
@@ -58,9 +58,9 @@ function TeamSection() {
           major="정보통신공학과"
           num="2020112096"
           github="https://github.com/hjyeeoonng"
-          keyword1="OOO"
-          keyword2="OOO"
-          keyword3="OOO"
+          keyword1="ENFP"
+          keyword2="프론트"
+          keyword3="꿈부자"
           img="https://avatars.githubusercontent.com/u/100748980?v=4"
         />
       </Team>

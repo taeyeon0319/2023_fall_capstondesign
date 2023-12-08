@@ -154,7 +154,13 @@ const RandTextBox = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-left:-100px;
+  margin-right:100px;
 `;
+
+const RandImg = styled.img`
+  width:50%;
+`
 const RandTextBig = styled.div`
   color: var(--Point-5, #725f51);
 
@@ -446,22 +452,20 @@ export const RandingPage = () => {
               alignItems: "flex-start",
             }}
           >
-            <RandTextBig>환영합니다</RandTextBig>
+            {/* <div style={{ width:"100%", backgroundColor:"red"}}><RandImg src="https://sdcarecoop.com/theme/basic/img/baby/img1.jpg" alt=""/></div> */}
+            <RandTextBig><br/><br/>안녕하세요. 도우미 긴급 호출 서비스 Help_py입니다</RandTextBig>
             <RandTextSmall>
-              물가 상승과 경기 둔화로 현재 경제 상황은 매우 어렵습니다. 그러나
-              이러한 도전적인 시기에도 혁신과 협력을 통해 새로운 기회를 찾을 수
-              있습니다. 기업들은 디지털 전환과 지속 가능한 비즈니스 모델을
-              채택하여 경쟁력을 확보해야 합니다.
-              <br />
-              교육 역시 중요한 과제 중 하나입니다. 젊은 세대에게 현대적인 스킬과
-              지식을 전달하고, 교육의 접근성을 높이는 것이 필수적입니다. 또한
-              사회적 평등을 증진하기 위해 다양성과 포용성을 존중하는 사회를
-              만들어야 합니다.
-              <br />
-              정부와 시민 사회, 기업이 협력하여 이러한 문제에 대처하고 해결책을
-              찾는다면 미래는 더 밝을 것입니다. 이러한 과정에서 우리는 지속
-              가능한 환경을 보호하고, 모든 사람들에게 공평한 기회를 제공하는
-              방향으로 나아갈 수 있을 것입니다.
+              Help_py는 예상치 못한 긴급한 상황에서 신속한 도움을 제공받을 수 있는 1회성 서비스입니다.
+              <br/><br/>
+              응급 상황, 갑작스러운 문제 또는 급하게 필요한 상황에서 Help_py 서비스 내 인증된 도우미들이 <br/>
+              즉각적으로 출동하여 필요한 지원을 제공합니다.
+              <br/><br/>
+              Help_py는 안전과 신뢰를 최우선으로 하며, 신속하고 효과적인 대응을 통해 사용자 도움에 중점을 
+              <br/>둡니다.
+              <br /><br/>
+              언제 어디서나 호출이 가능하며 안심하고 이용할 수 있는 도우미 긴급 매칭 서비스, Help_py를 지금 
+              <br/>이용해보세요.
+              
             </RandTextSmall>
           </div>
         </RandTextBox>
@@ -617,7 +621,7 @@ export const RandingPage = () => {
           <RandBtn onClick={clickTeam}>팀 소개</RandBtn>
         </RandButtonBox>
       </RandBody>
-      <Footer />
+      <div style={{marginTop:"200px"}}><Footer /></div>
       {/*
             <RandBox>
                 <RandLine></RandLine>
