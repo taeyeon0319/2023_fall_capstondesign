@@ -25,6 +25,7 @@ const UserMyPage = ()=>{
     const [userInfo, setUserInfo] = useState({});
     const [reviewlist, setReviewlist] = useState([]);
     const [requestIngList, setRequestIngList] = useState([]);
+    const [requestAcceptedList, setRequestAcceptedList] = useState([]);
     const handlerenderChange = () =>{
         setrender(prevState => (prevState === 0 ? 1 : 0));
     };
@@ -81,12 +82,12 @@ const UserMyPage = ()=>{
             setRequestIngList(res.data[0].requests)
         })
         
-        // const response_accepted = axios.get(`${process.env.REACT_APP_SERVER_URL}/helper/requests-helper/${loginedUserInfo.id}`);
+        const response_accepted = axios.get(`${process.env.REACT_APP_SERVER_URL}/helper/requests-user/${loginedUserInfo.id}/accepted`);
 
-        // response_accepted.then(res => {
-        //     // console.log('ing:::',res.data[0].requests)
-        //     setRequestIngList(res.data[0].requests)
-        // })
+        response_accepted.then(res => {
+            console.log('accepted:::',res.data)
+            setRequestAcceptedList(res.data)
+        })
     }, [])
 
     const historyItemList = ()=>{
@@ -115,6 +116,40 @@ const UserMyPage = ()=>{
                                 <ul style={{float: 'left', paddingTop: 5}}>
                                     <li style={{lineHeight: 2,}}><span style={{display: 'inline-block', fontWeight: 500, fontSize: 18, width: 100}}>도우미</span> <span style={{fontWeight: 700, fontSize: 20}}>{review.helper.name}</span> <span>도우미님</span></li>
                                     <li style={{lineHeight: 1.5,}}><span style={{display: 'inline-block', fontWeight: 500, fontSize: 18, width: 100}}>요청시각</span> <span style={{fontWeight: 700, fontSize: 20}}>{review.start_time} ~ {review._time}</span> </li>
+                                </ul>
+                            </div>
+                        </div>
+            )
+        })
+    }
+
+    const getAcceptedList = ()=>{
+        requestAcceptedList.sort(function(a, b){
+            if(new Date(a.date) > new Date(b.date)) return -1;
+            else return 1;
+        })
+
+        return requestAcceptedList.map((review, idx)=>{
+            console.log(review)
+            return (
+                        <div className="history-item" key={idx}>
+                            <div style={{position: "absolute", top: 20, right: 10}}>
+                                <p style={{textAlign: 'right', fontWeight: 500, fontSize: 18, color: '#725F51'}}>도우미 비용</p>
+                                <p style={{textAlign: 'right', fontSize: 24, fontWeight: 700, color: '#54493F', lineHeight: 2}}>{review.timepay}원</p>
+                            </div>
+                            <div style={{position: "absolute", bottom: 10, right: 10}}>
+                                <button onClick={()=>navigate(`/usermypage/helperReview/${review.helper_id}`)} style = {{padding : "6px 29px", border: "1px solid #725F51", background: "none", borderRadius :"5px", color:"#725F51", marginRight:"13px"}}>자세히 보기</button>
+                                <button disabled={true} style = {{padding : "6px 29px", border: "1px solid #725F51", backgroundColor: "#725F51", borderRadius :"5px", color:"#fff", marginRight:"13px"}}>수락된 요청</button>
+
+                            </div>
+                            <div style={{width: 106, height: 106, margin: 25, borderRadius: '50%', overflow: 'hidden', display: 'flex', justifyContent: 'center', float: "left" }}>
+                                <img style={{height: 106}} src={review.image}></img>
+                            </div>
+                            <div className="history-item-desc">
+                                <p className="history-item-title" style={{width: 850}}>{review.comment} - {convertYYYYMMDD(review.date)}</p>
+                                <ul style={{float: 'left', paddingTop: 5}}>
+                                    <li style={{lineHeight: 2,}}><span style={{display: 'inline-block', fontWeight: 500, fontSize: 18, width: 100}}>도우미</span> <span style={{fontWeight: 700, fontSize: 20}}>{review.name}</span> <span>도우미님</span></li>
+                                    <li style={{lineHeight: 1.5,}}><span style={{display: 'inline-block', fontWeight: 500, fontSize: 18, width: 100}}>요청시각</span> <span style={{fontWeight: 700, fontSize: 20}}>{review.start_time} ~ {review.end_time}</span> </li>
                                 </ul>
                             </div>
                         </div>
@@ -191,6 +226,7 @@ const UserMyPage = ()=>{
                         최근 이용 내역
                     </p>
                     <div className="history-list-container">
+                        {getAcceptedList()}
                         {requestIngItemList()}
                         {historyItemList()}
                         {/* <div className="history-item">
