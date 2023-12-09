@@ -61,7 +61,7 @@ chattingRouter.get("/insert-data", async (req, res) => {
 
     const insertDataQuery = (`
       INSERT INTO roomList2 (roomId, roomName, userId, helperId, sub ,lastChat) VALUES
-      ($1, '김동국_이숙희', 'dongguk123', 'sook_hee', '아이 3시간 봐주실 분 구합니다.', '알겠습니다~')`);
+      ($1, '김동국_전현정', 'dongguk123', 'hjyeeoonng', '아이 3시간 봐주실 분 구합니다.', '알겠습니다~')`);
 
     await client.query(insertDataQuery, [roomId]);
 
