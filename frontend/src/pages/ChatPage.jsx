@@ -10,6 +10,7 @@ import { useState } from "react";
 import socketIOClient from "socket.io-client";
 import ChatLog from "../components/ChatLog/ChatLog";
 import Loading from "./Loading";
+import api from "../api";
 
 const dummyDataReqList = [
     {
@@ -483,12 +484,12 @@ line-height: normal;
 `
 export const ChatPage = () => {
     const [render, setrender] = useState(0);
-
     const [selectedReq, setSelectedReq] = useState('');
     const [selectedHelper, setSelectedHelper] = useState(null);
     const [chatId, setChatId] = useState('');
     const [selectedChatList, setSelectedChatList] = useState([{chatId:"",chatList:[{type:"Notification",data:"채팅 내역이 없습니다.",time:""}]}]);
-    
+    const [roomList,setRoomList]=useState([]);
+
     //채팅 관련 State
     const [currentSocket, setCurrentSocket] = useState();
     const [chatMessage, setChatMessage] = useState("");
@@ -504,7 +505,21 @@ export const ChatPage = () => {
 
     useEffect(() => {
         setCurrentSocket(socketIOClient("localhost:5001"));
+        fetchData();
     }, []);
+
+    const fetchData = async () => {
+        try {
+            const response = await api.get(
+                "/chatting/get-all-roomList"
+            );
+            //setData(response.data.filter((item) => item.user_id === state));
+            console.log(response.data);
+            setRoomList(response.data);
+        } catch (error) {
+            console.error("API 호출 중 오류 발생:", error);
+        }
+    };
 
     if (currentSocket) {
         currentSocket.on("connect", () => {
@@ -570,16 +585,16 @@ export const ChatPage = () => {
                     ))}
                 </ChatSelect>
                 */}
-                {dummyDataChatList.data.map((item, index) => (
+                {roomList.map((item, index) => (
                     //item.sub === selectedReq && (
-                    <HelperReqList key={item.name} className={index === selectedHelper ? 'selected' : ''} onClick={() => handleHelperClick(index,item.name)}>
-                        <UserHelperListImg src={item.img} />
+                    <HelperReqList key={JSON.parse(localStorage.getItem("userInfo")).type==='helper'?item.roomname.split('_')[0]:item.roomname.split('_')[1]} className={index === selectedHelper ? 'selected' : ''} onClick={() => handleHelperClick(index,item.roomname)}>
+                        <UserHelperListImg src={JSON.parse(localStorage.getItem('userInfo')).image} />
                         <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "center" }}>
                         <div style={{ display: "flex", alignItems: "flex-end" }}>
-                            <HelperReqText>{item.name}</HelperReqText>
-                            <HelperReqText2>도우미</HelperReqText2>
+                            <HelperReqText>{JSON.parse(localStorage.getItem("userInfo")).type==='helper'?item.roomname.split('_')[0]:item.roomname.split('_')[1]}</HelperReqText>
+                            <HelperReqText2>{JSON.parse(localStorage.getItem("userInfo")).type==='helper'?'이용자':'도우미'}</HelperReqText2>
                         </div>
-                        <HelperReqText3>{item.lastChat}</HelperReqText3>
+                        <HelperReqText3>{item.lastchat}</HelperReqText3>
                         </div>
                     </HelperReqList>
                     //)
