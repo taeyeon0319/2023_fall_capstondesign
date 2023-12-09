@@ -590,8 +590,8 @@ export const HelperMyPage = () => {
   return (
     <Root>
       <Header2 data={render} onDataChange={handlerenderChange}></Header2>
-      <LeftMenu></LeftMenu>
       <HMyBody>
+      <LeftMenu></LeftMenu>
         <HMyEditBox>
           <div>
             <HMyText>이름 변경</HMyText>

@@ -316,7 +316,6 @@ export const HelperMyPage = () => {
     <Root>
       <Header2 data={render} onDataChange={handlerenderChange}></Header2>
       <LeftMenu></LeftMenu>
-
       <HelperMyProfileBox>
         <HelperMyImg
           src={JSON.parse(localStorage.getItem("userInfo")).image}
