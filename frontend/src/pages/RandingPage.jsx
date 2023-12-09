@@ -351,12 +351,7 @@ export const RandingPage = () => {
         localStorage.setItem("loginState", true);
         localStorage.setItem("loginId", loginData.id);
         setreRender((prevState) => (prevState === 0 ? 1 : 0));
-
-        if (response.data.type === "user") {
-          navigate("/");
-        } else {
-          navigate("/");
-        }
+        navigate("/");
       } catch (error) {
         console.error("정보가져오기 실패:", error);
         alert("정보 가져오기에 실패했습니다.");

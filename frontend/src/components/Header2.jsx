@@ -76,23 +76,47 @@ export const Header = ({ data, onDataChange }) => {
         };
     };
 
+    const clickMain = () => {
+        if (localStorage.getItem("loginState") === "false") {
+            alert("서비스 이용시 로그인이 필요합니다.");
+        }
+        if (localStorage.getItem("loginState") === "true") {
+            if (JSON.parse(localStorage.getItem("userInfo")).type === "helper") {
+                alert(
+                "안녕하세요 " +
+                    JSON.parse(localStorage.getItem("userInfo")).name +
+                    " 도우미님!"
+                );
+                navigate("/helper");
+            }
+            if (JSON.parse(localStorage.getItem("userInfo")).type === "user") {
+                alert(
+                "안녕하세요 " +
+                    JSON.parse(localStorage.getItem("userInfo")).name +
+                    "님!"
+                );
+                navigate("/user");
+            }
+        }
+    };
+
+    const OnClickHandler4 = () => {
+        navigate("/chat");
+    };
+
     return(
         <>
             <HeaderRoot>
                 <div style={{width:"2%"}}></div>
                 <HeadImg src={logoImg} onClick={OnClickHandler2}></HeadImg>
                 <div style={{width:"2%"}}></div>
-                <div style={{width:"12%"}}></div>
-                {/*
-                <HeadButtonSet>
-                    <HeadButtonText>메뉴A</HeadButtonText>
+                {/*<div style={{width:"12%"}}></div>*/}
+                <HeadButtonSet style={{width:"8%"}}>
+                    <HeadButtonText onClick={clickMain}>메인화면</HeadButtonText>
                     <HeadButtonLine></HeadButtonLine>
-                    <HeadButtonText>메뉴B</HeadButtonText>
-                    <HeadButtonLine></HeadButtonLine>
-                    <HeadButtonText>메뉴C</HeadButtonText>
+                    <HeadButtonText onClick={OnClickHandler4}>채팅</HeadButtonText>
                 </HeadButtonSet>
-                */}
-                <div style={{width:"55%"}}></div>
+                <div style={{width:"59%"}}></div>
                 <HeadButtonSet2>
                     {(localStorage.getItem("loginState")==="false"||localStorage.getItem("loginState")===null)&&(<HeadButtonText style={{width:"100%",marginRight:"4.33%",display:"flex",alignItems:"center",justifyContent:"flex-end"}}>로그인이 필요합니다</HeadButtonText>)}
                     {localStorage.getItem("loginState")==="true"&&(
