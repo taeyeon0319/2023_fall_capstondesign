@@ -11,6 +11,7 @@ import socketIOClient from "socket.io-client";
 import ChatLog from "../components/ChatLog/ChatLog";
 import Loading from "./Loading";
 import api from "../api";
+import { useParams } from 'react-router-dom';
 
 const dummyDataReqList = [
     {
@@ -482,7 +483,9 @@ font-style: normal;
 font-weight: 500;
 line-height: normal;
 `
-export const ChatPage = () => {
+export const ChatDisplayPage = () => {
+    const navigate = useNavigate();
+    const { roomid, name } = useParams();
     const [render, setrender] = useState(0);
     const [selectedReq, setSelectedReq] = useState('');
     const [selectedHelper, setSelectedHelper] = useState(null);
@@ -505,29 +508,15 @@ export const ChatPage = () => {
 
     useEffect(() => {
         setCurrentSocket(socketIOClient("localhost:5001"));
-        fetchData();
     }, []);
 
     if (currentSocket) {
         currentSocket.on("connect", () => {
             currentSocket.emit("join", {
-                roomName : roomName,
+                roomName : roomid,
                 userName : JSON.parse(localStorage.getItem("userInfo")).name
             });
         });
-    };
-
-    const fetchData = async () => {
-        try {
-            const response = await api.get(
-                "/chatting/get-all-roomList"
-            );
-            //setData(response.data.filter((item) => item.user_id === state));
-            console.log(response.data);
-            setRoomList(response.data);
-        } catch (error) {
-            console.error("API 호출 중 오류 발생:", error);
-        }
     };
     
     const handleHelperClick = (index,name) => {
@@ -558,76 +547,28 @@ export const ChatPage = () => {
             document.getElementById('IptBtn').value = null;
         }
     };
-    const handleBtnClick2 = () => {
-        currentSocket.emit("onSend", {
-            userName: JSON.parse(localStorage.getItem("userInfo")).name,
-            msg: '테스트응답',
-            timeStamp: new Date().toLocaleTimeString(),
-            type: JSON.parse(localStorage.getItem("userInfo")).type==='user'?'helper':'user'
-        });
-    };
     const handlerenderChange = () => {
         setrender((prevState) => (prevState === 0 ? 1 : 0));
     };
+    
+    const onClickHandler = () => {
+        navigate('/chatlist');
+    }
     
     return(
         <Root>
             <Header2 data={render} onDataChange={handlerenderChange}></Header2>
             <ChatRectBox>
-            <div style={{ height: "81.855vh", margin: "auto" }}>
-                <ChatRectTitle>채팅방 목록</ChatRectTitle>
-                <ChatRect>
-                {/*
-                <ChatSelect onChange={handleSelectChange}>
-                    <option value={""}>{"이용 건을 선택하세요"}</option>
-                    {dummyDataReqList.map((data, index) => (
-                        <option key={index} value={data.sub}>{data.sub}</option>
-                    ))}
-                </ChatSelect>
-                */}
-                {roomList.filter((data) => JSON.parse(localStorage.getItem('userInfo')).type==='helper'
-                ?data.helperid===JSON.parse(localStorage.getItem('userInfo')).id
-                :data.userid===JSON.parse(localStorage.getItem('userInfo')).id).map((item, index) => (
-                    //item.sub === selectedReq && (
-                    <HelperReqList key={JSON.parse(localStorage.getItem("userInfo")).type==='helper'?item.roomname.split('_')[0]:item.roomname.split('_')[1]} className={index === selectedHelper ? 'selected' : ''} onClick={() => handleHelperClick(index,item.roomid)}>
-                        <UserHelperListImg src={"https://ifh.cc/g/GrZGw4.png"} />
-                        <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "center" }}>
-                        <div style={{ display: "flex", alignItems: "flex-end" }}>
-                            <HelperReqText>{JSON.parse(localStorage.getItem("userInfo")).type==='helper'?item.roomname.split('_')[0]:item.roomname.split('_')[1]}</HelperReqText>
-                            <HelperReqText2>{JSON.parse(localStorage.getItem("userInfo")).type==='helper'?'이용자':'도우미'}</HelperReqText2>
-                        </div>
-                        <HelperReqText3>{item.lastchat}</HelperReqText3>
-                        </div>
-                    </HelperReqList>
-                    //)
-                ))}
-                </ChatRect>
-            </div>
             <div style={{ height: "81.855vh", margin: "auto", boxShadow: "0px 0px 8px 0px rgba(0, 0, 0, 0.10)" }}>
                 <ChatRectTitle2 style={{padding:"0px"}}>
                     <div style={{display:"flex", alignItems:"center",justifyContent:"center"}}>
                         <ChatHeadImg src={userImg}></ChatHeadImg>
-                        <ChatHeadText>김헬퍼님</ChatHeadText>
+                        <ChatHeadText>{name}님</ChatHeadText>
                         <ChatHeadBtn1>매칭 성공</ChatHeadBtn1>
-                        <ChatHeadBtn2>대화방 나가기</ChatHeadBtn2>
+                        <ChatHeadBtn2 onClick={onClickHandler}>대화방 나가기</ChatHeadBtn2>
                     </div>
                 </ChatRectTitle2>
                 <ChatRect style={{height:"71.855vh", boxShadow:"0px 0px 0px 0px"}}>
-                    {/*{<div style={{width:"100%", height:"67.155vh", overflow:"auto",display:"flex",flexDirection:"column",alignItems:"center",padding:"0px 10px"}}>
-                        {selectedChatList[0].chatList.map((chat,index)=>(
-                            (chat.type==="Date")&&(<ChatDate>{chat.data}</ChatDate>)||(chat.type==="Send")&&(
-                                <div style={{width:"100%",display:"flex",alignItems:"flex-end",justifyContent:"flex-end",margin:"6px 0px 0px 0px"}}>
-                                    <ChatTime>{chat.time}</ChatTime>
-                                    <ChatSend>{chat.data}</ChatSend>
-                                    <ChatSendTri src={arrowSendImg}></ChatSendTri>
-                                </div>)||(chat.type==="Reply")&&(
-                                <div style={{width:"100%",display:"flex",alignItems:"flex-end",justifyContent:"flex-start",margin:"6px 0px 0px 0px"}}>
-                                    <ChatReplyTri src={arrowReplyImg}></ChatReplyTri>
-                                    <ChatReply>{chat.data}</ChatReply>
-                                    <ChatTime>{chat.time}</ChatTime>
-                                </div>)||(chat.type==="Notification")&&(<ChatNotification>{chat.data}</ChatNotification>)
-                            ))}
-                    </div>}*/}
                     <div>
                     {currentSocket ? (
                         <><ChatLog socket={currentSocket}></ChatLog></>
@@ -635,12 +576,11 @@ export const ChatPage = () => {
                         <Loading></Loading>
                     )}
                     </div>
-                    <ChatSendBtn><input id="IptBtn" onChange={handleChatChange}></input><button onClick={handleBtnClick}><img src={sendImg}></img></button></ChatSendBtn>
-                    <button onClick={handleBtnClick2}><img src={sendImg}></img></button>
+                    <ChatSendBtn><input id="IptBtn" style={{width:"100%",height:"100%",outline:"none"}} onChange={handleChatChange}></input><button onClick={handleBtnClick}><img src={sendImg}></img></button></ChatSendBtn>
                 </ChatRect>
             </div>
             </ChatRectBox>
         </Root>
     );
 };
-export default ChatPage;
+export default ChatDisplayPage;
