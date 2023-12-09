@@ -34,9 +34,9 @@ function TeamSection() {
           major="정보통신공학과"
           num="2020112140"
           github="https://github.com/sdfjkj"
-          keyword1="OOO"
-          keyword2="OOO"
-          keyword3="OOO"
+          keyword1="ENTP"
+          keyword2="프론트"
+          keyword3="도전"
           img="https://avatars.githubusercontent.com/u/95211829?v=4"
         />
 

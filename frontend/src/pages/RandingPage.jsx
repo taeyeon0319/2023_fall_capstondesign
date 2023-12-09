@@ -616,8 +616,8 @@ export const RandingPage = () => {
             )}
           </RandLoginBox>
           <RandBtn onClick={clickMain}>메인 화면</RandBtn>
-          <RandBtn onClick={clickIntro}>서비스 소개</RandBtn>
-          <RandBtn onClick={clickGuide}>이용 가이드</RandBtn>
+          {/* <RandBtn onClick={clickIntro}>서비스 소개</RandBtn>
+          <RandBtn onClick={clickGuide}>이용 가이드</RandBtn> */}
           <RandBtn onClick={clickTeam}>팀 소개</RandBtn>
         </RandButtonBox>
       </RandBody>
