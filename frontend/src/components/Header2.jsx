@@ -101,7 +101,7 @@ export const Header = ({ data, onDataChange }) => {
     };
 
     const OnClickHandler4 = () => {
-        navigate("/chat");
+        navigate("/chatlist");
     };
 
     return(

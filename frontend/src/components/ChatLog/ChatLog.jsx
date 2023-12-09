@@ -321,7 +321,7 @@ const ChatLog = ({ socket }) => {
   }, [socket]);
 
   return (
-    <div style={{width:"100%", height:"67.155vh", overflow:"auto",display:"flex",flexDirection:"column",alignItems:"center",padding:"0px 10px"}}>
+    <div style={{width:"100%", overflow:"auto",display:"flex",flexDirection:"column",alignItems:"center",padding:"0px 10px"}}>
       {msgList.map((chat,index)=>(
           (chat.type==="Date")&&(<ChatDate>{chat.msg}</ChatDate>)||(chat.type==="Notification")&&(<ChatNotification>{chat.msg}</ChatNotification>)||(chat.type===JSON.parse(localStorage.getItem("userInfo")).type)&&(
               <div style={{width:"100%",display:"flex",alignItems:"flex-end",justifyContent:"flex-end",margin:"6px 0px 0px 0px"}}>

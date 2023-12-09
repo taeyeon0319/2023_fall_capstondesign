@@ -330,6 +330,7 @@ export const ChatListPage = () => {
     useEffect(() => {
         setCurrentSocket(socketIOClient("localhost:5001"));
         fetchData();
+        fetchData2();
     }, []);
 
     if (currentSocket) {
@@ -349,6 +350,20 @@ export const ChatListPage = () => {
             //setData(response.data.filter((item) => item.user_id === state));
             console.log(response.data);
             setRoomList(response.data);
+        } catch (error) {
+            console.error("API 호출 중 오류 발생:", error);
+        }
+    };
+
+    const fetchData2 = async () => {
+        try {
+            const response = await api.get(
+                "/chatting/get-all-chatlog"
+            );
+            //setData(response.data.filter((item) => item.user_id === state));
+            console.log(response.data);
+            setMsgList(response.data);
+            localStorage.setItem('chatlog',JSON.stringify(response.data));
         } catch (error) {
             console.error("API 호출 중 오류 발생:", error);
         }

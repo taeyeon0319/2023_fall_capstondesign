@@ -6,7 +6,7 @@ import userImg from '../img/Ellipse1.png';
 import sendImg from '../img/send.png';
 import arrowSendImg from '../img/arrowSend.png';
 import arrowReplyImg from '../img/arrowReply.png';
-import { useState } from "react";
+import { useState, useLocation } from "react";
 import socketIOClient from "socket.io-client";
 import ChatLog from "../components/ChatLog/ChatLog";
 import Loading from "./Loading";
@@ -485,20 +485,19 @@ line-height: normal;
 `
 export const ChatDisplayPage = () => {
     const navigate = useNavigate();
-    const { roomid, name } = useParams();
+    const { roomid, name, request_id } = useParams();
     const [render, setrender] = useState(0);
     const [selectedReq, setSelectedReq] = useState('');
     const [selectedHelper, setSelectedHelper] = useState(null);
     const [chatId, setChatId] = useState('');
     const [selectedChatList, setSelectedChatList] = useState([{chatId:"",chatList:[{type:"Notification",data:"채팅 내역이 없습니다.",time:""}]}]);
     const [roomList,setRoomList]=useState([]);
-
+    
     //채팅 관련 State
     const [currentSocket, setCurrentSocket] = useState();
     const [chatMessage, setChatMessage] = useState("");
-    const [msgList, setMsgList] = useState([]);
     const [roomName, setRoomName] = useState("");
-
+    const [chatLog, setChatLog] = useState([]);
     useEffect(() => {
         setSelectedChatList(dummyDataChat.filter((data) => data.chatId === chatId).length > 0
         ? dummyDataChat.filter((data) => data.chatId === chatId)
@@ -553,7 +552,56 @@ export const ChatDisplayPage = () => {
     
     const onClickHandler = () => {
         navigate('/chatlist');
+        //console.log('msglist: ',msgList);
     }
+    const successClick = async () => {
+        if (window.confirm("매칭 하시겠습니까?")) {
+            try {
+              //const response = await api.put(`/helper/response-request`, {
+              //  status: "수락",
+              //  id: String(Data[0].request_id),
+              //});
+              alert("매칭 성공!");
+            } catch (error) {
+              console.error("API 호출 중 오류 발생:", error);
+            }
+            //setrender(prevState => (prevState === 0 ? 1 : 0));
+          }
+        {/*
+        console.log(roomid);
+        try {
+            const successRes = await api.put("/chatting/roomdata",{
+                "roomId":roomid
+            });
+            console.log('res: ',successRes);
+            if(JSON.parse(localStorage.getItem('userInfo')).type==='user'){
+                const successRes2 = await api.put("/chatting/updateOk",{
+                    "roomId":roomid,
+                    "helperOk":successRes.helperOk,
+                    "userOk":"T"
+                });
+                if (successRes2==='매칭성공'){
+                    alert('매칭이 성공되었습니다.')
+                }else{
+                    alert('상대방이 매칭 성공 버튼을 누를때까지 기다려주세요')
+                }
+            }else{
+                const successRes2 = await api.put("/chatting/updateOk",{
+                    "roomId":roomid,
+                    "helperOk":"T",
+                    "userOk":successRes.userOk
+                });
+                if (successRes2==='매칭성공'){
+                    alert('매칭이 성공되었습니다.')
+                }else{
+                    alert('상대방이 매칭 성공 버튼을 누를때까지 기다려주세요')
+                }
+            }
+        } catch (error) {
+            console.error("API 호출 중 오류 발생:", error);
+        }
+        */}
+    };
     
     return(
         <Root>
@@ -564,20 +612,37 @@ export const ChatDisplayPage = () => {
                     <div style={{display:"flex", alignItems:"center",justifyContent:"center"}}>
                         <ChatHeadImg src={userImg}></ChatHeadImg>
                         <ChatHeadText>{name}님</ChatHeadText>
-                        <ChatHeadBtn1>매칭 성공</ChatHeadBtn1>
+                        <div style={{width: "6.666667vw"}}></div>
                         <ChatHeadBtn2 onClick={onClickHandler}>대화방 나가기</ChatHeadBtn2>
                     </div>
                 </ChatRectTitle2>
-                <ChatRect style={{height:"71.855vh", boxShadow:"0px 0px 0px 0px"}}>
-                    <div>
+                <ChatRect style={{height:"67.155vh", boxShadow:"0px 0px 0px 0px"}}>
+                    {<><div style={{width:"100%", overflow:"auto",display:"flex",flexDirection:"column",alignItems:"center",padding:"0px 10px"}}>
+                        {JSON.parse(localStorage.getItem('chatlog')).filter((data) => data.roomid===roomid).map((chat,index)=>(
+                            (chat.type==="Date")&&(<ChatDate>{chat.data}</ChatDate>)||(chat.type==="user")&&(
+                                <div style={{width:"100%",display:"flex",alignItems:"flex-end",justifyContent:"flex-end",margin:"6px 0px 0px 0px"}}>
+                                    <ChatTime>{chat.time}</ChatTime>
+                                    <ChatSend>{chat.text}</ChatSend>
+                                    <ChatSendTri src={arrowSendImg}></ChatSendTri>
+                                </div>)||(chat.type==="helper")&&(
+                                <div style={{width:"100%",display:"flex",alignItems:"flex-end",justifyContent:"flex-start",margin:"6px 0px 0px 0px"}}>
+                                    <ChatReplyTri src={arrowReplyImg}></ChatReplyTri>
+                                    <ChatReply>{chat.text}</ChatReply>
+                                    <ChatTime>{chat.time}</ChatTime>
+                                </div>)||(chat.type==="Notification")&&(<ChatNotification>{chat.data}</ChatNotification>)
+                        ))}
+                    </div>
+                    <div style={{width:"96%"}}>
                     {currentSocket ? (
-                        <><ChatLog socket={currentSocket}></ChatLog></>
+                        <><ChatLog style={{width:"100%"}} socket={currentSocket}></ChatLog></>
                     ) : (
                         <Loading></Loading>
                     )}
                     </div>
-                    <ChatSendBtn><input id="IptBtn" style={{width:"100%",height:"100%",outline:"none"}} onChange={handleChatChange}></input><button onClick={handleBtnClick}><img src={sendImg}></img></button></ChatSendBtn>
+                    </>
+                    }
                 </ChatRect>
+                <ChatSendBtn><input id="IptBtn" style={{width:"100%",height:"100%",outline:"none"}} onChange={handleChatChange}></input><button onClick={handleBtnClick}><img src={sendImg}></img></button></ChatSendBtn>
             </div>
             </ChatRectBox>
         </Root>
