@@ -1,7 +1,7 @@
 import Header2 from "../components/Header2";
 import styled from "styled-components";
 import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import userImg from '../img/Ellipse1.png';
 import sendImg from '../img/send.png';
 import arrowSendImg from '../img/arrowSend.png';
@@ -11,7 +11,6 @@ import socketIOClient from "socket.io-client";
 import ChatLog from "../components/ChatLog/ChatLog";
 import Loading from "./Loading";
 import api from "../api";
-
 const dummyDataReqList = [
     {
         sub:"아이 3시간 봐주실 분 구합니다.",
@@ -189,8 +188,6 @@ const dummyDataChat = [
         ]
     }
 ];
-
-
 const Root = styled.div`
 width: 100vw;
 height:100vh;
@@ -222,18 +219,6 @@ const ChatRectTitle = styled.div`
 
   display: flex;
   align-items: center;
-  padding-left: 1.48148vh;
-`;
-const ChatRectTitle2 = styled.div`
-  width: 30.6vw;
-  height: 10vh;
-  border-radius: 5px 5px 0px 0px;
-  background: var(--Gray-10, #F6F6F6);
-  color: #f6f6f6;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
   padding-left: 1.48148vh;
 `;
 const ChatRect = styled.div`
@@ -302,187 +287,26 @@ const UserHelperListImg = styled.img`
   border-radius: 70%;
 `;
 
-const ChatSelect = styled.select`
-margin:0.740740vh;
-width: 27.71vw;
-height: 4.07407vh;
-flex-shrink: 0;
+const ChatBtn = styled.div`
+width:100%;
+height:35%;
+border-radius: 5px 5px 5px 5px;
+background: var(--Point-5, #725f51);
 
-border-radius: 5px;
-border: 1px solid var(--Gray-30, #EBEAEA);
-background: var(--white, #FFF);
-`;
+color: var(--white, #fff);
 
-const ChatHeadImg = styled.img`
-width: 2.34375vw;
-height: 2.34375vw;
-flex-shrink: 0;
-`;
-const ChatHeadText = styled.div`
-color: var(--Point-6, #54493F);
-margin: 0vw 6vw 0vw 0.83333vw;
 font-family: Noto Sans KR;
-font-size: 1.25vw;
+font-size: 1.66666vh;
 font-style: normal;
 font-weight: 700;
-line-height: normal;
-`;
-const ChatHeadBtn1 = styled.div`
-width: 6.666667vw;
-height: 4.70588vh;
-flex-shrink: 0;
-border-radius: 5px;
-background: var(--Point-5, #725F51);
-margin-right:0.83333vw;
-
-display:flex;
-align-items:center;
-justify-content:center;
-
-color: #FFF;
-text-align: center;
-font-family: Noto Sans KR;
-font-size: 0.9375vw;
-font-style: normal;
-font-weight: 700;
-line-height: normal;
-`;
-const ChatHeadBtn2 = styled.div`
-width: 6.666667vw;
-height: 4.70588vh;
-flex-shrink: 0;
-border-radius: 5px;
-background: var(--Gray-30, #EBEAEA);
-
-display:flex;
-align-items:center;
-justify-content:center;
-
-color: var(--Gray-50, #999797);
-text-align: center;
-font-family: Noto Sans KR;
-font-size: 0.9375vw;
-font-style: normal;
-font-weight: 700;
-line-height: normal;
-`;
-const ChatDate = styled.div`
-width: 289px;
-height: 34px;
-flex-shrink: 0;
-
-border-radius: 999px;
-background: var(--Gray-10, #F6F6F6);
-
-color: var(--Gray-70, #707070);
-text-align: center;
-
-font-family: Noto Sans KR;
-font-size: 18px;
-font-style: normal;
-font-weight: 500;
 line-height: normal;
 
 display:flex;
 align-items:center;
 justify-content:center;
 `;
-const ChatSendBtn = styled.div`
-width: 100%;
-height: 4.7vh;
-padding: 0px 10px;
-flex-shrink: 0;
-
-border-radius: 5px;
-border: 1px solid var(--Gray-30, #EBEAEA);
-background: var(--white, #FFF);
-display:flex;
-align-items:center;
-justify-content:space-between;
-
-color: var(--Black, #141515);
-font-family: Noto Sans KR;
-font-size: 18px;
-font-style: normal;
-font-weight: 500;
-line-height: normal;
-`;
-const ChatSend = styled.div`
-width:360px;
-display: flex;
-padding: 12px;
-flex-direction: column;
-align-items: flex-start;
-gap: 4px;
-border-radius: 8px;
-background: var(--Point-5, #725F51);
-color: var(--bluegray-pallet-10, #FDFBFF);
-
-font-family: Noto Sans KR;
-font-size: 18px;
-font-style: normal;
-font-weight: 500;
-line-height: normal;
-`;
-const ChatSendTri = styled.img`
-height:50px;
-`;
-
-const ChatReply = styled.div`
-width:360px;
-display: flex;
-padding: 12px;
-flex-direction: column;
-align-items: flex-start;
-gap: 4px;
-border-radius: 8px;
-background: var(--Point-3, #D0B89E);
-
-color: var(--Black, #141515);
-font-family: Noto Sans KR;
-font-size: 18px;
-font-style: normal;
-font-weight: 500;
-line-height: normal;
-`;
-
-const ChatReplyTri = styled.img`
-height:50px;
-`;
-
-const ChatTime = styled.div`
-color: var(--Gray-70, #707070);
-text-align: right;
-margin:5px;
-
-font-family: Noto Sans KR;
-font-size: 11px;
-font-style: normal;
-font-weight: 500;
-line-height: normal;
-`
-const ChatNotification = styled.div`
-margin:6px;
-display: inline-flex;
-padding: 8px 24px;
-justify-content: center;
-align-items: center;
-gap: 8px;
-
-border-radius: 5px;
-border: 1px solid var(--Gray-30, #EBEAEA);
-background: var(--Gray-10, #F6F6F6);
-
-color: var(--Gray-70, #707070);
-text-align: center;
-
-font-family: Noto Sans KR;
-font-size: 18px;
-font-style: normal;
-font-weight: 500;
-line-height: normal;
-`
-export const ChatPage = () => {
+export const ChatListPage = () => {
+    const navigate = useNavigate();
     const [render, setrender] = useState(0);
     const [selectedReq, setSelectedReq] = useState('');
     const [selectedHelper, setSelectedHelper] = useState(null);
@@ -506,6 +330,7 @@ export const ChatPage = () => {
     useEffect(() => {
         setCurrentSocket(socketIOClient("localhost:5001"));
         fetchData();
+        fetchData2();
     }, []);
 
     if (currentSocket) {
@@ -525,6 +350,20 @@ export const ChatPage = () => {
             //setData(response.data.filter((item) => item.user_id === state));
             console.log(response.data);
             setRoomList(response.data);
+        } catch (error) {
+            console.error("API 호출 중 오류 발생:", error);
+        }
+    };
+
+    const fetchData2 = async () => {
+        try {
+            const response = await api.get(
+                "/chatting/get-all-chatlog"
+            );
+            //setData(response.data.filter((item) => item.user_id === state));
+            console.log(response.data);
+            setMsgList(response.data);
+            localStorage.setItem('chatlog',JSON.stringify(response.data));
         } catch (error) {
             console.error("API 호출 중 오류 발생:", error);
         }
@@ -569,7 +408,10 @@ export const ChatPage = () => {
     const handlerenderChange = () => {
         setrender((prevState) => (prevState === 0 ? 1 : 0));
     };
-    
+
+    const onClickHandler = (roomid,name) => {
+        navigate('/chatdisplay/'+roomid+'/'+name);
+    }
     return(
         <Root>
             <Header2 data={render} onDataChange={handlerenderChange}></Header2>
@@ -598,49 +440,17 @@ export const ChatPage = () => {
                         </div>
                         <HelperReqText3>{item.lastchat}</HelperReqText3>
                         </div>
+                        <div style={{width:"8vw"}}></div>
+                        <div style={{width:"8vw",height:"100%",display:"flex",justifyContent:"center",alignItems:"center"}}>
+                            <ChatBtn onClick={() => onClickHandler(item.roomid,JSON.parse(localStorage.getItem("userInfo")).type==='helper'?item.roomname.split('_')[0]:item.roomname.split('_')[1])}>채팅방으로</ChatBtn>
+                        </div>
                     </HelperReqList>
                     //)
                 ))}
-                </ChatRect>
-            </div>
-            <div style={{ height: "81.855vh", margin: "auto", boxShadow: "0px 0px 8px 0px rgba(0, 0, 0, 0.10)" }}>
-                <ChatRectTitle2 style={{padding:"0px"}}>
-                    <div style={{display:"flex", alignItems:"center",justifyContent:"center"}}>
-                        <ChatHeadImg src={userImg}></ChatHeadImg>
-                        <ChatHeadText>김헬퍼님</ChatHeadText>
-                        <ChatHeadBtn1>매칭 성공</ChatHeadBtn1>
-                        <ChatHeadBtn2>대화방 나가기</ChatHeadBtn2>
-                    </div>
-                </ChatRectTitle2>
-                <ChatRect style={{height:"71.855vh", boxShadow:"0px 0px 0px 0px"}}>
-                    {/*{<div style={{width:"100%", height:"67.155vh", overflow:"auto",display:"flex",flexDirection:"column",alignItems:"center",padding:"0px 10px"}}>
-                        {selectedChatList[0].chatList.map((chat,index)=>(
-                            (chat.type==="Date")&&(<ChatDate>{chat.data}</ChatDate>)||(chat.type==="Send")&&(
-                                <div style={{width:"100%",display:"flex",alignItems:"flex-end",justifyContent:"flex-end",margin:"6px 0px 0px 0px"}}>
-                                    <ChatTime>{chat.time}</ChatTime>
-                                    <ChatSend>{chat.data}</ChatSend>
-                                    <ChatSendTri src={arrowSendImg}></ChatSendTri>
-                                </div>)||(chat.type==="Reply")&&(
-                                <div style={{width:"100%",display:"flex",alignItems:"flex-end",justifyContent:"flex-start",margin:"6px 0px 0px 0px"}}>
-                                    <ChatReplyTri src={arrowReplyImg}></ChatReplyTri>
-                                    <ChatReply>{chat.data}</ChatReply>
-                                    <ChatTime>{chat.time}</ChatTime>
-                                </div>)||(chat.type==="Notification")&&(<ChatNotification>{chat.data}</ChatNotification>)
-                            ))}
-                    </div>}*/}
-                    <div>
-                    {currentSocket ? (
-                        <><ChatLog socket={currentSocket}></ChatLog></>
-                    ) : (
-                        <Loading></Loading>
-                    )}
-                    </div>
-                    <ChatSendBtn><input id="IptBtn" onChange={handleChatChange}></input><button onClick={handleBtnClick}><img src={sendImg}></img></button></ChatSendBtn>
-                    <button onClick={handleBtnClick2}><img src={sendImg}></img></button>
                 </ChatRect>
             </div>
             </ChatRectBox>
         </Root>
     );
 };
-export default ChatPage;
+export default ChatListPage;

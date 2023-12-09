@@ -180,8 +180,30 @@ export const HelperRequestPage = () => {
     fetchData3();
   };
 
-  const onClickHandler2 = () => {
-    navigate("/chat");
+  const onClickHandler2 = async () => {
+    try {
+      var now = new Date();
+      var roomId = 
+      ("00" + now.getFullYear()).slice(-2) +
+      ("0" + (now.getMonth() + 1)).slice(-2) +
+      ("0" + now.getDate()).slice(-2) +
+      ("0" + now.getHours()).slice(-2) +
+      ("0" + now.getMinutes()).slice(-2) +
+      ("0" + now.getSeconds()).slice(-2);
+      const roomListData={
+        "roomId":roomId, 
+        "roomName":Data[0].name+'_'+JSON.parse(localStorage.getItem('userInfo')).name, 
+        "userId":Data[0].user_id, 
+        "helperId":JSON.parse(localStorage.getItem('userInfo')).id, 
+        "sub":Data[0].comment, 
+        "lastChat":"안녕하세요"
+      };
+      console.log(roomListData);
+      const response = await api.put('/chatting/add-room-data',roomListData);
+    } catch (error) {
+      console.error("API 호출 중 오류 발생:", error);
+    }
+    navigate("/chatlist");
   };
 
   return (

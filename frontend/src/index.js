@@ -18,6 +18,8 @@ import HelperTimetablePage from "./pages/HelperTimetable";
 import TeamMember from "./pages/TeamMember";
 import Introduce from "./pages/Introduce";
 import Guide from "./pages/Guide";
+import ChatList  from "./pages/ChatListPage";
+import ChatDisplay from "./pages/ChatDisplayPage";
 import ChatTest from "./pages/ChatTestPage";
 
 import UserMyPageEdit from "./pages/user/userMyPage/UserMyPageEdit";
@@ -121,6 +123,14 @@ const router = createBrowserRouter([
   {
     path:"/chattest/:userName/:roomName",
     element:<ChatTest />
+  },
+  {
+    path:"/chatlist",
+    element:<ChatList />
+  },
+  {
+    path:"/chatdisplay/:roomid/:name",
+    element:<ChatDisplay />
   }
 ]);
 
