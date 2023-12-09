@@ -127,6 +127,7 @@ const UserMyPage = ()=>{
                                     // navigate(`/user-review/delete/${request.helper.id}`)
                                     axios.delete(`${process.env.REACT_APP_SERVER_URL}/review/user-review/delete/${request.id}`).then(()=>{
                                         const arr = requestIngList.slice()
+                                        console.log(request)
                                         arr.splice(idx, 1)
                                         setRequestIngList(arr)
                                         alert('취소되었습니다.')
