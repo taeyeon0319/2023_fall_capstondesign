@@ -418,8 +418,7 @@ userRouter.patch("/changeUser/:id", async (req, res) => {
   }
 });
 // /request : 도우미 요청 api(post)
-// post하면 해당 user테이블의 ()속성들이랑 helper테입르의 ()속성들이 저장됨.
-
+// post하면 해당 user테이블의 ()속성들이랑 helper테입르의 ()속성들이 저장됨
 //user 회원이용정보 숫자로 뽑아내기
 // request 횟수, request 수락 횟수, request 거절 횟수
 userRouter.get("/user-requests-cnt/:id", async (req, res) => {
@@ -441,5 +440,4 @@ userRouter.get("/user-requests-cnt/:id", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
-
 export default userRouter;
