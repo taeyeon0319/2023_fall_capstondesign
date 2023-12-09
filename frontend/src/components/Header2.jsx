@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import React from 'react';
-import logoImg from '../img/임시로고.png'
+import logoImg from '../img/Help_py로고.png'
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
@@ -40,7 +40,7 @@ height: 21px;
 background: #54493F;
 `
 const HeadImg = styled.img`
-height:80%;
+height:60%;
 `
 
 export const Header = ({ data, onDataChange }) => {
@@ -92,7 +92,7 @@ export const Header = ({ data, onDataChange }) => {
                     <HeadButtonText>메뉴C</HeadButtonText>
                 </HeadButtonSet>
                 */}
-                <div style={{width:"55%"}}></div>
+                <div style={{width:"51%"}}></div>
                 <HeadButtonSet2>
                     {(localStorage.getItem("loginState")==="false"||localStorage.getItem("loginState")===null)&&(<HeadButtonText style={{width:"100%",marginRight:"4.33%",display:"flex",alignItems:"center",justifyContent:"flex-end"}}>로그인이 필요합니다</HeadButtonText>)}
                     {localStorage.getItem("loginState")==="true"&&(
