@@ -32,7 +32,7 @@ const UserMyPageReviewCheck = ()=>{
         const date = new Date(dateObj);
         const year = date.getFullYear();
         const month = date.getMonth() + 1;
-        const day = date.getDay();
+        const day = date.getDate();
         return `${year}.${month}.${day}`
     }
 
@@ -153,7 +153,7 @@ const UserMyPageReviewCheck = ()=>{
                 </div>
             </div>
             <div className='btn-container'>
-                <button className='button-1' onClick={()=>{navigate('/usermypage')}}>이전</button>
+                <button className='button-1' onClick={()=>{navigate(-1)}}>이전</button>
                 <button className='button-2' disabled={true} onClick={()=>{navigate('/usermypage/edit')}}>도움 신청</button>
             </div>
             

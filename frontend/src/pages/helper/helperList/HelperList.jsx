@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./helper.css";
 import axios from "axios";
 import api from "../../../api";
-import { Button, Modal, DatePicker, Space, TimePicker } from "antd";
+import { Button, Modal, DatePicker, Space, TimePicker, Tag } from "antd";
 import Header2 from "../../../components/Header2";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
@@ -159,9 +159,21 @@ const HelperList = () => {
       // orderby : orderby,
     };
 
+    let orderbyType;
+
+    if(orderby === '등록순'){
+      orderbyType = ""
+    }
+    else if(orderby === '평점순'){
+      orderbyType = "/orderbystars"
+    }
+    else if(orderby === '시급순'){
+      orderbyType = '/orderbywage'
+    }
+
     try {
       const response = await api.get(
-        `/user/helper/search${orderby === "평점순" ? "/orderbystars" : ""}`,
+        `/user/helper/search${orderbyType}`,
         { params: requestParams }
       );
       setHelperlist(response.data);
@@ -183,6 +195,10 @@ const HelperList = () => {
     getHelperSearch();
   }, []);
 
+  function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+
   const handlerenderChange = () => {
     setrender((prevState) => (prevState === 0 ? 1 : 0));
   };
@@ -191,6 +207,7 @@ const HelperList = () => {
     const result = helperlist.map((helper, idx) => {
       return (
         <li
+          style={{position: 'relative'}}
           onClick={() => {
             const requestParams = {
               city: city,
@@ -214,7 +231,8 @@ const HelperList = () => {
           }}
           key={idx}
           className="helper-list-searched-item"
-        >
+        > 
+          <span style={{position: 'absolute', top: 10, right: 10}}><Tag color="#725F51">{numberWithCommas(helper.wage)}원</Tag></span>
           <img className="profile" src={helper.image} />
           <div className="description">
             <h4 className="name">
@@ -461,6 +479,7 @@ const HelperList = () => {
             >
               <option value="등록순">등록순</option>
               <option value="평점순">평점순</option>
+              <option value="시급순">시급순</option>
             </select>
           </div>
           <ul className="helper-list-searched">

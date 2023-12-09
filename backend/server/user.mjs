@@ -299,7 +299,6 @@ userRouter.get("/helper/search/orderbywage", async (req, res) => {
   }
 });
 
-
 // /helper:id : 도우미 상세정보 출력 api(가상 테이블 데이터 출력) == OK
 userRouter.get("/helper/:id", async (req, res) => {
   const helperId = req.params.id; // URL 파라미터에서 도우미의 ID를 가져옵니다.
@@ -419,24 +418,28 @@ userRouter.patch("/changeUser/:id", async (req, res) => {
   }
 });
 // /request : 도우미 요청 api(post)
-// post하면 해당 user테이블의 ()속성들이랑 helper테입르의 ()속성들이 저장됨.
-// 도우미의 호출된 목록 중 수락된 목록 반환하는 엔드포인트
-userRouter.get("/requests-helper/:user_id/accepted", async (req, res) => {
-  const userId = req.params.user_id;
+// post하면 해당 user테이블의 ()속성들이랑 helper테입르의 ()속성들이 저장됨
+//user 회원이용정보 숫자로 뽑아내기
+// request 횟수, request 수락 횟수, request 거절 횟수
+userRouter.get("/user-requests-cnt/:id", async (req, res) => {
+  const user_id = req.params.id;
+
   try {
-    const requests = await db.any(
-      `SELECT region_country, region_state, image, requests.id as request_id, signup.name, signup.email, signup.mobile, requests.user_id, requests.helper_id, requests.field, requests.care_gender, requests.care_age, requests.comment, requests.start_time, requests.end_time, requests.totalpay, requests.timepay, requests.created_at, requests.quick_matching, requests.date, requests.address FROM requests
-      LEFT JOIN signup on requests.user_id=signup.id 
-      left join user_mypage on signup.id=user_mypage.user_id
-      WHERE requests.user_id = $1  AND requests.status = '수락' and signup.type = 'user' `,
-      [userId]
+    const data = await db.any(
+      `
+            SELECT COUNT(id) as request_count, COUNT(CASE WHEN status = '수락' THEN 1 END) as accept_count, COUNT(CASE WHEN status = '거절' THEN 1 END) as reject_count
+            FROM requests
+            WHERE user_id = $1;
+        `,
+      [user_id]
     );
-    res.json(requests.rows);
-  } catch (err) {
-    console.error("Error fetching request data:", err);
-    res
-      .status(500)
-      .json({ error: "An error occurred while fetching the request data." });
+
+    res.json(data[0]);
+  } catch (error) {
+    console.error("Error: ", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
+>>>>>>> 71d3725b3ffd004226e53891ca3a77f00a0f620a
 export default userRouter;
