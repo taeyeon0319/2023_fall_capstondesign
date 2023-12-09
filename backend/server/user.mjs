@@ -440,6 +440,4 @@ userRouter.get("/user-requests-cnt/:id", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
-
->>>>>>> 71d3725b3ffd004226e53891ca3a77f00a0f620a
 export default userRouter;
