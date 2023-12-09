@@ -278,12 +278,15 @@ reviewRouter.patch("/user-review/modify/:review_id", async (req, res) => {
 reviewRouter.delete("/user-review/delete/:review_id", async (req, res) => {
   const client = await pool.connect();
   const reviewId = parseInt(req.params.review_id);
+  console.log(reviewId)
   try {
     const review = await client.query(
-      `DELETE FROM review WHERE id = $1 RETURNING *`,
+      `DELETE FROM review WHERE id = $1 `,
       [reviewId]
     );
-    res.json(review.rows);
+
+    console.log(review)
+    res.json(review);
     client.release();
   } catch (err) {
     console.error("Error updating request status:", err);

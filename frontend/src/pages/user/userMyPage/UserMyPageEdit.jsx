@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 import { Button, Input, Space } from 'antd';
 import "./UserMyPageEdit.css";
+import api from "../../../api";
 import SelectBox from "../../../components/SelectBox";
 import { Select } from 'antd';
 import Header2 from "../../../components/Header2";
@@ -25,9 +26,41 @@ const UserMyPageEdit = ()=>{
 
 
     const [city, setCity] = useState(`${userInfo.region_state}`);
-    const [country, setCountry] = useState(`${userInfo.region_country}`);
+    const [district, setDistrict] = useState(`${userInfo.region_country}`);
+
+    const [cityData, setCityData] = useState([]);
+    const [districts, setDistricts] = useState({}); //시/군/구 selectbox
+    
+
     const [passwordVisible, setPasswordVisible] = React.useState(false);
 
+    const getCities = () => {
+        if (!!districts) {
+            const districtList = Object.keys(districts);
+            return districtList.map((el, idx) => (
+                <option key={idx} value={el}>
+                {el}
+                </option>
+            ));
+            }
+        };
+        
+        const getDistrict = () => {
+            console.log('city:::',city)
+            console.log('city:disticts:::',districts[`${city}`])
+            if (city !== "" && districts[`${city}`] !== undefined) {
+
+                return districts[`${city}`].map((d, idx) => {
+                    return (
+                    <option key={idx} value={d}>
+                        {d}
+                    </option>
+                    );
+                });
+            } else {
+            return [];
+            }
+        };
     
     const updateUserInfo = ()=>{
         if(name === '' || password === '' || newpassword === ''){
@@ -48,8 +81,8 @@ const UserMyPageEdit = ()=>{
         const params = {
             name: name,
             password: newpassword,
-            region_state: '서울특별시',
-            region_country: '중구',
+            region_state: city,
+            region_country: district,
             password_confirm: passwordcheck,
         }
 
@@ -59,6 +92,32 @@ const UserMyPageEdit = ()=>{
             //console.log(res.data[0])
         })
     }
+
+    useEffect(() => {
+        const fetchData = async () => {
+          try {
+            const response = await api.get(`/city`);
+            const data = response.data;
+            setCityData(data);
+            const districtInfo = {};
+    
+            for (let district of data) {
+                // console.log(district)
+              districtInfo[`${district.region_state}`] = [];
+            }
+            for (let district of data) {
+                districtInfo[`${district.region_state}`].push(
+                    district.region_country
+                    );
+                }
+                setDistricts(districtInfo);
+          } catch (error) {
+            console.log("Error fetching data:", error);
+          }
+        };
+        fetchData();
+        
+      }, []);
 
     return (
         <div className="mypage-edit-container">
@@ -141,14 +200,42 @@ const UserMyPageEdit = ()=>{
                             <label htmlFor="name">e-mail</label>
                             <input className="w80" type="email" name="name" id="name" />
                         </li>
-                        {/* <li>
-                            <label htmlFor="name">대표 주소지</label>
-                            <input className="w80" type="text" name="name" id="name" />
-                        </li> */}
-                        {/* <li>
+
+                        <li>
+                        
                             <label htmlFor="name">주소지 수정</label>
-                            <input className="w80" type="text" name="name" id="name" />
-                        </li> */}
+                           <span style={{width: '400px', marginLeft: 20}}>
+                             {/* <input className="w80" type="text" name="name" id="name" /> */}
+                             <select
+                                value={city}
+                                onChange={(e) => {
+                                    setCity(e.target.value);
+                                }}
+                                className="select-container-item"
+                                style={{width: '200px'}}
+                                name=""
+                                id=""
+                                >
+                                <option value="">지역</option>
+                                {getCities()}
+
+                                {/* <option value="서울" >서울</option>
+                                                    <option value="광주" >광주</option>
+                                                <option value="대전" >대전</option> */}
+                            </select>
+                            <select
+                                value={district}
+                                                
+                                className="select-container-item"
+                                style={{width: '200px'}}
+                                name=""
+                                id=""
+                                >
+                                <option value="">시/군/구</option>
+                                {getDistrict()}
+                            </select>
+                           </span>
+                        </li>
                     </ul>
                     {/* <button style={{float: 'left', padding: '12px 20px', fontWeight: '700', backgroundColor: '#725f51', color: '#fff', borderRadius: 5, fontSize: '18px', border: 'none', marginLeft: 10}}>+ 주소지 추가</button> */}
                     

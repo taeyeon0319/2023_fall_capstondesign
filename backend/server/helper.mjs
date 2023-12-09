@@ -227,6 +227,27 @@ helperRouter.get("/requests-helper/:helper_id/accepted", async (req, res) => {
   }
 });
 
+helperRouter.get("/requests-user/:user_id/accepted", async (req, res) => {
+  const client = await pool.connect();
+  const userId = req.params.user_id;
+  try {
+    const requests = await client.query(
+      `SELECT region_country, region_state, image, requests.id as request_id, signup.name, signup.email, signup.mobile, requests.user_id, requests.helper_id, requests.field, requests.care_gender, requests.care_age, requests.comment, requests.start_time, requests.end_time, requests.totalpay, requests.timepay, requests.created_at, requests.quick_matching, requests.date, requests.address FROM requests
+      LEFT JOIN signup on requests.helper_id=signup.id 
+      left join helper_mypage on signup.id=helper_mypage.helper_id
+      WHERE requests.user_id = $1  AND requests.status = '수락' and signup.type = 'helper' `,
+      [userId]
+    );
+    res.json(requests.rows);
+    client.release();
+  } catch (err) {
+    console.error("Error fetching request data:", err);
+    res
+      .status(500)
+      .json({ error: "An error occurred while fetching the request data." });
+  }
+});
+
 // 도우미 총수입 불러오기
 helperRouter.get("/requests-helper/:helper_id/totalpay", async (req, res) => {
   const client = await pool.connect();

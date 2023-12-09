@@ -10,10 +10,10 @@ const UserMyPageWriteReview = ()=>{
     const param = useParams()
     const [userInfo, setUserInfo] = useState({});
     const [userAverageRate, setUserAverageRate] = useState(5);
-    const [reviewTag1, setReviewTag1] = useState(false);
-    const [reviewTag2, setReviewTag2] = useState(false);
-    const [reviewTag3, setReviewTag3] = useState(false);
-    const [reviewTag4, setReviewTag4] = useState(false);
+    const [reviewTag1, setReviewTag1] = useState("false");
+    const [reviewTag2, setReviewTag2] = useState("false");
+    const [reviewTag3, setReviewTag3] = useState("false");
+    const [reviewTag4, setReviewTag4] = useState("false");
     const [render, setRender] = useState(0);
     const [title, setTitle] = useState("");
     const [comment, setComment] = useState("");
@@ -72,7 +72,7 @@ const UserMyPageWriteReview = ()=>{
             // date : date,
             // start_time : serviceStartTime,
             // end_time : serviceEndTime,
-            content :comment,
+            contents :comment,
             // gender: gender,
         }
 
