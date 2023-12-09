@@ -69,7 +69,7 @@ const UserMyPage = ()=>{
         const date = new Date(dateObj);
         const year = date.getFullYear();
         const month = date.getMonth() + 1;
-        const day = date.getDay();
+        const day = date.getDate();
         return `${year}-${month}-${day}`
     }
 
@@ -80,10 +80,20 @@ const UserMyPage = ()=>{
             // console.log('ing:::',res.data[0].requests)
             setRequestIngList(res.data[0].requests)
         })
+        
+        // const response_accepted = axios.get(`${process.env.REACT_APP_SERVER_URL}/helper/requests-helper/${loginedUserInfo.id}`);
+
+        // response_accepted.then(res => {
+        //     // console.log('ing:::',res.data[0].requests)
+        //     setRequestIngList(res.data[0].requests)
+        // })
     }, [])
 
     const historyItemList = ()=>{
-
+        reviewlist.sort(function(a, b){
+            if(new Date(a.date) > new Date(b.date)) return -1;
+            else return 1;
+        })
 
         return reviewlist.map((review, idx)=>{
             return (
@@ -113,7 +123,11 @@ const UserMyPage = ()=>{
     }
 
     const requestIngItemList = ()=>{
-
+        // console.log(requestIngList)
+        requestIngList.sort(function(a, b){
+            if(new Date(a.date) > new Date(b.date)) return -1;
+            else return 1;
+        })
 
         return requestIngList.map((request, idx)=>{
             return (
