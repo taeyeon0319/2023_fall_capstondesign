@@ -493,6 +493,7 @@ export const ChatPage = () => {
     const [currentSocket, setCurrentSocket] = useState();
     const [chatMessage, setChatMessage] = useState("");
     const [msgList, setMsgList] = useState([]);
+    const [roomName, setRoomName] = useState("");
 
     useEffect(() => {
         setSelectedChatList(dummyDataChat.filter((data) => data.chatId === chatId).length > 0
@@ -508,7 +509,7 @@ export const ChatPage = () => {
     if (currentSocket) {
         currentSocket.on("connect", () => {
             currentSocket.emit("join", {
-                roomName : "r1", //룸이름 수정필요.
+                roomName : roomName,
                 userName : JSON.parse(localStorage.getItem("userInfo")).name
             });
         });
@@ -516,8 +517,10 @@ export const ChatPage = () => {
     
     const handleHelperClick = (index,name) => {
         setSelectedHelper(index === selectedHelper ? null : index);
-        setChatId(name);
-        console.log(chatId);
+        //setChatId(name);
+        setRoomName(JSON.parse(localStorage.getItem('userInfo')).id+name);
+        console.log(roomName);
+        //console.log(chatId);
         console.log(selectedChatList);
     };
     const handleSelectChange = (event) => {
@@ -559,14 +562,16 @@ export const ChatPage = () => {
             <div style={{ height: "81.855vh", margin: "auto" }}>
                 <ChatRectTitle>채팅방 목록</ChatRectTitle>
                 <ChatRect>
+                {/*
                 <ChatSelect onChange={handleSelectChange}>
                     <option value={""}>{"이용 건을 선택하세요"}</option>
                     {dummyDataReqList.map((data, index) => (
                         <option key={index} value={data.sub}>{data.sub}</option>
                     ))}
                 </ChatSelect>
+                */}
                 {dummyDataChatList.data.map((item, index) => (
-                    item.sub === selectedReq && (
+                    //item.sub === selectedReq && (
                     <HelperReqList key={item.name} className={index === selectedHelper ? 'selected' : ''} onClick={() => handleHelperClick(index,item.name)}>
                         <UserHelperListImg src={item.img} />
                         <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "center" }}>
@@ -577,7 +582,7 @@ export const ChatPage = () => {
                         <HelperReqText3>{item.lastChat}</HelperReqText3>
                         </div>
                     </HelperReqList>
-                    )
+                    //)
                 ))}
                 </ChatRect>
             </div>

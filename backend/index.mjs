@@ -4,6 +4,7 @@ import cors from "cors";
 import db from "./db.mjs";
 import userRouter from "./server/user.mjs"; // user 모듈 불러오기
 import helperRouter from "./server/helper.mjs"; // helper 모듈 불러오기
+import chattingRouter from "./server/chatting.mjs"; 
 import signupRouter from "./server/signup.mjs";
 import reviewRouter from "./server/review.mjs";
 import chatRouter from "./server/chat.js";
@@ -31,7 +32,8 @@ app.use("/", signupRouter);
 
 //리뷰
 app.use("/review", reviewRouter);
-
+//채팅
+app.use("/chatting", chattingRouter);
 //채팅
 app.use("/chat", chatRouter);
 
