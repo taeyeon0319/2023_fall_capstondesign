@@ -1,0 +1,105 @@
+.user-mypage-container {
+    display: flex;
+    flex-direction: column;
+    min-width: 800px;
+    max-width: 1200px;
+    margin: 0 auto;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 20px;
+    padding: 40px;
+    
+}
+.user-mypage-container .user-mypage-profile-change {
+    background-color: #FFFFFF;
+    height: 186px;
+    width: 1200px;
+    position: relative;
+    border-radius: 5px;
+    box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.1);
+    margin: 2px;
+}
+.user-mypage-container .user-name {
+    font-size: 30px;
+    font-weight:700;
+    line-height: 70px;
+    color: #54493F;
+}
+.user-mypage-container .user-address {
+    font-size: 25px;
+    line-height: 32px;
+    font-weight: 500;
+    color: #725F51;
+}
+
+.user-mypage-container .user-phonenumber {
+    font-size: 21px;
+    font-weight: 500;
+    color: #725F51;
+}
+
+.user-mypage-container .user-mypage-helper-usage-history {
+    background-color: #FFFFFF;
+    height: 583px;
+    width: 1200px;
+    
+    border-radius: 5px;
+    box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+.user-mypage-profile-change .user-mypage-image {
+    border-radius: 50%;
+    width: 146px; height: 146px;
+    margin: 20px 30px 20px 50px;
+    float: left;
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.history-list-container{
+    width: 100%;
+    margin: 10px 0;
+    padding: 0px 10px 10px 30px;
+    overflow-y: auto;
+
+    height: 484px;
+    position: relative;
+    left: -10px;
+}
+
+.history-list-container::-webkit-scrollbar{
+    background-color: #EBEAEA;
+    width: 8px;
+    border-radius: 5px;
+}
+
+.history-list-container::-webkit-scrollbar-thumb {
+    background-color: #54493F;
+    border-radius: 5px;
+    width: 8px;
+}
+
+.history-list-container .history-item {
+    width: 100%;
+    height: 175px;
+    border: 1px solid #EBEAEA;
+    border-radius: 5px;
+    position: relative;
+    margin-bottom: 10px;
+    padding-bottom: 30px;
+}
+
+.history-item-desc{
+    /* float: left; */
+    height: 156px;
+    padding-top: 25px;
+    padding-bottom: 25px;
+}
+
+.history-item-title {
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 28.96px;
+    color: #141515;
+}

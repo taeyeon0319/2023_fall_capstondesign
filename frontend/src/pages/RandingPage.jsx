@@ -1,251 +1,367 @@
 import styled from "styled-components";
-import React from 'react';
-import logoImg from '../img/임시로고.png'
-import userImg from '../img/profile.png'
-import helperImg from '../img/woman.png'
+import React from "react";
+import logoImg from "../img/임시로고.png";
+import helperImg from "../img/woman.png";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Header2 from "../components/Header2";
+import axios from "axios";
+import Footer from "../components/Footer";
+import api from "../api";
 
 const Root = styled.div`
-width: 100%;
-background-color: #FFF;
-display: flex;
-justify-content: flex-end;
-`
+  width: 100vw;
+  height: 100vh;
+  background: #fff8f3;
+  display: flex;
+  flex-direction: column;
+`;
+const RandBody = styled.div`
+  height: 91.12vh;
+  width: 100vw;
+  background: #fff8f3;
+  display: flex;
+`;
 const RandButtonBox = styled.div`
-display: flex;
-flex-direction: column;
-align-items: center;
-width: 25%;
-flex-shrink: 0;
-`
+  width: 17.5vw;
+  height: 100%;
+
+  background: var(--Point-1, #fff8f3);
+  box-shadow: -4px 0px 8px 0px rgba(0, 0, 0, 0.05);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+`;
 const RandBox = styled.div`
-width: 75%;
-display:flex;
-flex-direction: column;
-align-items: center;
-height: 1024px;
-background: linear-gradient(90deg, #FFF8F3 88.55%, #E7E6E6 100%);
-`
+  width: 75%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 1024px;
+  background: linear-gradient(90deg, #fff8f3 88.55%, #e7e6e6 100%);
+`;
+const RandLoginBox = styled.div`
+  padding: 0.83335vw;
+  margin: 0.83335vw;
+  width: 15.8333vw;
+  border-radius: 5px;
+  border: 1px solid var(--Gray-30, #ebeaea);
+  background: var(--white, #fffaf7);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
 const RandBtnBox = styled.div`
-margin : 32px auto 16px auto;
-width: 86%;
-height: 70px;
-display: flex;
-justify-content: space-between;
-align-items: center;
-`
+  width: 100%;
+  height: 70px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
 const RandBtn = styled.div`
-margin: 16px auto;
-width: 86%;
-height: 70px;
-flex-shrink: 0;
-border-radius: 15px;
-border: 1px solid #E7E6E6;
-background: #FFF8F3;
-box-shadow: 2px 2px 2px 0px rgba(0, 0, 0, 0.25);
+  margin: 6px auto;
+  width: 15.8333vw;
+  height: 4.3137vh;
+  flex-shrink: 0;
+  border-radius: 5px;
+  background: var(--Point-4, #93796a);
 
-color: #000;
-font-family: 'Noto Sans KR', sans-serif;
-font-size: 24px;
-font-style: normal;
-font-weight: 400;
-line-height: 48px; /* 200% */
-display : flex;
-justify-content : center;
-align-items : center;
-`
+  color: var(--white, #fff);
+  text-align: center;
+
+  font-family: Noto Sans KR;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 const RandBtnSmall = styled.div`
-width: 47.7%;
-height: 70px;
-flex-shrink: 0;
-border-radius: 15px;
-border: 1px solid #E7E6E6;
-background: ${props=>(props.toggle ? '#E7E6E6': '#FFF8F3')};
-box-shadow: 2px 2px 2px 0px rgba(0, 0, 0, 0.25);
+  width: 6.6666vw;
+  height: 4.313725vh;
+  flex-shrink: 0;
+  border-radius: 5px;
+  border: 1px solid var(--Point-5, #725f51);
+  background: var(--white, #fff);
 
-color: #000;
-font-family: 'Noto Sans KR', sans-serif;
-font-size: 24px;
-font-style: normal;
-font-weight: 400;
-line-height: 48px; /* 200% */
-display : flex;
-justify-content : center;
-align-items : center;
-`
+  color: var(--Point-5, #725f51);
+  text-align: center;
+
+  font-family: Noto Sans KR;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 const RandBtnBig = styled.div`
-margin: 16px auto;
-width: 86%;
-height: 100px;
-flex-shrink: 0;
-border-radius: 15px;
-background: #E7E6E6;
-box-shadow: 2px 2px 2px 0px rgba(0, 0, 0, 0.25);
+  margin: 16px auto;
+  width: 86%;
+  height: 100px;
+  flex-shrink: 0;
+  border-radius: 15px;
+  background: #e7e6e6;
+  box-shadow: 2px 2px 2px 0px rgba(0, 0, 0, 0.25);
 
-color: #000;
-font-family: 'Noto Sans KR', sans-serif;
-font-size: 24px;
-font-style: normal;
-font-weight: 400;
-line-height: 48px; /* 200% */
-display : flex;
-justify-content : center;
-align-items : center;
-`
-const RandLogin=styled.div`
-margin: 16px auto;
-width: 86%;
-flex-shrink: 0;
+  color: #000;
+  font-family: "Noto Sans KR", sans-serif;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 48px; /* 200% */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+const RandLogin = styled.div`
+  padding: 0.83335vw;
+  margin: 16px auto;
+  width: 14.16666vw;
+  flex-shrink: 0;
 
-border-radius: 15px;
-background: #E7E6E6;
-box-shadow: 2px 2px 2px 0px rgba(0, 0, 0, 0.25);
-`
+  border-radius: 5px;
+  background: #f9f8f7;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
 const RandLogoImg = styled.img`
-margin-top: 80px;
-margin-left: 124px;
-margin-bottom: 12px;
-width: 204px;
-height: 148px;
-`
+  margin-top: 80px;
+  margin-left: 124px;
+  margin-bottom: 12px;
+  width: 204px;
+  height: 148px;
+`;
 const RandLine = styled.div`
-width: 1180px;
-height: 2px;
-background: #E7E6E6;
-`
+  width: 1180px;
+  height: 2px;
+  background: #e7e6e6;
+`;
 const RandHeader = styled.div`
-width: 1440px;
-`
+  width: 1440px;
+`;
 const RandTextBox = styled.div`
-width: 1440px;
-padding-top:24px;
-padding-left:324px;
+  width: 82.5vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left:-100px;
+  margin-right:100px;
+`;
+
+const RandImg = styled.img`
+  width:50%;
 `
 const RandTextBig = styled.div`
-width: 1440px;
-height: 42px;
+  color: var(--Point-5, #725f51);
 
-color: #000;
-font-family: 'Noto Sans KR', sans-serif;
-font-size: 42px;
-font-style: normal;
-font-weight: 400;
-line-height: normal;
-`
+  font-family: Noto Sans KR;
+  font-size: 48px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+`;
 const RandTextSmall = styled.div`
-display: flex;
-width: 1100px;
-height: 538px;
-flex-direction: column;
-justify-content: center;
+  display: flex;
+  width: 1100px;
+  height: 538px;
+  flex-direction: column;
+  justify-content: center;
 
-color: #000;
-font-family: 'Noto Sans KR', sans-serif;
-font-size: 24px;
-font-style: normal;
-font-weight: 400;
-line-height: 48px; /* 200% */
-`
+  color: var(--Point-5, #725f51);
+  font-family: Noto Sans KR;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 190%;
+`;
 const RandLoginText = styled.p`
-color: #000;
-font-family: Noto Serif KR;
-font-size: 24px;
-font-style: normal;
-font-weight: 400;
-line-height: 48px; /* 200% */
-`
+  color: var(--Point-6, #54493f);
+  font-family: Noto Sans KR;
+  font-size: 1vw;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+`;
 const RandLoginTextF = styled.p`
-color: #8F8F8F;
-text-align: center;
-font-family: Inter;
-font-size: 18px;
-font-style: normal;
-font-weight: 400;
-line-height: normal;
-`
+  color: #8f8f8f;
+  text-align: center;
+  font-family: Inter;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+`;
 const RandLoginInput = styled.input`
-width: 63.33%;
-height: 54px;
-flex-shrink: 0;
+  width: 63.33%;
+  height: 44px;
+  padding: 0.5vw;
+  flex-shrink: 0;
 
-fill: #FFF;
-stroke-width: 1px;
-stroke: #BB6C25;
-`
+  border-radius: 5px;
+  border: 1px solid var(--Point-5, #725f51);
+  background: var(--white, #fff);
+`;
 const RandAfterLoginBox = styled.div`
-margin: 16px auto;
-width: 86%;
-height: 100px;
+  margin: 16px auto;
+  width: 100%;
+  height: 9.8vh;
 
-display: flex;
-align-items: center;
-justify-content: space-around;
-`
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+`;
 const RandAfterLoginImg = styled.img`
-width:24%;
-border-radius:70%;
-`
+  width: 3.6vw;
+  height: 3.6vw;
+  border-radius: 70%;
+`;
 //height 작성 필요함.
 const RandAfterLoginText = styled.div`
-color: #000;
-font-family: Inter;
-font-size: 25px;
-font-style: normal;
-font-weight: 800;
-line-height: normal;
-
-`
+  color: #000;
+  font-family: Inter;
+  font-size: 1.2vw;
+  font-style: normal;
+  font-weight: 800;
+  line-height: normal;
+`;
+const RandAfterLoginText2 = styled.div`
+  color: #8f8f8f;
+  font-family: Inter;
+  font-size: 0.8vw;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+`;
 const RandAfterLoginBtn = styled.div`
-padding:5px 10px;
-margin:3px;
+  width: 3.8vw;
+  height: 3vh;
+  margin: 3px;
 
-border-radius: 15px;
-border: 1px solid #E7E6E6;
-background: #FFF8F3;
-box-shadow: 2px 2px 2px 0px rgba(0, 0, 0, 0.25);
+  border-radius: 5px;
+  border: 1px solid #e7e6e6;
+  background: #fff8f3;
+  box-shadow: 2px 2px 2px 0px rgba(0, 0, 0, 0.25);
 
-color: #000;
-text-align: center;
-font-family: Inter;
-font-size: 15px;
-font-style: normal;
-font-weight: 800;
-line-height: normal;
-`
+  color: #000;
+  text-align: center;
+  font-family: Inter;
+  font-size: 0.6vw;
+  font-style: normal;
+  font-weight: 800;
+  line-height: normal;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+const RandLoginBoxText = styled.div`
+  width: 14.16666vw;
+  height: 25vh;
+  color: var(--Point-5, #725f51);
+  text-align: center;
+
+  font-family: Noto Sans KR;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
 
 export const RandingPage = () => {
+  const navigate = useNavigate();
 
-    const navigate = useNavigate();
+  //임시데이터
+  const helper = { name: "김헬퍼", address: "서울특별시 중구 충무로" };
+  const user = { name: "김동국", address: "서울특별시 중구 충무로" };
 
-    //임시데이터
-    const helper = {name:"김헬퍼", address:"서울특별시 중구 충무로"};
-    const user = {name:"김동국", address:"서울특별시 중구 충무로"};
+  const [loginBtn, setLoginBtn] = useState(0);
+  const [login, setLogin] = useState(0);
+  const [reRender, setreRender] = useState(0);
+  const [render, setrender] = useState(0);
+  const [id, setId] = useState("");
+  const [pw, setPw] = useState("");
+  const [loginData, setloginData] = useState({
+    id: "",
+    password: "",
+  });
 
-    const [loginBtn, setLoginBtn] = useState(0);
-    const [login, setLogin] = useState(0);
-    const [id, setId] = useState('');
-    const [pw, setPw] = useState('');
+  React.useEffect(() => {
+    console.log(localStorage.getItem("loginState"));
+  }, []);
 
-    const clickLoginBtn = () =>{
-        if (loginBtn===1){
-            setLoginBtn(0);
-        }else{
-            setLoginBtn(1);
+  React.useEffect(() => {
+    console.log(localStorage.getItem("loginState"));
+  }, [reRender, render]);
+
+  const clickLoginBtn = () => {
+    if (loginBtn === 1) {
+      setLoginBtn(0);
+    } else {
+      setLoginBtn(1);
+    }
+  };
+
+  const clickLogoutBtn = () => {
+    if (window.confirm("로그아웃하시겠습니까?")) {
+      setLogin(0);
+      localStorage.setItem("loginState", false);
+      console.log(localStorage.getItem("loginState"));
+      setreRender((prevState) => (prevState === 0 ? 1 : 0));
+    }
+  };
+
+  const JoinOnclickHandler = () => {
+    navigate("/Join");
+  };
+
+  const clickLoginbtn = async () => {
+    try {
+      const response = await api.post("/login", loginData);
+      console.log("로그인 성공:", response.data);
+      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("userType", response.data.type);
+      localStorage.setItem("userId", response.data.userId);
+      try {
+        console.log(response.data.token);
+        const response2 = await api.get("/mypage", {
+          headers: { Authorization: response.data.token },
+        });
+        if (response2.data.userData.image === null) {
+          response2.data.userData.image = "https://ifh.cc/g/GrZGw4.png";
         }
-    };
+        console.log(response2.data.userData);
+        localStorage.setItem(
+          "userInfo",
+          JSON.stringify(response2.data.userData)
+        );
+        localStorage.setItem("loginState", true);
+        localStorage.setItem("loginId", loginData.id);
+        setreRender((prevState) => (prevState === 0 ? 1 : 0));
+        navigate("/");
+      } catch (error) {
+        console.error("정보가져오기 실패:", error);
+        alert("정보 가져오기에 실패했습니다.");
+      }
+    } catch (error) {
+      console.error("로그인 실패:", error.message);
+      alert("아이디 또는 비밀번호가 일치하지 않습니다.");
+    }
 
-    const clickLogoutBtn = () =>{
-        if(window.confirm('로그아웃하시겠습니까?')){
-            setLogin(0);
-        }
-    };
-
-    const JoinOnclickHandler =() =>{
-        navigate("/Join");
-    };
-
-    const clickLoginbtn = () =>{
+    /*
         if(id==='user' && pw==='user'){
             setLogin(1);
         }else if(id==='helper' && pw==='helper'){
@@ -258,14 +374,251 @@ export const RandingPage = () => {
                 inputItem[i].value='';
             }
         }
-    };
+        */
+  };
 
-    return(
-        <Root>
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setloginData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const onClickHandlerMy = () => {
+    const userType = localStorage.getItem("userType");
+
+    if (userType === "user") {
+      navigate("/usermypage");
+    } else {
+      navigate("/helperMy");
+    }
+  };
+
+  const clickMain = () => {
+    if (localStorage.getItem("loginState") === "false") {
+      alert("서비스 이용시 로그인이 필요합니다.");
+    }
+    if (localStorage.getItem("loginState") === "true") {
+      if (JSON.parse(localStorage.getItem("userInfo")).type === "helper") {
+        alert(
+          "안녕하세요 " +
+            JSON.parse(localStorage.getItem("userInfo")).name +
+            " 도우미님!"
+        );
+        navigate("/helper");
+      }
+      if (JSON.parse(localStorage.getItem("userInfo")).type === "user") {
+        alert(
+          "안녕하세요 " +
+            JSON.parse(localStorage.getItem("userInfo")).name +
+            "님!"
+        );
+        navigate("/user");
+      }
+    }
+  };
+
+  const clickTeam = () => {
+    navigate("/team");
+  };
+
+  const clickIntro = () => {
+    navigate("/service");
+  };
+
+  const clickGuide = () => {
+    navigate("/guide");
+  };
+
+  const handlerenderChange = () => {
+    setrender((prevState) => (prevState === 0 ? 1 : 0));
+  };
+
+  return (
+    <Root>
+      <Header2 data={render} onDataChange={handlerenderChange}></Header2>
+      <RandBody>
+        <RandTextBox>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-start",
+            }}
+          >
+            {/* <div style={{ width:"100%", backgroundColor:"red"}}><RandImg src="https://sdcarecoop.com/theme/basic/img/baby/img1.jpg" alt=""/></div> */}
+            <RandTextBig><br/><br/>안녕하세요. 도우미 긴급 호출 서비스 Help_py입니다</RandTextBig>
+            <RandTextSmall>
+              Help_py는 예상치 못한 긴급한 상황에서 신속한 도움을 제공받을 수 있는 1회성 서비스입니다.
+              <br/><br/>
+              응급 상황, 갑작스러운 문제 또는 급하게 필요한 상황에서 Help_py 서비스 내 인증된 도우미들이 <br/>
+              즉각적으로 출동하여 필요한 지원을 제공합니다.
+              <br/><br/>
+              Help_py는 안전과 신뢰를 최우선으로 하며, 신속하고 효과적인 대응을 통해 사용자 도움에 중점을 
+              <br/>둡니다.
+              <br /><br/>
+              언제 어디서나 호출이 가능하며 안심하고 이용할 수 있는 도우미 긴급 매칭 서비스, Help_py를 지금 
+              <br/>이용해보세요.
+              
+            </RandTextSmall>
+          </div>
+        </RandTextBox>
+        <RandButtonBox>
+          <RandLoginBox>
+            {(localStorage.getItem("loginState") === "false" ||
+              localStorage.getItem("loginState") === null) &&
+              loginBtn === 0 && (
+                <>
+                  <div
+                    style={{
+                      width: "14.16666vw",
+                      display: "flex",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <RandBtnSmall
+                      id={"cypresslogin"}
+                      toggle={loginBtn}
+                      onClick={clickLoginBtn}
+                    >
+                      로그인
+                    </RandBtnSmall>
+                    <RandBtnSmall onClick={JoinOnclickHandler}>
+                      회원가입
+                    </RandBtnSmall>
+                  </div>
+                  <RandLoginBoxText>
+                    서비스 이용시 <br /> 로그인이 필요합니다.
+                  </RandLoginBoxText>
+                </>
+              )}
+            {(localStorage.getItem("loginState") === "false" ||
+              localStorage.getItem("loginState") === null) &&
+              loginBtn === 1 && (
+                <>
+                  <div
+                    style={{
+                      width: "14.16666vw",
+                      display: "flex",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <RandBtnSmall
+                      id={"cypresslogin"}
+                      toggle={loginBtn}
+                      onClick={clickLoginBtn}
+                    >
+                      로그인
+                    </RandBtnSmall>
+                    <RandBtnSmall onClick={JoinOnclickHandler}>
+                      회원가입
+                    </RandBtnSmall>
+                  </div>
+                  <RandLogin>
+                    {/*
+                        <div style={{width:"12.4999vw", display:"flex", justifyContent:"space-between"}}>
+                            <RandBtnSmall style={{width:"5.833275vw"}}>이용자</RandBtnSmall>
+                            <RandBtnSmall style={{width:"5.833275vw"}}>도우미</RandBtnSmall>
+                        </div>
+                        */}
+                    <RandBtnBox>
+                      <RandLoginText>아이디</RandLoginText>
+                      <RandLoginInput
+                        type="text"
+                        name="id"
+                        value={loginData.id}
+                        id="cypressid"
+                        className="input"
+                        onChange={handleChange}
+                      ></RandLoginInput>
+                    </RandBtnBox>
+                    <RandBtnBox>
+                      <RandLoginText>비밀번호</RandLoginText>
+                      <RandLoginInput
+                        type="password"
+                        name="password"
+                        value={loginData.password}
+                        id="cypresspw"
+                        className="input"
+                        onChange={handleChange}
+                      ></RandLoginInput>
+                    </RandBtnBox>
+                    <RandBtn
+                      style={{ width: "12.4999vw" }}
+                      onClick={clickLoginbtn}
+                    >
+                      로그인
+                    </RandBtn>
+                    <RandLoginTextF>로그인 정보를 잊으셨나요?</RandLoginTextF>
+                  </RandLogin>
+                </>
+              )}
+            {localStorage.getItem("loginState") === "true" && (
+              <RandLogin>
+                <RandAfterLoginBox>
+                  <RandAfterLoginImg
+                    src={JSON.parse(localStorage.getItem("userInfo")).image}
+                  ></RandAfterLoginImg>
+                  <div style={{ display: "flex", flexDirection: "column" }}>
+                    <RandAfterLoginText id="cypressname">
+                      {JSON.parse(localStorage.getItem("userInfo")).name}
+                    </RandAfterLoginText>
+                    {JSON.parse(localStorage.getItem("userInfo"))
+                      .region_state === null ? (
+                      <RandAfterLoginText2>
+                        지역을 등록해주세요
+                      </RandAfterLoginText2>
+                    ) : (
+                      <RandAfterLoginText2>
+                        {JSON.parse(localStorage.getItem("userInfo"))
+                          .region_state +
+                          " " +
+                          JSON.parse(localStorage.getItem("userInfo"))
+                            .region_country}
+                      </RandAfterLoginText2>
+                    )}
+                    <div style={{ display: "flex" }}>
+                      <RandAfterLoginBtn onClick={onClickHandlerMy}>
+                        마이페이지
+                      </RandAfterLoginBtn>
+                      <RandAfterLoginBtn onClick={clickLogoutBtn}>
+                        로그아웃
+                      </RandAfterLoginBtn>
+                    </div>
+                  </div>
+                </RandAfterLoginBox>
+              </RandLogin>
+            )}
+            {login === 2 && (
+              <RandLogin>
+                <RandAfterLoginBox>
+                  <RandAfterLoginImg src={helperImg}></RandAfterLoginImg>
+                  <div style={{ display: "flex", flexDirection: "column" }}>
+                    <RandAfterLoginText id="cypressname">
+                      {helper.name}
+                    </RandAfterLoginText>
+                    <RandAfterLoginText2>{helper.address}</RandAfterLoginText2>
+                    <div style={{ display: "flex" }}>
+                      <RandAfterLoginBtn>마이페이지</RandAfterLoginBtn>
+                      <RandAfterLoginBtn onClick={clickLogoutBtn}>
+                        로그아웃
+                      </RandAfterLoginBtn>
+                    </div>
+                  </div>
+                </RandAfterLoginBox>
+              </RandLogin>
+            )}
+          </RandLoginBox>
+          <RandBtn onClick={clickMain}>메인 화면</RandBtn>
+          {/* <RandBtn onClick={clickIntro}>서비스 소개</RandBtn>
+          <RandBtn onClick={clickGuide}>이용 가이드</RandBtn> */}
+          <RandBtn onClick={clickTeam}>팀 소개</RandBtn>
+        </RandButtonBox>
+      </RandBody>
+      <div style={{marginTop:"200px"}}><Footer /></div>
+      {/*
             <RandBox>
-                <RandHeader>
-                    <RandLogoImg src={logoImg}></RandLogoImg>
-                </RandHeader>
                 <RandLine></RandLine>
                 <RandTextBox>
                     <RandTextBig>환영합니다</RandTextBig>
@@ -282,7 +635,7 @@ export const RandingPage = () => {
             </RandBox>
             <RandButtonBox>
                 <RandBtnBox>
-                    <RandBtnSmall toggle={loginBtn} onClick={clickLoginBtn}>로그인</RandBtnSmall>
+                    <RandBtnSmall id={'cypresslogin'} toggle={loginBtn} onClick={clickLoginBtn}>로그인</RandBtnSmall>
                     <RandBtnSmall onClick={JoinOnclickHandler}>회원가입</RandBtnSmall>
                 </RandBtnBox>
                 {loginBtn===1&&login===0&&(
@@ -294,14 +647,14 @@ export const RandingPage = () => {
                     </RandBtnBox>
                     <RandBtnBox style={{margin:'16px auto'}}>
                         <RandLoginText>아이디</RandLoginText>
-                        <RandLoginInput className="input" onChange={(e) => setId(e.target.value)}></RandLoginInput>
+                        <RandLoginInput id="cypressid" className="input" onChange={(e) => setId(e.target.value)}></RandLoginInput>
                     </RandBtnBox>
                     <RandBtnBox style={{margin:'16px auto'}}>
                         <RandLoginText>비밀번호</RandLoginText>
-                        <RandLoginInput className="input" type='password' onChange={(e) => setPw(e.target.value)}></RandLoginInput>
+                        <RandLoginInput id="cypresspw" className="input" type='password' onChange={(e) => setPw(e.target.value)}></RandLoginInput>
                     </RandBtnBox>
                     <RandLoginTextF>로그인 정보를 잊으셨나요?</RandLoginTextF>
-                    <RandBtn style={{color:'#FFF',background:'#BB6C25',height:'53px'}} onClick={clickLoginbtn}>로그인</RandBtn>
+                    <RandBtn id="cypressok"style={{color:'#FFF',background:'#BB6C25',height:'53px'}} onClick={clickLoginbtn}>로그인</RandBtn>
                 </RandLogin>
                 <RandBtnBig>로그인이 필요합니다.</RandBtnBig>
                 </>
@@ -311,7 +664,7 @@ export const RandingPage = () => {
                     <RandAfterLoginBox>
                         <RandAfterLoginImg src={userImg}></RandAfterLoginImg>
                         <div style={{display:"flex", flexDirection:"column"}}>
-                            <RandAfterLoginText>{user.name}</RandAfterLoginText>
+                            <RandAfterLoginText id="cypressname">{user.name}</RandAfterLoginText>
                             <RandAfterLoginText style={{fontSize:"16px", fontWeight:"400", color:"#8F8F8F"}}>{user.address}</RandAfterLoginText>
                             <div style={{display:"flex"}}>
                                 <RandAfterLoginBtn>마이페이지</RandAfterLoginBtn>
@@ -326,7 +679,7 @@ export const RandingPage = () => {
                     <RandAfterLoginBox>
                         <RandAfterLoginImg src={helperImg}></RandAfterLoginImg>
                         <div style={{display:"flex", flexDirection:"column"}}>
-                            <RandAfterLoginText>{helper.name}</RandAfterLoginText>
+                            <RandAfterLoginText id="cypressname">{helper.name}</RandAfterLoginText>
                             <RandAfterLoginText style={{fontSize:"16px", fontWeight:"400", color:"#8F8F8F"}}>{helper.address}</RandAfterLoginText>
                             <div style={{display:"flex"}}>
                                 <RandAfterLoginBtn>마이페이지</RandAfterLoginBtn>
@@ -336,12 +689,13 @@ export const RandingPage = () => {
                     </RandAfterLoginBox>
                 </RandLogin>
                 )}
-                <RandBtn>메인 화면</RandBtn>
+                <RandBtn onClick={clickMain}>메인 화면</RandBtn>
                 <RandBtn>이용 가이드</RandBtn>
                 <RandBtn>서비스</RandBtn>
                 <RandBtn>소개</RandBtn>
             </RandButtonBox>
-        </Root>
-    );
+            */}
+    </Root>
+  );
 };
 export default RandingPage;
